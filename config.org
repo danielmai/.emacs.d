@@ -151,8 +151,8 @@ A quick way to jump around the buffer.
 #+begin_src emacs-lisp
   (use-package markdown-mode
     :ensure t
-    :mode (("\\.markdown\\" . markdown-mode)
-           ("\\.md\\"       . markdown-mode)))
+    :mode (("\\.markdown\\'" . markdown-mode)
+           ("\\.md\\'"       . markdown-mode)))
 #+end_src
 
 * Helm
