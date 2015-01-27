@@ -136,6 +136,15 @@ source: http://ergoemacs.org/emacs/emacs_buffer_management.html
 Truly the way to [[http://orgmode.org/][live life in plain text]]. I mainly use it to take
 notes and save executable source blocks.
 
+** Org setup
+
+Speed commands are a nice and quick way to perform certain actions
+while at the beginning of a heading. It's not activated by default.
+
+#+begin_src emacs-lisp
+(setq org-use-speed-commands t)
+#+end_src
+
 ** Org tags
 
 #+begin_src emacs-lisp
