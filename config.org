@@ -1,28 +1,56 @@
 #+TITLE: Emacs Configuration
 #+AUTHOR: Daniel Mai
 
+I've been using Emacs extensively since the summer of 2013, and along
+the way I've become accustomed to many different tweaks for it.
+
+This configuration uses the [[https://github.com/jwiegley/use-package][use-package]] package from John Wiegley, which is
+a fantastic way to manage package configurations.
+
 * Installing Emacs
 
 On OS X, [[http://brew.sh/][homebrew]] is an easy way to install emacs.
 
+Here's what the parameter means.
 - ~--cocoa~ :: installs emacs with the OS X GUI version
 - ~--with-imagemagick~ :: installs emacs with imagemagick support
 
 #+begin_src sh
   brew install emacs --cocoa --with-imagemagick
 #+end_src
- 
+
+* Personal Information
+
+#+begin_src emacs-lisp
+  (setq user-full-name "Daniel Mai"
+        user-mail-address "daniel@danielmai.net")
+#+end_src
+
+* Customize settings
+
+Set up the customize file to its own separate file, instead of saving
+things in [[file:init.el][init.el]].
+
+#+begin_src emacs-lisp
+  (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (load custom-file)
+#+end_src
+
 * Theme
+
+The [[https://github.com/n3mo/cyberpunk-theme.el][cyberpunk theme]] is dark and colorful. However, I don't like the
+boxes around the mode line.
 
 #+begin_src emacs-lisp
   (use-package cyberpunk-theme
-               :ensure t
-               :init
-               (progn
-                 (set-face-attribute `mode-line nil
-                                     :box nil)
-                 (set-face-attribute `mode-line-inactive nil
-                                     :box nil)))
+    :ensure t
+    :init
+    (progn
+      (load-theme 'cyberpunk)
+      (set-face-attribute `mode-line nil
+                          :box nil)
+      (set-face-attribute `mode-line-inactive nil
+                          :box nil)))
 #+end_src
 
 * Sane defaults
@@ -34,6 +62,7 @@ Let's start with some sane defaults, shall we?
   (put 'downcase-region 'disabled nil)
   (put 'upcase-region 'disabled nil)
   (put 'narrow-to-region 'disabled nil)
+  (put 'dired-find-alternate-file 'disabled nil)
 
   ;; Answering just 'y' or 'n' will do
   (defalias 'yes-or-no-p 'y-or-n-p)
@@ -58,9 +87,19 @@ Let's start with some sane defaults, shall we?
   ;; Don't count two spaces after a period as the end of a sentence.
   ;; Just one space is needed.
   (setq sentence-end-double-space nil)
+
+  ;; delete the region when typing, just like as we expect nowadays.
+  (delete-selection-mode t)
+
+  (show-paren-mode t)
+
+  (column-number-mode t)
+
+  (global-visual-line-mode)
+  (diminish 'visual-line-mode)
 #+end_src
 
-* Buffer listings
+* List buffers
 
 ibuffer is the improved version of list-buffers.
 
@@ -72,101 +111,42 @@ ibuffer is the improved version of list-buffers.
 
 source: http://ergoemacs.org/emacs/emacs_buffer_management.html
 
-* Magit
-
-#+begin_src emacs-lisp
-  (use-package magit
-               :ensure t)
-#+end_src
-
-Use an easy keybinding to access magit and set up the emacsclient so
-that the commit messages don't go crazy.
-
-#+begin_src emacs-lisp
-  ;; define key for magit-status
-  (global-set-key "\C-cg" 'magit-status)
-
-  ;; emacs client for magit
-  (setq magit-emacsclient-executable "/usr/local/Cellar/emacs/24.4/bin/emacsclient")
-#+end_src
-
-The following code makes magit-status run alone in the frame, and then
-restores the old window configuration when you quit out of magit.
-
-No more juggling windows after commiting. It's magit bliss.
-
-[[http://whattheemacsd.com/setup-magit.el-01.html][Source: Magnar Sveen]]
-
-#+begin_src emacs-lisp
-  ;; full screen magit-status
-
-  (defadvice magit-status (around magit-fullscreen activate)
-    (window-configuration-to-register :magit-fullscreen)
-    ad-do-it
-    (delete-other-windows))
-
-  (defun magit-quit-session ()
-    "Restores the previous window configuration and kills the magit buffer"
-    (interactive)
-    (kill-buffer)
-    (jump-to-register :magit-fullscreen))
-
-  (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
-#+end_src
-
-* Ace Jump Mode
-
-A quick way to jump around the buffer.
-
-[[http://emacsrocks.com/e10.html][See Emacs Rocks Episode 10 for a screencast.]]
-
-#+begin_src emacs-lisp
-  (use-package ace-jump-mode
-               :ensure t
-               :commands ace-jump-mode
-               :init
-               (bind-key "C-S-s" 'ace-jump-mode))
-#+end_src
-
 * Recentf
 
 #+begin_src emacs-lisp
-  (use-package recentf-mode
-               :init
-               (progn
-                 (setq recent-max-saved-items 100)
-                 
-                 (defun ido-recentf-open ()
-                   "Use `ido-completing-read' to \\[find-file] a recent file"
-                   (interactive)
-                   (if (find-file (ido-completing-read "Find recent file: " recentf-list))
-                       (message "Opening file...")
-                     (message "Aborting")))
+  (use-package recentf
+    :init
+    (progn
+      (recentf-mode t)
+      (setq recent-max-saved-items 100)
 
-                 (bind-key "C-x C-r" 'ido-recentf-open)))
-#+end_src
+      (defun ido-recentf-open ()
+        "Use `ido-completing-read' to \\[find-file] a recent file"
+        (interactive)
+        (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+            (message "Opening file...")
+          (message "Aborting")))
 
-* Markdown mode
-
-#+begin_src emacs-lisp
-  (use-package markdown-mode
-    :ensure t
-    :mode (("\\.markdown\\'" . markdown-mode)
-           ("\\.md\\'"       . markdown-mode)))
-#+end_src
-
-* Helm
-
-#+begin_src emacs-lisp
-  (use-package helm
-    :ensure t
-    :config (progn
-              (require 'helm-config)
-              (use-package helm-projectile :ensure t)
-              (setq helm-locate-command "mdfind %s %s")))
+      (bind-key "C-x C-r" 'ido-recentf-open)))
 #+end_src
 
 * Org mode
+
+Truly the way to [[http://orgmode.org/][live life in plain text]]. I mainly use it to take
+notes and save executable source blocks.
+
+** Org tags
+
+#+begin_src emacs-lisp
+  (setq org-tags-column 45)
+#+end_src
+
+** Org capture
+
+#+begin_src emacs-lisp
+    (bind-key "C-c c" 'org-capture)
+  (setq org-default-notes-file "~/Dropbox/Notes/notes.org")
+#+end_src
 
 ** Org babel languages
 
@@ -190,46 +170,17 @@ A quick way to jump around the buffer.
   (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
 #+end_src
 
-
 ** Org babel/source blocks
+
+I like to have source blocks properly syntax highlighted and with the
+editing popup window staying within the same window so all the windows
+don't jump around. Also, having the top and bottom trailing lines in
+the block is a waste of space, so we can remove them.
 
 #+begin_src emacs-lisp
   (setq org-src-fontify-natively t)
   (setq org-src-window-setup 'current-window)
   (setq org-src-strip-leading-and-trailing-blank-lines t)
-#+end_src
-
-* Expand region
-
-#+begin_src emacs-lisp
-  (use-package expand-region
-               :ensure t
-               :bind ("C-@" . er/expand-region))
-#+end_src
-
-* Multiple cursors
-
-#+begin_src emacs-lisp
-  (use-package multiple-cursors
-    :ensure t
-    :bind (("C-S-c C-S-c" . mc/edit-lines)
-           ("C->"         . mc/mark-next-line-like-this)
-           ("C-<"         . mc/mark-previous-like-this)
-           ("C-c C-<"     . mc/mark-all-like-this)))
-#+end_src
-
-* Visual-regexp
-
-#+begin_src emacs-lisp
-  (use-package visual-regexp
-               :ensure t
-               :init
-               (use-package visual-regexp-steroids :ensure t)
-               :bind (("C-c r" . vr/replace)
-                      ("C-c q" . vr/query-replace)
-                      ("C-c m" . vr/mc-mark) ; Need multiple cursors
-                      ("C-M-r" . vr/isearch-backward)
-                      ("C-M-s" . vr/isearch-forward)))
 #+end_src
 
 * Tramp
@@ -238,89 +189,15 @@ A quick way to jump around the buffer.
   (use-package tramp)
 #+end_src
 
-* Smartparens mode
-
-#+begin_src emacs-lisp
-  (use-package smartparens
-               :ensure t
-               :diminish smartparens
-               :config (require 'smartparens-config))
-#+end_src
-
 * Locate
 
 Using OS X Spotlight within Emacs by modifying the ~locate~ function.
 
-I usually use the 
+I usually use the
 
 #+begin_src emacs-lisp
   ;; mdfind is the command line interface to Spotlight
   (setq locate-command "mdfind")
-#+end_src
-
-* Dash
-
-Integration with Dash, the API documentation browser on OS X.
-
-#+begin_src emacs-lisp
-  (use-package dash-at-point
-    :ensure t
-    :bind (("C-c a d" . dash-at-point)
-           ("C-c e"   . dash-at-point-with-docset)))
-#+end_src
-
-* Mac-specific settings
-
-#+begin_src emacs-lisp
-  ; Don't use Lion-style fullscreen
-  (setq ns-use-native-fullscreen nil)
-
-  ; delete files by moving them to the OS X trash
-  (setq delete-by-moving-to-trash t)
-
-  ; path to the OS X system trash
-  (setq trash-directory "~/.Trash")
-
-  ;; use srgb colors because they're better
-  (setq ns-use-srgb-colorspace t)
-#+end_src
-
-** Keys
-
-#+begin_src emacs-lisp
-  ; Use Command-` to switch between Emacs windows (not frames)
-  (global-set-key (kbd "s-`") 'other-window)
-  ; Use Command-Shift-` to switch Emacs frames in reverse
-  (global-set-key (kbd "s-~") (lambda() () (interactive) (other-window -1)))
-
-  ; Because I changed the key bindings above, set one for 'other-frame
-  (global-set-key (kbd "s-1") 'other-frame)
-
-  ; Fullscreen!
-  (global-set-key [(super return)] 'toggle-frame-fullscreen)
-
-  ; buffer switching
-  (global-set-key [(super {)] 'previous-buffer)
-  (global-set-key [(super })] 'next-buffer)
-
-  ; open file
-  (global-set-key [(super o)] 'find-file)
-
-  ; set a key for 'compile
-  (global-set-key (kbd "H-c") 'compile)
-
-  ; set a key binding to run 'recompile
-  ; it will run the most recent command for 'compile
-  (global-set-key (kbd "H-r") 'recompile)
-
-  ; set the Fn key as the hyper key
-  (setq ns-function-modifier 'hyper)
-
-  ; disable the key that minimizes emacs to the dock
-  (global-unset-key (kbd "C-z"))
-
-  ; open a new finder window for the current file
-  (global-set-key [(super /)] '(lambda () (interactive) (shell-command "open .")))
 #+end_src
 
 * Shell
@@ -330,17 +207,309 @@ Integration with Dash, the API documentation browser on OS X.
   (global-set-key (kbd "C-x M") 'ansi-term)
 #+end_src
 
-* Projectile
+* ELPA packages
+
+These are the packages that are not built into Emacs.
+
+** Ace Jump Mode
+
+A quick way to jump around the buffer.
+
+[[http://emacsrocks.com/e10.html][See Emacs Rocks Episode 10 for a screencast.]]
 
 #+begin_src emacs-lisp
-  (use-package projectile
+  (use-package ace-jump-mode
+    :ensure t
+    :diminish t
+    :commands ace-jump-mode
+    :init
+    (bind-key "C-S-s" 'ace-jump-mode))
+#+end_src
+
+** Dash
+
+Integration with [[http://kapeli.com/dash][Dash, the API documentation browser on OS X]].
+
+#+begin_src emacs-lisp
+  (use-package dash-at-point
+    :ensure t
+    :bind (("C-c a d" . dash-at-point)
+           ("C-c e"   . dash-at-point-with-docset)))
+#+end_src
+
+** Helm
+
+#+begin_src emacs-lisp
+  (use-package helm
+    :ensure t
+    :diminish helm-mode
+    :init (progn
+              (require 'helm-config)
+              (use-package helm-projectile :ensure t)
+              (use-package helm-ag :ensure t)
+              (setq helm-locate-command "mdfind -interpret -name %s %s")
+              (helm-mode))
+    :bind (("C-`" . helm-resume)
+           ("M-x" . helm-M-x)
+           ("C-x C-f" . helm-find-files)))
+#+end_src
+
+** Magit
+
+A great interface for git projects. It's much more pleasant to use
+than the command line inteface.
+
+#+begin_src emacs-lisp
+  (use-package magit
+    :ensure t
+    :diminish magit-auto-revert-mode)
+#+end_src
+
+Use an easy keybinding to access magit and set up the emacsclient so
+that commit windows [[http://stackoverflow.com/questions/18856047/emacs-magit-commit-opens-new-emacs-client][don't open up in a new frame]].
+
+#+begin_src emacs-lisp
+  ;; define key for magit-status
+  (global-set-key "\C-cg" 'magit-status)
+
+  ;; emacs client for magit
+  (setq magit-emacsclient-executable "/usr/local/Cellar/emacs/24.4/bin/emacsclient")
+#+end_src
+
+#+BEGIN_QUOTE
+The following code makes magit-status run alone in the frame, and then
+restores the old window configuration when you quit out of magit.
+
+No more juggling windows after commiting. It's magit bliss.
+#+END_QUOTE
+[[http://whattheemacsd.com/setup-magit.el-01.html][Source: Magnar Sveen]]
+
+#+begin_src emacs-lisp
+  ;; full screen magit-status
+
+  (defadvice magit-status (around magit-fullscreen activate)
+    (window-configuration-to-register :magit-fullscreen)
+    ad-do-it
+    (delete-other-windows))
+
+  (defun magit-quit-session ()
+    "Restores the previous window configuration and kills the magit buffer"
+    (interactive)
+    (kill-buffer)
+    (jump-to-register :magit-fullscreen))
+
+  (define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
+#+end_src
+
+** Expand region
+
+#+begin_src emacs-lisp
+  (use-package expand-region
+               :ensure t
+               :bind ("C-@" . er/expand-region))
+#+end_src
+
+** Flycheck
+
+Still need to set up hooks so that flycheck automatically runs in
+python mode, etc. js2-mode is already really good for the syntax
+checks, so I probably don't need the jshint checks with flycheck for
+it.
+
+#+begin_src emacs-lisp
+  (use-package flycheck
     :ensure t)
 #+end_src
 
-* Skewer mode
+** Markdown mode
+
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :mode (("\\.markdown\\'" . markdown-mode)
+           ("\\.md\\'"       . markdown-mode)))
+#+end_src
+
+** Multiple cursors
+
+We'll also need to ~(require 'mulitple-cusors)~ because of []an
+autoload issue](https://github.com/magnars/multiple-cursors.el/issues/105).
+
+#+begin_src emacs-lisp
+  (use-package multiple-cursors
+    :ensure t
+    :init (require 'multiple-cursors)
+    :bind (("C-S-c C-S-c" . mc/edit-lines)
+           ("C->"         . mc/mark-next--like-this)
+           ("C-<"         . mc/mark-previous-like-this)
+           ("C-c C-<"     . mc/mark-all-like-this)))
+#+end_src
+
+** Projectile
+
+#+BEGIN_QUOTE
+Project navigation and management library for Emacs.
+#+END_QUOTE
+http://batsov.com/projectile/
+
+
+#+begin_src emacs-lisp
+  (use-package projectile
+    :ensure t
+    :diminish projectile-mode
+    :config
+    (progn
+      (projectile-global-mode t)
+      (use-package ag
+        :ensure t)))
+#+end_src
+
+** Smartparens mode
+
+#+begin_src emacs-lisp
+  (use-package smartparens
+               :ensure t
+               :diminish smartparens-mode
+               :config (progn (require 'smartparens-config)
+                              (smartparens-global-mode t)))
+#+end_src
+
+** Smartscan
+
+#+BEGIN_QUOTE
+Quickly jumps between other symbols found at point in Emacs.
+#+END_QUOTE
+http://www.masteringemacs.org/article/smart-scan-jump-symbols-buffer
+
+
+#+begin_src emacs-lisp
+  (use-package smartscan
+    :ensure t
+    :config (global-smartscan-mode 1)
+    :bind (("s-n" . smartscan-symbol-go-forward)
+           ("s-p" . smartscan-symbol-go-backward)))
+#+end_src
+
+** Skewer mode
+
+Live coding for HTML/CSS/JavaScript.
 
 #+begin_src emacs-lisp
   (use-package skewer-mode
     :ensure t
     :config (skewer-setup))
 #+end_src
+
+** Smoothscrolling
+
+This makes it so `C-n`-ing and `C-p`-ing won't make the buffer jump
+around so much.
+
+#+begin_src emacs-lisp
+  (use-package smooth-scrolling
+    :ensure t)
+#+end_src
+
+** Visual-regexp
+
+#+begin_src emacs-lisp
+  (use-package visual-regexp
+    :ensure t
+    :init
+    (use-package visual-regexp-steroids :ensure t)
+    :bind (("C-c r" . vr/replace)
+           ("C-c q" . vr/query-replace)
+           ("C-c m" . vr/mc-mark) ; Need multiple cursors
+           ("C-M-r" . vr/isearch-backward)
+           ("C-M-s" . vr/isearch-forward)))
+#+end_src
+
+** Yasnippet
+
+Yeah, snippets!
+
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :ensure t
+    :diminish yas-minor-mode
+    :defer t
+    :idle (yas-global-mode))
+#+end_src
+
+* Mac customizations
+
+There are configurations to make when running Emacs on OS X (hence the
+"darwin" system-type check).
+
+#+begin_src emacs-lisp
+  (let ((is-mac (string-equal system-type "darwin")))
+    (when is-mac
+      ;; delete files by moving them to the trash
+      (setq delete-by-moving-to-trash t)
+      (setq trash-directory "~/.Trash")
+
+      ;; Don't make new frames when opening a new file with Emacs
+      (setq ns-pop-up-frames nil)
+
+      ;; set the Fn key as the hyper key
+      (setq ns-function-modifier 'hyper)
+
+      ;; Use Command-` to switch between Emacs windows (not frames)
+      (global-set-key (kbd "s-`") 'other-window)
+
+      ;; Use Command-Shift-` to switch Emacs frames in reverse
+      (global-set-key (kbd "s-~") (lambda() () (interactive) (other-window -1)))
+
+      ;; Because of the keybindings above, set one for `other-frame'
+      (global-set-key (kbd "s-1") 'other-frame)
+
+      ;; Fullscreen!
+      (setq ns-use-native-fullscreen nil) ; Not Lion style
+      (global-set-key [(super return)] 'toggle-frame-fullscreen)
+
+      ;; buffer switching
+      (global-set-key [(super {)] 'previous-buffer)
+      (global-set-key [(super })] 'next-buffer)
+
+      ;; Compliing
+      (global-set-key (kbd "H-c") 'compile)
+      (global-set-key (kbd "H-r") 'recompile)
+
+      ;; disable the key that minimizes emacs to the dock because I don't
+      ;; minimize my windows
+      ;; (global-unset-key (kbd "C-z"))
+
+      ;; open a new finder window to the path of the current buffer
+      (global-set-key [(super /)]
+                       '(lambda () (interactive) (shell-command "open .")))
+      (put 'ns-print-buffer 'disabled t)
+
+      (use-package exec-path-from-shell
+        :if (memq window-system '(mac ns))
+        :ensure t
+        :config
+        (exec-path-from-shell-initialize))))
+#+end_src
+
+* Computer-specific settings
+
+Load some computer specific settings, such as the name and and email
+address.
+
+* Ido
+
+#+begin_src emacs-lisp
+  (use-package ido
+    :init
+    (progn
+      (setq ido-enable-flex-matching t)
+    (setq ido-everywhere t)
+    (ido-mode t)
+    (use-package ido-ubiquitous
+      :ensure t
+      :init (ido-ubiquitous-mode))
+    (use-package ido-vertical-mode
+      :ensure t
+      :init (ido-vertical-mode 1))))
+#+end_src
+
