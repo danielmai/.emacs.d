@@ -203,7 +203,7 @@ the block is a waste of space, so we can remove them.
 
 Using OS X Spotlight within Emacs by modifying the ~locate~ function.
 
-I usually use the
+I usually use [[*Helm][~helm-locate~]], which live updates the spotlight search list.
 
 #+begin_src emacs-lisp
   ;; mdfind is the command line interface to Spotlight
