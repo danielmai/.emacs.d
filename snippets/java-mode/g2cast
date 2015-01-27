@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: g2cast
+# key: gg2
+# --
+Graphics2D g2 = (Graphics2D) g;
