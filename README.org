@@ -1,0 +1,6 @@
+#+TITLE: Mai Emacs Configuration
+#+AUTHOR: Daniel Mai
+
+Here's my Emacs setup that I use on the daily.
+
+The configuration depends on Org mode. [[file:init.el][init.el]] sets up a few initial GUI settings, bootstraps [[https://github.com/jwiegley/use-package][use-package]], and loads [[file:config.org][config.org]], which is where the majority of the configuration magic happens.
