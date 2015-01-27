@@ -501,7 +501,7 @@ There are configurations to make when running Emacs on OS X (hence the
         (exec-path-from-shell-initialize))))
 #+end_src
 
-* Computer-specific settings
+* TODO Computer-specific settings
 
 Load some computer specific settings, such as the name and and email
 address.
