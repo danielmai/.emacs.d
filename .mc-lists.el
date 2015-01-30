@@ -3,6 +3,9 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        beginning-of-visual-line
+        end-of-visual-line
+        kill-visual-line
         mc/mark-next-line-like-this
         org-beginning-of-line
         org-end-of-line
