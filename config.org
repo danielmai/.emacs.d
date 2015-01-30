@@ -29,7 +29,7 @@ Here's what the parameter means.
 * Customize settings
 
 Set up the customize file to its own separate file, instead of saving
-things in [[file:init.el][init.el]].
+customize settings in [[file:init.el][init.el]].
 
 #+begin_src emacs-lisp
   (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
@@ -56,6 +56,8 @@ boxes around the mode line.
 * Sane defaults
 
 Let's start with some sane defaults, shall we?
+
+Sources for this section include [[https://github.com/magnars/.emacs.d/blob/master/settings/sane-defaults.el][Magnars Sveen]] and [[http://pages.sachachua.com/.emacs.d/Sacha.html][Sacha Chua]].
 
 #+begin_src emacs-lisp
   ;; These functions are useful. Activate them.
@@ -146,6 +148,10 @@ while at the beginning of a heading. It's not activated by default.
 #+end_src
 
 ** Org tags
+
+The default value is -77, which is weird for smaller width windows.
+I'd rather have the tags align horizontally with the header. 45 is a
+good column number to do that.
 
 #+begin_src emacs-lisp
   (setq org-tags-column 45)
@@ -267,7 +273,7 @@ Integration with [[http://kapeli.com/dash][Dash, the API documentation browser o
 ** Magit
 
 A great interface for git projects. It's much more pleasant to use
-than the command line inteface.
+than the git interface on the command line.
 
 #+begin_src emacs-lisp
   (use-package magit
@@ -285,6 +291,8 @@ that commit windows [[http://stackoverflow.com/questions/18856047/emacs-magit-co
   ;; emacs client for magit
   (setq magit-emacsclient-executable "/usr/local/Cellar/emacs/24.4/bin/emacsclient")
 #+end_src
+
+*** Fullscreen magit
 
 #+BEGIN_QUOTE
 The following code makes magit-status run alone in the frame, and then
@@ -443,7 +451,12 @@ around so much.
 
 ** Yasnippet
 
-Yeah, snippets!
+Yeah, snippets! I start with snippets from [[https://github.com/AndreaCrotti/yasnippet-snippets][Andrea Crotti's collection]]
+and have also modified them and added my own.
+
+It takes a few seconds to load and I don't need them immediately when
+Emacs starts up, so we can defer loading yasnippet until there's some
+idle time.
 
 #+begin_src emacs-lisp
   (use-package yasnippet
