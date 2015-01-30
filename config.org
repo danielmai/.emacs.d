@@ -144,7 +144,8 @@ Speed commands are a nice and quick way to perform certain actions
 while at the beginning of a heading. It's not activated by default.
 
 #+begin_src emacs-lisp
-(setq org-use-speed-commands t)
+  (setq org-use-speed-commands t)
+  (bind-key "C-c l" 'org-store-link)
 #+end_src
 
 ** Org tags
