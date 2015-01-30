@@ -434,6 +434,13 @@ around so much.
            ("C-M-s" . vr/isearch-forward)))
 #+end_src
 
+** Webmmode
+
+#+begin_src emacs-lisp
+  (use-package web-mode
+    :ensure t)
+#+end_src
+
 ** Yasnippet
 
 Yeah, snippets!
