@@ -4,6 +4,7 @@
 (setq mc/cmds-to-run-for-all
       '(
         beginning-of-visual-line
+        c-electric-semi&comma
         end-of-visual-line
         kill-visual-line
         mc/mark-next-line-like-this
