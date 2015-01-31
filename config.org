@@ -393,6 +393,15 @@ http://batsov.com/projectile/
                               (smartparens-global-mode t)))
 #+end_src
 
+*** Smartparens org mode
+
+Set up some pairings for org mode markup.
+
+#+begin_src emacs-lisp
+  (sp-local-pair 'org-mode "~" "~" :bind "C-~")
+  (sp-local-pair 'org-mode "/" "/")
+#+end_src
+
 ** Smartscan
 
 #+BEGIN_QUOTE
