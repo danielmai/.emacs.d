@@ -452,7 +452,7 @@ around so much.
            ("C-M-s" . vr/isearch-forward)))
 #+end_src
 
-** Webmmode
+** Webmode
 
 #+begin_src emacs-lisp
   (use-package web-mode
