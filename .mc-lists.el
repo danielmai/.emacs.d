@@ -5,12 +5,18 @@
       '(
         beginning-of-visual-line
         c-electric-semi&comma
+        electric-newline-and-maybe-indent
         end-of-visual-line
+        helm-confirm-and-exit-minibuffer
         kill-visual-line
+        mark-whole-buffer
         mc/mark-next-line-like-this
         org-beginning-of-line
+        org-delete-char
         org-end-of-line
         org-self-insert-command
+        sgml-close-tag
+        yas-expand
         ))
 
 (setq mc/cmds-to-run-once
