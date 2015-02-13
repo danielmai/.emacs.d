@@ -224,6 +224,17 @@ I usually use [[*Helm][~helm-locate~]], which live updates the spotlight search 
   (global-set-key (kbd "C-x M") 'ansi-term)
 #+end_src
 
+* Window
+
+Convenient keybindings to resize windows.
+
+#+begin_src emacs-lisp
+(bind-key "s-C-<left>"  'shrink-window-horizontally)
+(bind-key "s-C-<right>" 'enlarge-window-horizontally)
+(bind-key "s-C-<down>"  'shrink-window)
+(bind-key "s-C-<up>"    'enlarge-window)
+#+end_src
+
 * ELPA packages
 
 These are the packages that are not built into Emacs.
