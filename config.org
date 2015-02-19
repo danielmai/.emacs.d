@@ -441,7 +441,7 @@ Live coding for HTML/CSS/JavaScript.
 
 ** Smoothscrolling
 
-This makes it so `C-n`-ing and `C-p`-ing won't make the buffer jump
+This makes it so ~C-n~-ing and ~C-p~-ing won't make the buffer jump
 around so much.
 
 #+begin_src emacs-lisp
