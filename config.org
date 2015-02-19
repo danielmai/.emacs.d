@@ -525,6 +525,7 @@ There are configurations to make when running Emacs on OS X (hence the
       ;; Compliing
       (bind-key "H-c" 'compile)
       (bind-key "H-r" 'recompile)
+      (bind-key "H-s" (defun save-and-recompile () (interactive) (save-buffer) (recompile)))
 
       ;; disable the key that minimizes emacs to the dock because I don't
       ;; minimize my windows
