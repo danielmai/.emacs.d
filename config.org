@@ -544,14 +544,20 @@ There are configurations to make when running Emacs on OS X (hence the
       (bind-key "s-=" 'open-dir-in-iterm)
 
       ;; Not going to use these commands
-      (put 'ns-print-buffer 'disabled t)
-
-      (use-package exec-path-from-shell
-        :if (memq window-system '(mac ns))
-        :ensure t
-        :config
-        (exec-path-from-shell-initialize))))
+      (put 'ns-print-buffer 'disabled t)))
 #+end_src
+
+~exec-path-from-shell~ makes the command-line path with Emacs's shell
+match the same one on OS X.
+
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :if (memq window-system '(mac ns))
+    :ensure t
+    :config
+    (exec-path-from-shell-initialize))
+#+end_src
+
 
 * TODO Computer-specific settings
 
