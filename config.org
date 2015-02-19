@@ -506,33 +506,44 @@ There are configurations to make when running Emacs on OS X (hence the
       (setq ns-function-modifier 'hyper)
 
       ;; Use Command-` to switch between Emacs windows (not frames)
-      (global-set-key (kbd "s-`") 'other-window)
-
+      (bind-key "s-`" 'other-window)
+      
       ;; Use Command-Shift-` to switch Emacs frames in reverse
-      (global-set-key (kbd "s-~") (lambda() () (interactive) (other-window -1)))
+      (bind-key "s-~" (lambda() () (interactive) (other-window -1)))
 
       ;; Because of the keybindings above, set one for `other-frame'
-      (global-set-key (kbd "s-1") 'other-frame)
+      (bind-key "s-1" 'other-frame)
 
       ;; Fullscreen!
       (setq ns-use-native-fullscreen nil) ; Not Lion style
-      (global-set-key [(super return)] 'toggle-frame-fullscreen)
+      (bind-key "<s-return>" 'toggle-frame-fullscreen)
 
       ;; buffer switching
-      (global-set-key [(super {)] 'previous-buffer)
-      (global-set-key [(super })] 'next-buffer)
+      (bind-key "s-{" 'previous-buffer)
+      (bind-key "s-}" 'next-buffer)
 
       ;; Compliing
-      (global-set-key (kbd "H-c") 'compile)
-      (global-set-key (kbd "H-r") 'recompile)
+      (bind-key "H-c" 'compile)
+      (bind-key "H-r" 'recompile)
 
       ;; disable the key that minimizes emacs to the dock because I don't
       ;; minimize my windows
       ;; (global-unset-key (kbd "C-z"))
 
-      ;; open a new finder window to the path of the current buffer
-      (global-set-key [(super /)]
-                       '(lambda () (interactive) (shell-command "open .")))
+      (defun open-dir-in-finder ()
+        "Open a new Finder window to the path of the current buffer"
+        (interactive)
+        (shell-command "open ."))
+      (bind-key "s-/" 'open-dir-in-finder)
+
+      (defun open-dir-in-iterm ()
+        "Open the current directory of the buffer in iTerm."
+        (interactive)
+        (let ((iterm-path "/opt/homebrew-cask/Caskroom/iterm2/1.0.0/iTerm.app"))
+          (shell-command (concat "open -a " iterm-path " ."))))
+      (bind-key "s-=" 'open-dir-in-iterm)
+
+      ;; Not going to use these commands
       (put 'ns-print-buffer 'disabled t)
 
       (use-package exec-path-from-shell
