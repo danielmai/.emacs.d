@@ -483,8 +483,7 @@ idle time.
   (use-package yasnippet
     :ensure t
     :diminish yas-minor-mode
-    :defer t
-    :idle (yas-global-mode))
+    :config (yas-global-mode))
 #+end_src
 
 * Mac customizations
