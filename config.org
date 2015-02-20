@@ -539,7 +539,11 @@ There are configurations to make when running Emacs on OS X (hence the
       (defun open-dir-in-iterm ()
         "Open the current directory of the buffer in iTerm."
         (interactive)
-        (let ((iterm-path "/opt/homebrew-cask/Caskroom/iterm2/1.0.0/iTerm.app"))
+        (let* ((iterm-app-path "/Applications/iTerm.app")
+               (iterm-brew-path "/opt/homebrew-cask/Caskroom/iterm2/1.0.0/iTerm.app")
+               (iterm-path (if (file-directory-p iterm-app-path)
+                               iterm-app-path
+                             iterm-brew-path)))
           (shell-command (concat "open -a " iterm-path " ."))))
       (bind-key "s-=" 'open-dir-in-iterm)
 
