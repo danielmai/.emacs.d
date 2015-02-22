@@ -100,6 +100,9 @@ Sources for this section include [[https://github.com/magnars/.emacs.d/blob/mast
 
   (global-visual-line-mode)
   (diminish 'visual-line-mode)
+
+  ;; Don't beep at me
+  (setq visible-bell t)
 #+end_src
 
 * List buffers
