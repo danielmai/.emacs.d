@@ -4,7 +4,10 @@
 (setq mc/cmds-to-run-for-all
       '(
         beginning-of-visual-line
+        c-electric-delete-forward
         c-electric-semi&comma
+        c-electric-slash
+        delete-horizontal-space
         electric-newline-and-maybe-indent
         end-of-visual-line
         helm-confirm-and-exit-minibuffer

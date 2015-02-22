@@ -588,3 +588,45 @@ address.
       :init (ido-vertical-mode 1))))
 #+end_src
 
+* Languages
+
+** C/Java
+
+I don't like the default way that Emacs handles indentation. For instance,
+
+#+begin_src C
+  int main(int argc, char *argv[])
+  {
+    /* What's with the brace alignment? */
+    if (check)
+      {
+      }
+    return 0;
+  }
+#+end_src
+
+#+begin_src java
+  switch (number)
+      {
+      case 1:
+          doStuff();
+          break;
+      case 2:
+          doStuff();
+          break;
+      default:
+          break;
+      }
+#+end_src
+
+Luckily, I can modify the way Emacs formats code with this configuration.
+
+#+begin_src emacs-lisp
+  (defun my-c-mode-hook ()
+    (setq c-basic-offset 4)
+    (c-set-offset 'substatement-open 0)   ; Curly braces alignment
+    (c-set-offset 'case-label 4))         ; Switch case statements alignment
+
+  (add-hook 'c-mode-hook 'my-c-mode-hook)
+  (add-hook 'java-mode-hook 'my-c-mode-hook)
+#+end_src
