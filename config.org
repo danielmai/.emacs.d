@@ -105,6 +105,25 @@ Sources for this section include [[https://github.com/magnars/.emacs.d/blob/mast
   (setq visible-bell t)
 #+end_src
 
+The following function for ~occur-dwim~ is taken from [[https://github.com/abo-abo][Oleh Krehel]] from
+[[http://oremacs.com/2015/01/26/occur-dwim/][his blog post at (or emacs]]. It takes the current region or the symbol
+at point as the default value for occur.
+
+#+begin_src emacs-lisp
+  (defun occur-dwim ()
+    "Call `occur' with a sane default."
+    (interactive)
+    (push (if (region-active-p)
+              (buffer-substring-no-properties
+               (region-beginning)
+               (region-end))
+            (thing-at-point 'symbol))
+          regexp-history)
+    (call-interactively 'occur))
+
+  (defalias 'occur 'occur-dwim)
+#+end_src
+
 * Font
 
 [[http://levien.com/type/myfonts/inconsolata.html][Inconsolata]] is a nice monospaced font.
