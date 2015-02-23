@@ -5,9 +5,11 @@
       '(
         beginning-of-visual-line
         c-electric-delete-forward
+        c-electric-paren
         c-electric-semi&comma
         c-electric-slash
         delete-horizontal-space
+        dabbrev-expand
         electric-newline-and-maybe-indent
         end-of-visual-line
         helm-confirm-and-exit-minibuffer

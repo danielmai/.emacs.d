@@ -105,6 +105,23 @@ Sources for this section include [[https://github.com/magnars/.emacs.d/blob/mast
   (setq visible-bell t)
 #+end_src
 
+* Font
+
+[[http://levien.com/type/myfonts/inconsolata.html][Inconsolata]] is a nice monospaced font.
+
+To install it on OS X, you can use Homebrew with the cask extension.
+
+#+begin_src sh
+  brew tap caskroom/fonts                  # you only have to do this once!
+  brew cask install font-inconsolata
+#+end_src
+
+And here's how we tell Emacs to use the font we want to use.
+
+#+begin_src emacs-lisp
+  (set-frame-font "Inconsolata-14")
+#+end_src
+
 * List buffers
 
 ibuffer is the improved version of list-buffers.
