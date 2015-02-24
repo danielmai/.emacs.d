@@ -138,7 +138,8 @@ To install it on OS X, you can use Homebrew with the cask extension.
 And here's how we tell Emacs to use the font we want to use.
 
 #+begin_src emacs-lisp
-  (set-frame-font "Inconsolata-14")
+  (add-to-list 'default-frame-alist
+                       '(font . "Inconsolata-14"))
 #+end_src
 
 * List buffers
