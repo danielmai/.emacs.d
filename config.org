@@ -121,7 +121,7 @@ at point as the default value for occur.
           regexp-history)
     (call-interactively 'occur))
 
-  (defalias 'occur 'occur-dwim)
+  (bind-key "M-s o" 'occur-dwim)
 #+end_src
 
 * Font
