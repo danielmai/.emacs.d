@@ -2,4 +2,4 @@
 # name: comment
 # key: c
 # --
-#+$1: $0
+#+${1:$$(upcase yas-text)}: $0
