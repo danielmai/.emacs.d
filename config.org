@@ -409,8 +409,7 @@ it.
 
 ** Multiple cursors
 
-We'll also need to ~(require 'mulitple-cusors)~ because of []an
-autoload issue](https://github.com/magnars/multiple-cursors.el/issues/105).
+We'll also need to ~(require 'multiple-cusors)~ because of [[https://github.com/magnars/multiple-cursors.el/issues/105][an autoload issue]].
 
 #+begin_src emacs-lisp
   (use-package multiple-cursors
