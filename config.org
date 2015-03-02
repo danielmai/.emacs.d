@@ -260,8 +260,8 @@ I usually use [[*Helm][~helm-locate~]], which live updates the spotlight search 
 * Shell
 
 #+begin_src emacs-lisp
-  (global-set-key (kbd "C-x m") 'shell)
-  (global-set-key (kbd "C-x M") 'ansi-term)
+  (bind-key "C-x m" 'shell)
+  (bind-key "C-x M" 'ansi-term)
 #+end_src
 
 * Window
@@ -338,7 +338,7 @@ that commit windows [[http://stackoverflow.com/questions/18856047/emacs-magit-co
 
 #+begin_src emacs-lisp
   ;; define key for magit-status
-  (global-set-key "\C-cg" 'magit-status)
+  (bind-key "C-c g" 'magit-status)
 
   ;; emacs client for magit
   (setq magit-emacsclient-executable "/usr/local/Cellar/emacs/24.4/bin/emacsclient")
