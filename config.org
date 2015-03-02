@@ -7,6 +7,13 @@ the way I've become accustomed to many different tweaks for it.
 This configuration uses the [[https://github.com/jwiegley/use-package][use-package]] package from John Wiegley, which is
 a fantastic way to manage package configurations.
 
+If you see any keybindings that seem weird to you, it's probably
+because I type with the Dvorak keyboard layout, so things'll probably
+seem strange on other keyboard layouts. I may assign a keybinding just
+because it's more on convenient on Dvorak. Though for the most part, I
+try to follow Emacs and assign bindings by mnemonics, would should
+make sense for any layout.
+
 * Installing Emacs
 
 On OS X, [[http://brew.sh/][homebrew]] is an easy way to install emacs.
