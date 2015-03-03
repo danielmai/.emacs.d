@@ -60,6 +60,28 @@ boxes around the mode line.
                           :box nil)))
 #+end_src
 
+I tend to switch themes more often than normal. For example, switching
+to a lighter theme (such as the default) or to a different theme
+depending on the time of day or my mood. Normally, switching themes is
+a multi-step process with ~disable-theme~ and ~load-theme~. The
+~switch-theme~ function will do that in one swoop. I just choose which
+theme I want to go to.
+
+#+begin_src emacs-lisp
+  (defun switch-theme (theme)
+    ;; This interactive call is taken from `load-theme'
+    (interactive
+     (list
+      (intern (completing-read "Load custom theme: "
+                               (mapcar 'symbol-name
+                                       (custom-available-themes))))))
+    (let ((enabled-themes custom-enabled-themes))
+      (mapcar #'disable-theme custom-enabled-themes)
+      (load-theme theme t)))
+
+  (bind-key "s-<f12>" 'switch-theme)
+#+end_src
+
 * Sane defaults
 
 Let's start with some sane defaults, shall we?
