@@ -301,6 +301,18 @@ A quick way to jump around the buffer.
     (bind-key "C-S-s" 'ace-jump-mode))
 #+end_src
 
+** Ace Window
+
+I'm using the ~s-2~ keybinding because I already set ~s-`~ for other
+window and ~s-1~ for other-frame. I might as well use something close
+to the window/frame navigation keys.
+
+#+begin_src emacs-lisp
+  (use-package ace-window
+    :ensure t
+    :config (bind-key "s-2" 'ace-window))
+#+end_src
+
 ** Dash
 
 Integration with [[http://kapeli.com/dash][Dash, the API documentation browser on OS X]].
