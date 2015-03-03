@@ -335,6 +335,7 @@ Integration with [[http://kapeli.com/dash][Dash, the API documentation browser o
               (use-package helm-projectile :ensure t)
               (use-package helm-ag :ensure t)
               (setq helm-locate-command "mdfind -interpret -name %s %s")
+              (setq helm-ff-newfile-prompt-p nil)
               (helm-mode))
     :bind (("C-`" . helm-resume)
            ("M-x" . helm-M-x)
