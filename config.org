@@ -192,7 +192,7 @@ source: http://ergoemacs.org/emacs/emacs_buffer_management.html
     :init
     (progn
       (recentf-mode t)
-      (setq recent-max-saved-items 100)
+      (setq recentf-max-saved-items 200)
 
       (defun ido-recentf-open ()
         "Use `ido-completing-read' to \\[find-file] a recent file"
@@ -604,7 +604,7 @@ There are configurations to make when running Emacs on OS X (hence the
       (bind-key "s-{" 'previous-buffer)
       (bind-key "s-}" 'next-buffer)
 
-      ;; Compliing
+      ;; Compiling
       (bind-key "H-c" 'compile)
       (bind-key "H-r" 'recompile)
       (bind-key "H-s" (defun save-and-recompile () (interactive) (save-buffer) (recompile)))
