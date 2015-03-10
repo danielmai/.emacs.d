@@ -477,6 +477,15 @@ http://batsov.com/projectile/
         :ensure t)))
 #+end_src
 
+** Python
+
+Integrates with IPython.
+
+#+begin_src emacs-lisp
+  (use-package python-mode
+    :ensure t)
+#+end_src
+
 ** Smartparens mode
 
 #+begin_src emacs-lisp
