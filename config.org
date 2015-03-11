@@ -53,7 +53,7 @@ boxes around the mode line.
     :ensure t
     :init
     (progn
-      (load-theme 'cyberpunk)
+      (load-theme 'cyberpunk t)
       (set-face-attribute `mode-line nil
                           :box nil)
       (set-face-attribute `mode-line-inactive nil
