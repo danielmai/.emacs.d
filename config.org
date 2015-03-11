@@ -373,12 +373,15 @@ what I have them set to (with respect to Dvorak, of course).
 
 ** Dash
 
-Integration with [[http://kapeli.com/dash][Dash, the API documentation browser on OS X]].
+Integration with [[http://kapeli.com/dash][Dash, the API documentation browser on OS X]]. The
+binding ~s-D~ is the same as Cmd-Shift-D, the same binding that dash
+uses in Android Studio (trying to keep things consistent with the
+tools I use).
 
 #+begin_src emacs-lisp
   (use-package dash-at-point
     :ensure t
-    :bind (("C-c a d" . dash-at-point)
+    :bind (("s-D    " . dash-at-point)
            ("C-c e"   . dash-at-point-with-docset)))
 #+end_src
 
