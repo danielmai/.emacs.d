@@ -79,7 +79,12 @@ theme I want to go to.
       (mapcar #'disable-theme custom-enabled-themes)
       (load-theme theme t)))
 
+  (defun disable-active-themes ()
+    (interactive)
+    (mapcar #'disable-theme custom-enabled-themes))
+
   (bind-key "s-<f12>" 'switch-theme)
+  (bind-key "s-<f11>" 'disable-active-themes)
 #+end_src
 
 * Sane defaults
