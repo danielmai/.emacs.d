@@ -212,16 +212,44 @@ source: http://ergoemacs.org/emacs/emacs_buffer_management.html
 * Org mode
 
 Truly the way to [[http://orgmode.org/][live life in plain text]]. I mainly use it to take
-notes and save executable source blocks.
+notes and save executable source blocks. I'm also starting to make use
+of its agenda, timestamping, and capturing features.
+
+It goes without saying that I also use it to manage my Emacs config.
+
+** Org activation bindings
+
+Set up some global key bindings that integrate with Org Mode features.
+
+#+begin_src emacs-lisp
+  (bind-key "C-c l" 'org-store-link)
+  (bind-key "C-c c" 'org-capture)
+  (bind-key "C-c a" 'org-agenda)
+#+end_src
+
+*** Org agenda
+
+#+begin_src emacs-lisp
+  (setq org-agenda-files '("~/Dropbox/Agenda"))
+#+end_src
+
+*** Org capture
+
+#+begin_src emacs-lisp
+  (bind-key "C-c c" 'org-capture)
+  (setq org-default-notes-file "~/Dropbox/Notes/notes.org")
+#+end_src
 
 ** Org setup
 
 Speed commands are a nice and quick way to perform certain actions
 while at the beginning of a heading. It's not activated by default.
 
+See the doc for speed keys by checking out [[elisp:(info%20"(org)%20speed%20keys")][the documentation for
+speed keys in Org mode]].
+
 #+begin_src emacs-lisp
   (setq org-use-speed-commands t)
-  (bind-key "C-c l" 'org-store-link)
 #+end_src
 
 ** Org tags
@@ -232,13 +260,6 @@ good column number to do that.
 
 #+begin_src emacs-lisp
   (setq org-tags-column 45)
-#+end_src
-
-** Org capture
-
-#+begin_src emacs-lisp
-    (bind-key "C-c c" 'org-capture)
-  (setq org-default-notes-file "~/Dropbox/Notes/notes.org")
 #+end_src
 
 ** Org babel languages
