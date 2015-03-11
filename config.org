@@ -311,6 +311,23 @@ Convenient keybindings to resize windows.
 (bind-key "s-C-<up>"    'enlarge-window)
 #+end_src
 
+* Ido
+
+#+begin_src emacs-lisp
+  (use-package ido
+    :init
+    (progn
+      (setq ido-enable-flex-matching t)
+    (setq ido-everywhere t)
+    (ido-mode t)
+    (use-package ido-ubiquitous
+      :ensure t
+      :init (ido-ubiquitous-mode))
+    (use-package ido-vertical-mode
+      :ensure t
+      :init (ido-vertical-mode 1))))
+#+end_src
+
 * ELPA packages
 
 These are the packages that are not built into Emacs.
@@ -532,6 +549,17 @@ http://www.masteringemacs.org/article/smart-scan-jump-symbols-buffer
            ("s-p" . smartscan-symbol-go-backward)))
 #+end_src
 
+** Smex
+
+Smex is a nice way to 
+
+#+begin_src
+  (use-package smex
+    :if (not (featurep 'helm-mode))
+    :ensure t
+    :bind ("M-x" . smex))
+#+end_src
+
 ** Skewer mode
 
 Live coding for HTML/CSS/JavaScript.
@@ -665,28 +693,10 @@ match the same one on OS X.
     (exec-path-from-shell-initialize))
 #+end_src
 
-
 * TODO Computer-specific settings
 
 Load some computer specific settings, such as the name and and email
 address.
-
-* Ido
-
-#+begin_src emacs-lisp
-  (use-package ido
-    :init
-    (progn
-      (setq ido-enable-flex-matching t)
-    (setq ido-everywhere t)
-    (ido-mode t)
-    (use-package ido-ubiquitous
-      :ensure t
-      :init (ido-ubiquitous-mode))
-    (use-package ido-vertical-mode
-      :ensure t
-      :init (ido-vertical-mode 1))))
-#+end_src
 
 * Languages
 
