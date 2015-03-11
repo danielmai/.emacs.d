@@ -453,13 +453,15 @@ it.
 We'll also need to ~(require 'multiple-cusors)~ because of [[https://github.com/magnars/multiple-cursors.el/issues/105][an autoload issue]].
 
 #+begin_src emacs-lisp
-  (use-package multiple-cursors
-    :ensure t
-    :init (require 'multiple-cursors)
-    :bind (("C-S-c C-S-c" . mc/edit-lines)
-           ("C->"         . mc/mark-next-like-this)
-           ("C-<"         . mc/mark-previous-like-this)
-           ("C-c C-<"     . mc/mark-all-like-this)))
+    (use-package multiple-cursors
+      :ensure t
+      :init (require 'multiple-cursors)
+      :bind (("C-S-c C-S-c" . mc/edit-lines)
+             ("C->"         . mc/mark-next-like-this)
+             ("C-<"         . mc/mark-previous-like-this)
+             ("C-c C-<"     . mc/mark-all-like-this)
+             ("C-!"         . mc/mark-next-symbol-like-this)
+             ("s-d"         . mc/mark-all-dwim)))
 #+end_src
 
 ** Projectile
