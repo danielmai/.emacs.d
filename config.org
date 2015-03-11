@@ -327,14 +327,18 @@ A quick way to jump around the buffer.
 
 ** Ace Window
 
-I'm using the ~s-2~ keybinding because I already set ~s-`~ for other
-window and ~s-1~ for other-frame. I might as well use something close
-to the window/frame navigation keys.
+[[https://github.com/abo-abo/ace-window][ace-window]] is a package that uses the same idea from ace-jump-mode for
+buffer navigation, but applies it to windows. The default keys are
+1-9, but it's faster to access the keys on the home row, so that's
+what I have them set to (with respect to Dvorak, of course).
 
 #+begin_src emacs-lisp
   (use-package ace-window
     :ensure t
-    :config (bind-key "s-2" 'ace-window))
+    :config (progn
+              (bind-key "s-o" 'ace-window)
+              (setq aw-keys '(?a ?e ?o ?u ?h ?t ?n ?s))))
+#+end_src
 #+end_src
 
 ** Dash
