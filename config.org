@@ -392,8 +392,11 @@ Integration with [[http://kapeli.com/dash][Dash, the API documentation browser o
               (require 'helm-config)
               (use-package helm-projectile :ensure t)
               (use-package helm-ag :ensure t)
-              (setq helm-locate-command "mdfind -interpret -name %s %s")
-              (setq helm-ff-newfile-prompt-p nil)
+              (setq helm-locate-command "mdfind -interpret -name %s %s"
+                    helm-ff-newfile-prompt-p nil
+                    helm-M-x-fuzzy-match t
+                    helm-move-to-line-cycle-in-source t)
+              (bind-key "C-c h" 'helm-command-prefix)
               (helm-mode))
     :bind (("C-`" . helm-resume)
            ("M-x" . helm-M-x)
