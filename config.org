@@ -270,10 +270,18 @@ editing popup window staying within the same window so all the windows
 don't jump around. Also, having the top and bottom trailing lines in
 the block is a waste of space, so we can remove them.
 
+I noticed that fontification doesn't work with markdown mode when the
+block is indented after editing it in the org src buffer---the leading
+#s for headers don't get fontified properly. Setting
+~org-src-preserve-indentation~ makes things consistent as it doesn't
+pad source blocks with leading spaces.
+
 #+begin_src emacs-lisp
-  (setq org-src-fontify-natively t)
-  (setq org-src-window-setup 'current-window)
-  (setq org-src-strip-leading-and-trailing-blank-lines t)
+(setq org-src-fontify-natively t
+      org-src-window-setup 'current-window
+      org-src-strip-leading-and-trailing-blank-lines t
+      org-src-preserve-indentation t
+      org-src-tab-acts-natively t)
 #+end_src
 
 * Tramp
