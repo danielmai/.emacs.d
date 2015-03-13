@@ -586,7 +586,8 @@ http://www.masteringemacs.org/article/smart-scan-jump-symbols-buffer
 
 ** Smex
 
-Smex is a nice way to 
+Smex integrates ido with ~M-x~. I used to use this before moving on to
+[[*Helm][helm]].
 
 #+begin_src emacs-lisp
 (use-package smex
