@@ -340,6 +340,26 @@ Convenient keybindings to resize windows.
 (bind-key "s-C-<up>"    'enlarge-window)
 #+end_src
 
+Whenever I split windows, I usually do so and also switch to the other
+window as well, so might as well rebind the splitting key bindings to
+do just that to reduce the repetition.
+
+#+begin_src emacs-lisp
+(defun vsplit-other-window ()
+  "Splits the window vertically and switches to that window."
+  (interactive)
+  (split-window-vertically)
+  (other-window 1 nil))
+(defun hsplit-other-window ()
+  "Splits the window horizontally and switches to that window."
+  (interactive)
+  (split-window-horizontally)
+  (other-window 1 nil))
+
+(bind-key "C-x 2" 'vsplit-other-window)
+(bind-key "C-x 3" 'hsplit-other-window)
+#+end_src
+
 * Ido
 
 #+begin_src emacs-lisp
