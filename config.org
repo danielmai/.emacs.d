@@ -446,7 +446,7 @@ tools I use).
 #+begin_src emacs-lisp
 (use-package dash-at-point
   :ensure t
-  :bind (("s-D    " . dash-at-point)
+  :bind (("s-D"     . dash-at-point)
          ("C-c e"   . dash-at-point-with-docset)))
 #+end_src
 
