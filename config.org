@@ -164,10 +164,14 @@ at point as the default value for occur.
 
 [[http://levien.com/type/myfonts/inconsolata.html][Inconsolata]] is a nice monospaced font.
 
-To install it on OS X, you can use Homebrew with the cask extension.
+To install it on OS X, you can use Homebrew with [[http://caskroom.io/][Homebrew Cask]].
 
-#+begin_src sh
-brew tap caskroom/fonts                  # you only have to do this once!
+#+begin_src sh :tangle no
+# You may need to run these two lines if you haven't set up Homebrew
+# Cask and its fonts formula.
+brew install caskroom/cask/brew-cask
+brew tap caskroom/fonts
+
 brew cask install font-inconsolata
 #+end_src
 
