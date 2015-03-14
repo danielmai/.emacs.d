@@ -412,6 +412,19 @@ what I have them set to (with respect to Dvorak, of course).
 #+end_src
 #+end_src
 
+** C-Eldoc
+   :PROPERTIES:
+   :GitHub:   https://github.com/mooz/c-eldoc
+   :END:
+
+This package displays function signatures in the mode line.
+
+#+begin_src emacs-lisp
+(use-package c-eldoc
+  :ensure t
+  :init (add-hook 'c-mode-hook #'c-turn-on-eldoc-mode))
+#+end_src
+
 ** Dash
 
 Integration with [[http://kapeli.com/dash][Dash, the API documentation browser on OS X]]. The
