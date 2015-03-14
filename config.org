@@ -381,6 +381,13 @@ do just that to reduce the repetition.
       :init (ido-vertical-mode 1))))
 #+end_src
 
+* Whitespace mode
+
+#+begin_src emacs-lisp
+(use-package whitespace
+  :init (bind-key "s-<f10>" #'whitespace-mode))
+#+end_src
+
 * ELPA packages
 
 These are the packages that are not built into Emacs.
