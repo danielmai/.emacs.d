@@ -528,6 +528,15 @@ No more juggling windows after commiting. It's magit bliss.
   :bind ("C-@" . er/expand-region))
 #+end_src
 
+** Floobits
+
+Using [[https://floobits.com/][Floobits]] for code collaboration.
+
+#+begin_src emacs-lisp
+(use-package floobits
+  :ensure t)
+#+end_src
+
 ** Flycheck
 
 Still need to set up hooks so that flycheck automatically runs in
