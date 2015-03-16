@@ -385,7 +385,7 @@ do just that to reduce the repetition.
 
 #+begin_src emacs-lisp
 (use-package whitespace
-  :init (bind-key "s-<f10>" #'whitespace-mode))
+  :bind ("s-<f10>" . whitespace-mode))
 #+end_src
 
 * ELPA packages
@@ -403,8 +403,7 @@ A quick way to jump around the buffer.
   :ensure t
   :diminish t
   :commands ace-jump-mode
-  :init
-  (bind-key "C-S-s" 'ace-jump-mode))
+  :bind ("C-S-s" . ace-jump-mode))
 #+end_src
 
 ** Ace Window
@@ -417,9 +416,8 @@ what I have them set to (with respect to Dvorak, of course).
 #+begin_src emacs-lisp
 (use-package ace-window
   :ensure t
-  :config (progn
-            (bind-key "s-o" 'ace-window)
-            (setq aw-keys '(?a ?e ?o ?u ?h ?t ?n ?s))))
+  :config (setq aw-keys '(?a ?e ?o ?u ?h ?t ?n ?s))
+  :bind ("s-o" . ace-window))
 #+end_src
 #+end_src
 
@@ -463,10 +461,10 @@ tools I use).
           (setq helm-locate-command "mdfind -interpret -name %s %s"
                 helm-ff-newfile-prompt-p nil
                 helm-M-x-fuzzy-match t)
-          (bind-key "C-c h" 'helm-command-prefix)
-          (bind-key "C-x b" 'helm-mini)
           (helm-mode))
-  :bind (("C-`" . helm-resume)
+  :bind (("C-c h" . helm-command-prefix)
+         ("C-x b" . helm-mini)
+         ("C-`" . helm-resume)
          ("M-x" . helm-M-x)
          ("C-x C-f" . helm-find-files)))
 #+end_src
@@ -474,23 +472,17 @@ tools I use).
 ** Magit
 
 A great interface for git projects. It's much more pleasant to use
-than the git interface on the command line.
+than the git interface on the command line. Use an easy keybinding to
+access magit. Also, let's set up the emacsclient so that commit
+windows [[http://stackoverflow.com/questions/18856047/emacs-magit-commit-opens-new-emacs-client][don't open up in a new frame]].
+
 
 #+begin_src emacs-lisp
 (use-package magit
   :ensure t
-  :diminish magit-auto-revert-mode)
-#+end_src
-
-Use an easy keybinding to access magit and set up the emacsclient so
-that commit windows [[http://stackoverflow.com/questions/18856047/emacs-magit-commit-opens-new-emacs-client][don't open up in a new frame]].
-
-#+begin_src emacs-lisp
-;; define key for magit-status
-(bind-key "C-c g" 'magit-status)
-
-;; emacs client for magit
-(setq magit-emacsclient-executable "/usr/local/Cellar/emacs/24.4/bin/emacsclient")
+  :diminish magit-auto-revert-mode
+  :config (setq magit-emacsclient-executable "/usr/local/Cellar/emacs/24.4/bin/emacsclient")
+  :bind ("C-c g" . magit-status))
 #+end_src
 
 *** Fullscreen magit
