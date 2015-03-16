@@ -464,6 +464,7 @@ tools I use).
                 helm-ff-newfile-prompt-p nil
                 helm-M-x-fuzzy-match t)
           (bind-key "C-c h" 'helm-command-prefix)
+          (bind-key "C-x b" 'helm-mini)
           (helm-mode))
   :bind (("C-`" . helm-resume)
          ("M-x" . helm-M-x)
