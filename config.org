@@ -614,11 +614,13 @@ Integrates with IPython.
 
 *** Smartparens org mode
 
-Set up some pairings for org mode markup.
+Set up some pairings for org mode markup. These pairings won't
+activate by default; they'll only apply for wrapping regions.
 
 #+begin_src emacs-lisp
-(sp-local-pair 'org-mode "~" "~" :bind "C-~")
-(sp-local-pair 'org-mode "/" "/")
+(sp-local-pair 'org-mode "~" "~" :actions '(wrap))
+(sp-local-pair 'org-mode "/" "/" :actions '(wrap))
+(sp-local-pair 'org-mode "*" "*" :actions '(wrap))
 #+end_src
 
 ** Smartscan
