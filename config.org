@@ -782,10 +782,40 @@ match the same one on OS X.
   (exec-path-from-shell-initialize))
 #+end_src
 
-* TODO Computer-specific settings
+* Computer-specific settings
 
-Load some computer specific settings, such as the name and and email
-address.
+Load some computer-specific settings, such as the name and and email
+address. The way the settings are loaded is based off of [[https://github.com/magnars/.emacs.d][Magnar
+Sveen's]] config.
+
+In my case, the computers I use usually use the same username (my
+name, go figure), so instead of basing the specific settings from the
+username, I use the hostname. The shell command ~hostname -s~ gets the
+hostname for the computer without any "domain information," such as
+the ".local" suffix.
+
+I use the ~s-trim~ function, which comes from the [[https://github.com/magnars/s.el][s string library]]. I
+~require~ it here, though a handful of the ELPA packages that are
+loaded earlier in the config depend on it already. That means the
+~require~ is redundant, but better to be explicit about it.
+
+#+begin_src emacs-lisp
+(defvar mai/user-settings-dir nil
+  "The directory with user-specific Emacs settings for this
+  user.")
+
+;; Settings for currently logged in user
+(require 's)
+(setq mai/user-settings-dir
+      (concat user-emacs-directory
+              "users/"
+              (s-trim (shell-command-to-string "hostname -s"))))
+(add-to-list 'load-path mai/user-settings-dir)
+
+;; Load settings specific for the current user
+(when (file-exists-p mai/user-settings-dir)
+  (mapc 'load (directory-files mai/user-settings-dir nil "^[^#].*el$")))
+#+end_src
 
 * Languages
 
