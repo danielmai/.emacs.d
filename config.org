@@ -770,7 +770,8 @@ There are configurations to make when running Emacs on OS X (hence the
     (bind-key "s-=" 'open-dir-in-iterm)
 
     ;; Not going to use these commands
-    (put 'ns-print-buffer 'disabled t)))
+    (put 'ns-print-buffer 'disabled t)
+    (put 'suspend-frame 'disabled t)))
 #+end_src
 
 ~exec-path-from-shell~ makes the command-line path with Emacs's shell
