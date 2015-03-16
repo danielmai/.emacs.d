@@ -462,8 +462,7 @@ tools I use).
           (use-package helm-ag :ensure t)
           (setq helm-locate-command "mdfind -interpret -name %s %s"
                 helm-ff-newfile-prompt-p nil
-                helm-M-x-fuzzy-match t
-                helm-move-to-line-cycle-in-source t)
+                helm-M-x-fuzzy-match t)
           (bind-key "C-c h" 'helm-command-prefix)
           (helm-mode))
   :bind (("C-`" . helm-resume)
