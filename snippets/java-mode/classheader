@@ -1,0 +1,14 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: classheader
+# key: classheader
+# binding: direct-keybinding
+# --
+/**
+ * Class description
+ *
+ * @author `(user-full-name)`
+ * @version `(format-time-string "%Y-%m-%d")`
+ */
+public class `(substring (buffer-name) 0 -4)` {
+    $0
+}
