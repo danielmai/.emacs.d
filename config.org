@@ -44,6 +44,7 @@ customize settings in [[file:init.el][init.el]].
 #+end_src
 
 * Theme
+** Cyberpunk theme
 
 The [[https://github.com/n3mo/cyberpunk-theme.el][cyberpunk theme]] is dark and colorful. However, I don't like the
 boxes around the mode line.
@@ -66,6 +67,18 @@ depending on the time of day or my mood. Normally, switching themes is
 a multi-step process with ~disable-theme~ and ~load-theme~. The
 ~switch-theme~ function will do that in one swoop. I just choose which
 theme I want to go to.
+
+** Solarized theme
+
+Here's some configuration for [[https://github.com/bbatsov/solarized-emacs/][bbatsov's solarized themes]].
+
+#+begin_src emacs-lisp
+(use-package solarized-theme
+  :config (setq solarized-use-variable-pitch nil)
+  :ensure t)
+#+end_src
+
+** Convenient theme functions
 
 #+begin_src emacs-lisp
 (defun switch-theme (theme)
