@@ -434,7 +434,7 @@ A quick way to jump around the buffer.
 #+begin_src emacs-lisp
 (use-package ace-jump-mode
   :ensure t
-  :diminish t
+  :diminish ace-jump-mode
   :commands ace-jump-mode
   :bind ("C-S-s" . ace-jump-mode))
 #+end_src
