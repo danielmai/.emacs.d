@@ -571,7 +571,19 @@ it.
 
 #+begin_src emacs-lisp
 (use-package flycheck
-  :ensure t)
+  :ensure t
+  :config (setq flycheck-html-tidy-executable "tidy5"))
+#+end_src
+
+*** Linter setups
+
+Install the HTML5/CSS/JavaScript linters.
+
+#+begin_src sh
+brew tap homebrew/dupes
+brew install tidy
+npm install -g jshint
+npm install -g csslint
 #+end_src
 
 ** Markdown mode
