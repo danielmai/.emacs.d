@@ -375,6 +375,15 @@ do just that to reduce the repetition.
 (bind-key "C-x 3" 'hsplit-other-window)
 #+end_src
 
+** Winner mode
+
+Winner mode allows you to undo/redo changes to window changes in Emacs
+and allows you.
+
+#+begin_src emacs-lisp
+(winner-mode t)
+#+end_src
+
 * Ido
 
 #+begin_src emacs-lisp
