@@ -514,8 +514,10 @@ windows [[http://stackoverflow.com/questions/18856047/emacs-magit-commit-opens-n
 (use-package magit
   :ensure t
   :diminish magit-auto-revert-mode
-  :config (setq magit-emacsclient-executable "/usr/local/Cellar/emacs/24.4/bin/emacsclient")
-  :bind ("C-c g" . magit-status))
+  :config
+  (setq magit-emacsclient-executable "/usr/local/Cellar/emacs/24.4/bin/emacsclient")
+  (setq magit-last-seen-setup-instructions "1.4.0")
+  (bind-key "C-c g" 'magit-status))
 #+end_src
 
 *** Fullscreen magit
