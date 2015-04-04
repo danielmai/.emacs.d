@@ -745,6 +745,18 @@ idle time.
   :config (yas-global-mode))
 #+end_src
 
+** Emmet
+
+According to [[http://emmet.io/][their website]], "Emmet — the essential toolkit for web-developers."
+
+#+begin_src emacs-lisp
+(use-package emmet-mode
+  :ensure t
+  :config
+  (add-hook 'html-mode-hook 'emmet-mode)
+  (add-hook 'css-mode-hook 'emmet-mode))
+#+end_src
+
 * Mac customizations
 
 There are configurations to make when running Emacs on OS X (hence the
