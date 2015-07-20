@@ -449,7 +449,9 @@ what I have them set to (with respect to Dvorak, of course).
 #+begin_src emacs-lisp
 (use-package ace-window
   :ensure t
-  :config (setq aw-keys '(?a ?e ?o ?u ?h ?t ?n ?s))
+  :config
+  (setq aw-keys '(?a ?o ?e ?u ?h ?t ?n ?s))
+  (ace-window-display-mode)
   :bind ("s-o" . ace-window))
 #+end_src
 #+end_src
