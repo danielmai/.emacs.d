@@ -21,7 +21,12 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-(require 'use-package)
+
+(eval-when-compile
+  (require 'use-package))
+(require 'diminish)                ;; if you use :diminish
+(require 'bind-key)
+;(setq use-package-verbose t)
 
 ;;; Load the config
 (org-babel-load-file (concat user-emacs-directory "config.org"))
