@@ -19,11 +19,12 @@ make sense for any layout.
 On OS X, [[http://brew.sh/][homebrew]] is an easy way to install emacs.
 
 Here's what the parameter means.
-- ~--cocoa~ :: installs emacs with the OS X GUI version
-- ~--with-imagemagick~ :: installs emacs with imagemagick support
+- ~--with-cocoa~ :: installs emacs with the OS X GUI version
+- ~--with-imagemagick~ :: installs emacs with imagemagick support for image processing
+- ~--with-gnutls~ :: installs emacs with GnuTLS to utilize encrypted SSL and TLS connections
 
 #+begin_src sh
-brew install emacs --cocoa --with-imagemagick
+brew install emacs --with-cocoa --with-imagemagick --with-gnutls
 #+end_src
 
 * Personal Information
