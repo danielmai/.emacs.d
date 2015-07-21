@@ -151,6 +151,9 @@ Sources for this section include [[https://github.com/magnars/.emacs.d/blob/mast
 
 (setq uniquify-buffer-name-style 'forward)
 
+;; -i gets alias definitions from .bash_profile
+(setq shell-command-switch "-ic")
+
 ;; Don't beep at me
 (setq visible-bell t)
 #+end_src
