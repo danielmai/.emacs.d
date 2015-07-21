@@ -561,11 +561,19 @@ No more juggling windows after commiting. It's magit bliss.
   :bind ("C-@" . er/expand-region))
 #+end_src
 
+** Olivetti
+
+#+begin_src emacs-lisp
+(use-package olivetti
+  :ensure t
+  :bind ("s-<f6>" . olivetti-mode))
+#+end_src
+
 ** Floobits
 
 Using [[https://floobits.com/][Floobits]] for code collaboration.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package floobits
   :ensure t)
 #+end_src
