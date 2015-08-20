@@ -192,11 +192,15 @@ brew tap caskroom/fonts
 brew cask install font-inconsolata
 #+end_src
 
-And here's how we tell Emacs to use the font we want to use.
+~exec-path-from-shell~ makes the command-line path with Emacs's shell
+match the same one on OS X.
 
 #+begin_src emacs-lisp
-(add-to-list 'default-frame-alist
-             '(font . "Inconsolata-14"))
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns))
+  :ensure t
+  :config
+  (exec-path-from-shell-initialize))
 #+end_src
 
 * List buffers
@@ -839,16 +843,6 @@ There are configurations to make when running Emacs on OS X (hence the
     (put 'suspend-frame 'disabled t)))
 #+end_src
 
-~exec-path-from-shell~ makes the command-line path with Emacs's shell
-match the same one on OS X.
-
-#+begin_src emacs-lisp
-(use-package exec-path-from-shell
-  :if (memq window-system '(mac ns))
-  :ensure t
-  :config
-  (exec-path-from-shell-initialize))
-#+end_src
 
 * Computer-specific settings
 
