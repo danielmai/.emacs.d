@@ -1003,3 +1003,10 @@ Luckily, I can modify the way Emacs formats code with this configuration.
   (define-key doc-view-mode-map (kbd "<right>") 'doc-view-next-page)
   (define-key doc-view-mode-map (kbd "<left>") 'doc-view-previous-page))
 #+end_src
+
+** OS X scrolling
+
+#+begin_src emacs-lisp
+(setq mouse-wheel-scroll-amount (quote (0.01)))
+#+end_src
+
