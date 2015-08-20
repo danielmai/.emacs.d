@@ -994,3 +994,12 @@ Luckily, I can modify the way Emacs formats code with this configuration.
 (add-hook 'c-mode-hook 'my-c-mode-hook)
 (add-hook 'java-mode-hook 'my-c-mode-hook)
 #+end_src
+* Misc
+** Docview keybindings
+
+#+begin_src emacs-lisp
+(use-package doc-view
+  :config
+  (define-key doc-view-mode-map (kbd "<right>") 'doc-view-next-page)
+  (define-key doc-view-mode-map (kbd "<left>") 'doc-view-previous-page))
+#+end_src
