@@ -1,0 +1,7 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: print_debug
+# key: pd
+# group: debug
+# binding: direct-keybinding
+# --
+print '${1:var} =', $1
