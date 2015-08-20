@@ -23,7 +23,9 @@
         org-ctrl-c-ctrl-c
         org-delete-char
         org-end-of-line
+        org-metaright
         org-self-insert-command
+        other-frame
         sgml-close-tag
         sgml-slash
         transpose-words
@@ -32,5 +34,6 @@
 
 (setq mc/cmds-to-run-once
       '(
+        dired-unmark-backward
         markdown-exdent-or-delete
         ))
