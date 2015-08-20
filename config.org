@@ -73,9 +73,11 @@ theme I want to go to.
 
 Here's some configuration for [[https://github.com/bbatsov/solarized-emacs/][bbatsov's solarized themes]].
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package solarized-theme
-  :config (setq solarized-use-variable-pitch nil)
+  :config
+  (setq solarized-use-variable-pitch nil)
+  (load-theme 'solarized-dark t)
   :ensure t)
 #+end_src
 
@@ -99,6 +101,27 @@ Here's some configuration for [[https://github.com/bbatsov/solarized-emacs/][bba
 
 (bind-key "s-<f12>" 'switch-theme)
 (bind-key "s-<f11>" 'disable-active-themes)
+#+end_src
+* Font
+
+[[http://levien.com/type/myfonts/inconsolata.html][Inconsolata]] is a nice monospaced font.
+
+To install it on OS X, you can use Homebrew with [[http://caskroom.io/][Homebrew Cask]].
+
+#+begin_src sh :tangle no
+# You may need to run these two lines if you haven't set up Homebrew
+# Cask and its fonts formula.
+brew install caskroom/cask/brew-cask
+brew tap caskroom/fonts
+
+brew cask install font-inconsolata
+#+end_src
+
+And here's how we tell Emacs to use the font we want to use.
+
+#+begin_src emacs-lisp
+(add-to-list 'default-frame-alist
+             '(font . "Inconsolata-14"))
 #+end_src
 
 * Sane defaults
@@ -177,19 +200,70 @@ at point as the default value for occur.
 (bind-key "M-s o" 'occur-dwim)
 #+end_src
 
-* Font
+* Mac customizations
 
-[[http://levien.com/type/myfonts/inconsolata.html][Inconsolata]] is a nice monospaced font.
+There are configurations to make when running Emacs on OS X (hence the
+"darwin" system-type check).
 
-To install it on OS X, you can use Homebrew with [[http://caskroom.io/][Homebrew Cask]].
+#+begin_src emacs-lisp
+(let ((is-mac (string-equal system-type "darwin")))
+  (when is-mac
+    ;; delete files by moving them to the trash
+    (setq delete-by-moving-to-trash t)
+    (setq trash-directory "~/.Trash")
 
-#+begin_src sh :tangle no
-# You may need to run these two lines if you haven't set up Homebrew
-# Cask and its fonts formula.
-brew install caskroom/cask/brew-cask
-brew tap caskroom/fonts
+    ;; Don't make new frames when opening a new file with Emacs
+    (setq ns-pop-up-frames nil)
 
-brew cask install font-inconsolata
+    ;; set the Fn key as the hyper key
+    (setq ns-function-modifier 'hyper)
+
+    ;; Use Command-` to switch between Emacs windows (not frames)
+    (bind-key "s-`" 'other-window)
+    
+    ;; Use Command-Shift-` to switch Emacs frames in reverse
+    (bind-key "s-~" (lambda() () (interactive) (other-window -1)))
+
+    ;; Because of the keybindings above, set one for `other-frame'
+    (bind-key "s-1" 'other-frame)
+
+    ;; Fullscreen!
+    (setq ns-use-native-fullscreen nil) ; Not Lion style
+    (bind-key "<s-return>" 'toggle-frame-fullscreen)
+
+    ;; buffer switching
+    (bind-key "s-{" 'previous-buffer)
+    (bind-key "s-}" 'next-buffer)
+
+    ;; Compiling
+    (bind-key "H-c" 'compile)
+    (bind-key "H-r" 'recompile)
+    (bind-key "H-s" (defun save-and-recompile () (interactive) (save-buffer) (recompile)))
+
+    ;; disable the key that minimizes emacs to the dock because I don't
+    ;; minimize my windows
+    ;; (global-unset-key (kbd "C-z"))
+
+    (defun open-dir-in-finder ()
+      "Open a new Finder window to the path of the current buffer"
+      (interactive)
+      (shell-command "open ."))
+    (bind-key "s-/" 'open-dir-in-finder)
+
+    (defun open-dir-in-iterm ()
+      "Open the current directory of the buffer in iTerm."
+      (interactive)
+      (let* ((iterm-app-path "/Applications/iTerm.app")
+             (iterm-brew-path "/opt/homebrew-cask/Caskroom/iterm2/1.0.0/iTerm.app")
+             (iterm-path (if (file-directory-p iterm-app-path)
+                             iterm-app-path
+                           iterm-brew-path)))
+        (shell-command (concat "open -a " iterm-path " ."))))
+    (bind-key "s-=" 'open-dir-in-iterm)
+
+    ;; Not going to use these commands
+    (put 'ns-print-buffer 'disabled t)
+    (put 'suspend-frame 'disabled t)))
 #+end_src
 
 ~exec-path-from-shell~ makes the command-line path with Emacs's shell
@@ -225,11 +299,11 @@ source: http://ergoemacs.org/emacs/emacs_buffer_management.html
 
 source: [[http://whattheemacsd.com/sane-defaults.el-01.html][Magnars Sveen]]
 
-
 * Recentf
 
 #+begin_src emacs-lisp
 (use-package recentf
+  :commands ido-recentf-open
   :init
   (progn
     (recentf-mode t)
@@ -318,10 +392,11 @@ good column number to do that.
    (sh . t)))
 
 (defun my-org-confirm-babel-evaluate (lang body)
+  "Do not confirm evaluation for these languages."
   (not (or (string= lang "C")
            (string= lang "java")
            (string= lang "python")
-           (string= lang "emacs-lisp"))))  ; don't ask for c, java, or python
+           (string= lang "emacs-lisp"))))
 (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
 #+end_src
 
@@ -334,9 +409,9 @@ the block is a waste of space, so we can remove them.
 
 I noticed that fontification doesn't work with markdown mode when the
 block is indented after editing it in the org src buffer---the leading
-#s for headers don't get fontified properly. Setting
-~org-src-preserve-indentation~ makes things consistent as it doesn't
-pad source blocks with leading spaces.
+#s for headers don't get fontified properly because they appear as Org
+comments. Setting ~org-src-preserve-indentation~ makes things
+consistent as it doesn't pad source blocks with leading spaces.
 
 #+begin_src emacs-lisp
 (setq org-src-fontify-natively t
@@ -346,9 +421,20 @@ pad source blocks with leading spaces.
       org-src-tab-acts-natively t)
 #+end_src
 
-* Tramp
+** Org exporting
+
+*** Pandoc exporter
+
+Pandoc converts between a huge number of different file formats. 
 
 #+begin_src emacs-lisp
+(use-package ox-pandoc
+  :ensure t)
+#+end_src
+
+* Tramp
+
+#+begin_src emacs-lisp :tangle no
 (use-package tramp)
 #+end_src
 
@@ -356,7 +442,8 @@ pad source blocks with leading spaces.
 
 Using OS X Spotlight within Emacs by modifying the ~locate~ function.
 
-I usually use [[*Helm][~helm-locate~]], which live updates the spotlight search list.
+I usually use [[*Helm][~helm-locate~]], which does live updates the spotlight
+search list as you type a query.
 
 #+begin_src emacs-lisp
 ;; mdfind is the command line interface to Spotlight
@@ -410,6 +497,14 @@ and allows you.
 (winner-mode t)
 #+end_src
 
+** Transpose frame
+
+#+begin_src emacs-lisp
+(use-package transpose-frame
+  :ensure t
+  :bind ("s-M-t" . transpose-frame))
+#+end_src
+
 * Ido
 
 #+begin_src emacs-lisp
@@ -419,12 +514,13 @@ and allows you.
     (setq ido-enable-flex-matching t)
     (setq ido-everywhere t)
     (ido-mode t)
-    (use-package ido-ubiquitous
-      :ensure t
-      :init (ido-ubiquitous-mode))
+    ;; (use-package ido-ubiquitous
+    ;;   :ensure t
+    ;;   :init (ido-ubiquitous-mode))
     (use-package ido-vertical-mode
       :ensure t
-      :init (ido-vertical-mode 1))))
+      :init (ido-vertical-mode 1)
+      (setq ido-vertical-define-keys 'C-n-and-C-p-only))))
 #+end_src
 
 * Whitespace mode
@@ -478,8 +574,16 @@ This package displays function signatures in the mode line.
 
 #+begin_src emacs-lisp
 (use-package c-eldoc
+  :commands c-turn-on-eldoc-mode
   :ensure t
   :init (add-hook 'c-mode-hook #'c-turn-on-eldoc-mode))
+#+end_src
+
+** Clojure
+
+#+begin_src emacs-lisp
+(use-package clojure-mode
+  :ensure t)
 #+end_src
 
 ** Dash
@@ -504,7 +608,10 @@ tools I use).
   :diminish helm-mode
   :init (progn
           (require 'helm-config)
-          (use-package helm-projectile :ensure t)
+          (use-package helm-projectile
+            :ensure t
+            :commands helm-projectile
+            :bind ("C-c p h" . helm-projectile))
           (use-package helm-ag :ensure t)
           (setq helm-locate-command "mdfind -interpret -name %s %s"
                 helm-ff-newfile-prompt-p nil
@@ -528,11 +635,10 @@ windows [[http://stackoverflow.com/questions/18856047/emacs-magit-commit-opens-n
 #+begin_src emacs-lisp
 (use-package magit
   :ensure t
-  :diminish magit-auto-revert-mode
+  :bind ("C-c g" . magit-status)
   :config
-  (setq magit-emacsclient-executable "/usr/local/Cellar/emacs/24.4/bin/emacsclient")
-  (setq magit-last-seen-setup-instructions "1.4.0")
-  (bind-key "C-c g" 'magit-status))
+  (setq magit-emacsclient-executable "/usr/local/Cellar/emacs/24.5/bin/emacsclient")
+  (define-key magit-status-mode-map (kbd "q") 'magit-quit-session))
 #+end_src
 
 *** Fullscreen magit
@@ -547,7 +653,6 @@ No more juggling windows after commiting. It's magit bliss.
 
 #+begin_src emacs-lisp
 ;; full screen magit-status
-
 (defadvice magit-status (around magit-fullscreen activate)
   (window-configuration-to-register :magit-fullscreen)
   ad-do-it
@@ -558,8 +663,22 @@ No more juggling windows after commiting. It's magit bliss.
   (interactive)
   (kill-buffer)
   (jump-to-register :magit-fullscreen))
+#+end_src
 
-(define-key magit-status-mode-map (kbd "q") 'magit-quit-session)
+** Elfeed
+
+#+begin_src emacs-lisp :tangle no
+(use-package elfeed
+  :ensure t
+  :config (setq elfeed-feeds
+                '("http://feeds.feedburner.com/gonintendo/news"
+                  "http://usesthis.com/feed/")))
+#+end_src
+
+** Emacs IPython Notebook
+#+begin_src emacs-lisp
+(use-package ein
+  :ensure t)
 #+end_src
 
 ** Expand region
@@ -636,6 +755,16 @@ We'll also need to ~(require 'multiple-cusors)~ because of [[https://github.com/
          ("s-d"         . mc/mark-all-dwim)))
 #+end_src
 
+** Perspective
+
+Workspaces in Emacs.
+
+#+begin_src emacs-lisp :tangle no
+(use-package perspective
+  :ensure t
+  :config (persp-mode))
+#+end_src
+
 ** Projectile
 
 #+BEGIN_QUOTE
@@ -648,10 +777,13 @@ http://batsov.com/projectile/
 (use-package projectile
   :ensure t
   :diminish projectile-mode
+  :commands projectile-mode
   :config
   (progn
     (projectile-global-mode t)
+    (setq projectile-enable-caching t)
     (use-package ag
+      :commands ag
       :ensure t)))
 #+end_src
 
@@ -659,7 +791,7 @@ http://batsov.com/projectile/
 
 Integrates with IPython.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package python-mode
   :ensure t)
 #+end_src
@@ -719,6 +851,7 @@ Live coding for HTML/CSS/JavaScript.
 
 #+begin_src emacs-lisp
 (use-package skewer-mode
+  :commands skewer-mode
   :ensure t
   :config (skewer-setup))
 #+end_src
@@ -749,7 +882,7 @@ around so much.
 
 ** Webmode
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package web-mode
   :ensure t)
 #+end_src
@@ -767,7 +900,9 @@ idle time.
 (use-package yasnippet
   :ensure t
   :diminish yas-minor-mode
-  :config (yas-global-mode))
+  :config
+  (setq yas-snippet-dirs (concat user-emacs-directory "snippets"))
+  (yas-global-mode))
 #+end_src
 
 ** Emmet
@@ -777,77 +912,11 @@ According to [[http://emmet.io/][their website]], "Emmet — the essential toolk
 #+begin_src emacs-lisp
 (use-package emmet-mode
   :ensure t
+  :commands emmet-mode
   :config
   (add-hook 'html-mode-hook 'emmet-mode)
   (add-hook 'css-mode-hook 'emmet-mode))
 #+end_src
-
-* Mac customizations
-
-There are configurations to make when running Emacs on OS X (hence the
-"darwin" system-type check).
-
-#+begin_src emacs-lisp
-(let ((is-mac (string-equal system-type "darwin")))
-  (when is-mac
-    ;; delete files by moving them to the trash
-    (setq delete-by-moving-to-trash t)
-    (setq trash-directory "~/.Trash")
-
-    ;; Don't make new frames when opening a new file with Emacs
-    (setq ns-pop-up-frames nil)
-
-    ;; set the Fn key as the hyper key
-    (setq ns-function-modifier 'hyper)
-
-    ;; Use Command-` to switch between Emacs windows (not frames)
-    (bind-key "s-`" 'other-window)
-    
-    ;; Use Command-Shift-` to switch Emacs frames in reverse
-    (bind-key "s-~" (lambda() () (interactive) (other-window -1)))
-
-    ;; Because of the keybindings above, set one for `other-frame'
-    (bind-key "s-1" 'other-frame)
-
-    ;; Fullscreen!
-    (setq ns-use-native-fullscreen nil) ; Not Lion style
-    (bind-key "<s-return>" 'toggle-frame-fullscreen)
-
-    ;; buffer switching
-    (bind-key "s-{" 'previous-buffer)
-    (bind-key "s-}" 'next-buffer)
-
-    ;; Compiling
-    (bind-key "H-c" 'compile)
-    (bind-key "H-r" 'recompile)
-    (bind-key "H-s" (defun save-and-recompile () (interactive) (save-buffer) (recompile)))
-
-    ;; disable the key that minimizes emacs to the dock because I don't
-    ;; minimize my windows
-    ;; (global-unset-key (kbd "C-z"))
-
-    (defun open-dir-in-finder ()
-      "Open a new Finder window to the path of the current buffer"
-      (interactive)
-      (shell-command "open ."))
-    (bind-key "s-/" 'open-dir-in-finder)
-
-    (defun open-dir-in-iterm ()
-      "Open the current directory of the buffer in iTerm."
-      (interactive)
-      (let* ((iterm-app-path "/Applications/iTerm.app")
-             (iterm-brew-path "/opt/homebrew-cask/Caskroom/iterm2/1.0.0/iTerm.app")
-             (iterm-path (if (file-directory-p iterm-app-path)
-                             iterm-app-path
-                           iterm-brew-path)))
-        (shell-command (concat "open -a " iterm-path " ."))))
-    (bind-key "s-=" 'open-dir-in-iterm)
-
-    ;; Not going to use these commands
-    (put 'ns-print-buffer 'disabled t)
-    (put 'suspend-frame 'disabled t)))
-#+end_src
-
 
 * Computer-specific settings
 
@@ -885,7 +954,6 @@ loaded earlier in the config depend on it already. That means the
 #+end_src
 
 * Languages
-
 ** C/Java
 
 I don't like the default way that Emacs handles indentation. For instance,
