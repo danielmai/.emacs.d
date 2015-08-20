@@ -288,6 +288,11 @@ speed keys in Org mode]].
 (setq org-use-speed-commands t)
 #+end_src
 
+#+begin_src emacs-lisp
+(setq org-image-actual-width 550)
+#+end_src
+
+
 ** Org tags
 
 The default value is -77, which is weird for smaller width windows.
