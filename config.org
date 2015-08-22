@@ -665,6 +665,23 @@ No more juggling windows after commiting. It's magit bliss.
   (jump-to-register :magit-fullscreen))
 #+end_src
 
+** Edit With Emacs
+
+Editing input boxes from Chrome with Emacs. Pretty useful to keep all
+significant text-writing on the web within emacs. I typically use this
+with posts on Discourse, which has a post editor that overrides normal
+Emacs key bindings with other functions. As such, ~markdown-mode~ is
+used.
+
+#+begin_src emacs-lisp
+(use-package edit-server
+  :ensure t
+  :config
+  (edit-server-start)
+  (setq edit-server-default-major-mode 'markdown-mode)
+  (setq edit-server-new-frame nil))
+#+end_src
+
 ** Elfeed
 
 #+begin_src emacs-lisp :tangle no
