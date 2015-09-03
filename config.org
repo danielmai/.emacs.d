@@ -81,6 +81,12 @@ Here's some configuration for [[https://github.com/bbatsov/solarized-emacs/][bba
   :ensure t)
 #+end_src
 
+** Monokai theme
+
+#+begin_src emacs-lisp
+(setq monokai-use-variable-pitch nil)
+#+end_src
+
 ** Convenient theme functions
 
 #+begin_src emacs-lisp
