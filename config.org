@@ -754,6 +754,13 @@ npm install -g jshint
 npm install -g csslint
 #+end_src
 
+** Gists
+
+#+BEGIN_SRC emacs-lisp
+(use-package gist
+  :ensure t)
+#+END_SRC
+
 ** Markdown mode
 
 #+begin_src emacs-lisp
