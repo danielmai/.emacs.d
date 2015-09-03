@@ -536,7 +536,7 @@ These are the packages that are not built into Emacs.
 
 ** Ace Jump Mode
 
-A quick way to jump around the buffer.
+A quick way to jump around text in buffers.
 
 [[http://emacsrocks.com/e10.html][See Emacs Rocks Episode 10 for a screencast.]]
 
