@@ -827,6 +827,22 @@ Integrates with IPython.
   :ensure t)
 #+end_src
 
+** Racket
+
+Starting to use Racket now, mainly for programming paradigms class,
+though I'm looking forward to some "REPL-driven development" whenever
+I get the chance.
+
+#+begin_src emacs-lisp
+(use-package racket-mode
+  :ensure t
+  :config
+  (setq racket-smart-open-bracket-enable t))
+
+(use-package geiser
+  :ensure t)
+#+end_src
+
 ** Smartparens mode
 
 #+begin_src emacs-lisp
