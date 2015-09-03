@@ -965,6 +965,21 @@ According to [[http://emmet.io/][their website]], "Emmet — the essential toolk
   (add-hook 'css-mode-hook 'emmet-mode))
 #+end_src
 
+** Zoom-frm
+
+=zoom-frm= is a nice package that allows you to resize the text of
+entire Emacs frames (this includes text in the buffer, mode line, and
+minibuffer). The =zoom-in/out= command acts similar to the
+=text-scale-adjust= command---you can chain zooming in, out, or
+resetting to the default size once the command has been initially
+called.
+
+#+begin_src emacs-lisp
+(use-package zoom-frm
+  :ensure t
+  :bind ("C-M-=" . zoom-in/out))
+#+end_src
+
 * Computer-specific settings
 
 Load some computer-specific settings, such as the name and and email
