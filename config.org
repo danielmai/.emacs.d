@@ -435,6 +435,7 @@ Pandoc converts between a huge number of different file formats.
 
 #+begin_src emacs-lisp
 (use-package ox-pandoc
+  :no-require t
   :ensure t)
 #+end_src
 
