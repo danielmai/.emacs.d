@@ -713,14 +713,6 @@ used.
   :bind ("C-@" . er/expand-region))
 #+end_src
 
-** Olivetti
-
-#+begin_src emacs-lisp
-(use-package olivetti
-  :ensure t
-  :bind ("s-<f6>" . olivetti-mode))
-#+end_src
-
 ** Floobits
 
 Using [[https://floobits.com/][Floobits]] for code collaboration.
@@ -784,6 +776,14 @@ We'll also need to ~(require 'multiple-cusors)~ because of [[https://github.com/
          ("C-c C-<"     . mc/mark-all-like-this)
          ("C-!"         . mc/mark-next-symbol-like-this)
          ("s-d"         . mc/mark-all-dwim)))
+#+end_src
+
+** Olivetti
+
+#+begin_src emacs-lisp
+(use-package olivetti
+  :ensure t
+  :bind ("s-<f6>" . olivetti-mode))
 #+end_src
 
 ** Perspective
