@@ -1026,6 +1026,24 @@ Luckily, I can modify the way Emacs formats code with this configuration.
 (add-hook 'java-mode-hook 'my-c-mode-hook)
 #+end_src
 * Misc
+** Display Time
+
+When displaying the time with =display-time-mode=, I don't care about
+the load average.
+
+#+begin_src emacs-lisp
+(setq display-time-default-load-average nil)
+#+end_src
+
+** Display Battery Mode
+
+See the documentation for =battery-mode-line-format= for the format
+characters.
+
+#+begin_src emacs-lisp
+(setq battery-mode-line-format "[%b%p%% %t]")
+#+end_src
+
 ** Docview keybindings
 
 #+begin_src emacs-lisp
