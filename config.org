@@ -73,11 +73,10 @@ theme I want to go to.
 
 Here's some configuration for [[https://github.com/bbatsov/solarized-emacs/][bbatsov's solarized themes]].
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
 (use-package solarized-theme
-  :config
+  :init
   (setq solarized-use-variable-pitch nil)
-  (load-theme 'solarized-dark t)
   :ensure t)
 #+end_src
 
