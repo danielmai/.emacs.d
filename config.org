@@ -397,14 +397,17 @@ good column number to do that.
    (java . t)
    (ruby . t)
    (scheme . t)
-   (sh . t)))
+   (sh . t)
+   (sqlite . t)
+   (js . t)))
 
 (defun my-org-confirm-babel-evaluate (lang body)
   "Do not confirm evaluation for these languages."
   (not (or (string= lang "C")
            (string= lang "java")
            (string= lang "python")
-           (string= lang "emacs-lisp"))))
+           (string= lang "emacs-lisp")
+           (string= lang "sqlite"))))
 (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
 #+end_src
 
