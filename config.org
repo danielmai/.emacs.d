@@ -347,8 +347,13 @@ Set up some global key bindings that integrate with Org Mode features.
 
 *** Org agenda
 
+Learned about [[https://github.com/sachac/.emacs.d/blob/83d21e473368adb1f63e582a6595450fcd0e787c/Sacha.org#org-agenda][this =delq= and =mapcar= trick from Sacha Chua's config]].
+
 #+begin_src emacs-lisp
-(setq org-agenda-files '("~/Dropbox/Agenda"))
+(setq org-agenda-files
+      (delq nil
+            (mapcar (lambda (x) (and (file-exists-p x) x))
+                    '("~/Dropbox/Agenda"))))
 #+end_src
 
 *** Org capture
