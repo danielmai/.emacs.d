@@ -1110,3 +1110,15 @@ characters.
 (setq mouse-wheel-scroll-amount (quote (0.01)))
 #+end_src
 
+** Visible mode
+
+I found out about this mode my looking through simple.el. I use it to
+see raw org-mode files without going to a different mode like
+text-mode, which is what I had done in order to see invisible text
+(with org hyperlinks). The entire buffer contents will be visible
+while still being in org mode.
+
+#+begin_src emacs-lisp
+(use-package visible-mode
+  :bind ("H-v" . visible-mode))
+#+end_src
