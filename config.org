@@ -901,7 +901,6 @@ activate by default; they'll only apply for wrapping regions.
 (sp-local-pair 'org-mode "/" "/" :actions '(wrap))
 (sp-local-pair 'org-mode "*" "*" :actions '(wrap))
 #+end_src
-
 ** Smartscan
 
 #+BEGIN_QUOTE
@@ -1021,7 +1020,9 @@ Changing the =frame-zoom-font-difference= essentially enables a
   :bind (("C-M-=" . zoom-in/out)
          ("H-z"   . toggle-zoom-frame))
   :config
-  (setq frame-zoom-font-difference 20))
+  (setq frame-zoom-font-difference 10))
+#+end_src
+
 ** Scratch
 
 Convenient package to create =*scratch*= buffers that are based on the
@@ -1110,6 +1111,7 @@ Luckily, I can modify the way Emacs formats code with this configuration.
 (add-hook 'c-mode-hook 'my-c-mode-hook)
 (add-hook 'java-mode-hook 'my-c-mode-hook)
 #+end_src
+
 * Misc
 ** Display Time
 
