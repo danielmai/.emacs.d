@@ -764,7 +764,8 @@ npm install -g csslint
 
 #+BEGIN_SRC emacs-lisp
 (use-package gist
-  :ensure t)
+  :ensure t
+  :commands gist-list)
 #+END_SRC
 
 ** Macrostep
