@@ -767,6 +767,17 @@ npm install -g csslint
   :ensure t)
 #+END_SRC
 
+** Macrostep
+
+Macrostep allows you to see what Elisp macros expand to. Learned about
+it from the [[https://www.youtube.com/watch?v%3D2TSKxxYEbII][package highlight talk for use-package]].
+
+#+begin_src emacs-lisp
+(use-package macrostep
+  :ensure t
+  :bind ("H-`" . macrostep-expand))
+#+end_src
+
 ** Markdown mode
 
 #+begin_src emacs-lisp
