@@ -998,6 +998,16 @@ Changing the =frame-zoom-font-difference= essentially enables a
          ("H-z"   . toggle-zoom-frame))
   :config
   (setq frame-zoom-font-difference 20))
+** Scratch
+
+Convenient package to create =*scratch*= buffers that are based on the
+current buffer's major mode. This is more convienent than manually
+creating a buffer to do some scratch work or reusing the initial
+=*scratch*= buffer.
+
+#+begin_src emacs-lisp
+(use-package scratch
+  :ensure t)
 #+end_src
 
 * Computer-specific settings
