@@ -25,6 +25,7 @@
         org-end-of-line
         org-metaright
         org-self-insert-command
+        org-shiftmetaright
         other-frame
         sgml-close-tag
         sgml-slash
