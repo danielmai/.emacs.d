@@ -855,6 +855,18 @@ I get the chance.
 
 (use-package geiser
   :ensure t)
+** Restclient
+
+See [[http://emacsrocks.com/e15.html][Emacs Rocks! Episode 15]] to learn how restclient can help out with
+testing APIs from within Emacs. The HTTP calls you make in the buffer
+aren't constrainted within Emacs; there's the
+=restclient-copy-curl-command= to get the equivalent =curl= call
+string to keep things portable.
+
+#+begin_src emacs-lisp
+(use-package restclient
+  :ensure t
+  :mode ("\\.restclient\\'" . restclient-mode))
 #+end_src
 
 ** Smartparens mode
