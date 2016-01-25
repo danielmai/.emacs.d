@@ -52,6 +52,7 @@ boxes around the mode line.
 
 #+begin_src emacs-lisp
 (use-package cyberpunk-theme
+  :if (window-system)
   :ensure t
   :init
   (progn
