@@ -529,7 +529,7 @@ and allows you.
 #+begin_src emacs-lisp
 (use-package transpose-frame
   :ensure t
-  :bind ("s-M-t" . transpose-frame))
+  :bind ("H-t" . transpose-frame))
 #+end_src
 
 * Ido
