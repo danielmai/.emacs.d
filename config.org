@@ -209,6 +209,15 @@ at point as the default value for occur.
 (bind-key "M-s o" 'occur-dwim)
 #+end_src
 
+Here we make page-break characters look pretty, instead of appearing
+as =^L= in Emacs. [[http://ericjmritz.name/2015/08/29/using-page-breaks-in-gnu-emacs/][Here's an informative article called "Using
+Page-Breaks in GNU Emacs" by Eric J. M. Ritz.]]
+
+#+begin_src emacs-lisp
+(use-package page-break-lines
+  :ensure t)
+#+end_src
+
 * Mac customizations
 
 There are configurations to make when running Emacs on OS X (hence the
