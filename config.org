@@ -541,17 +541,13 @@ and allows you.
 #+begin_src emacs-lisp
 (use-package ido
   :init
-  (progn
-    (setq ido-enable-flex-matching t)
-    (setq ido-everywhere t)
-    (ido-mode t)
-    ;; (use-package ido-ubiquitous
-    ;;   :ensure t
-    ;;   :init (ido-ubiquitous-mode))
-    (use-package ido-vertical-mode
-      :ensure t
-      :init (ido-vertical-mode 1)
-      (setq ido-vertical-define-keys 'C-n-and-C-p-only))))
+  (setq ido-enable-flex-matching t)
+  (setq ido-everywhere t)
+  (ido-mode t)
+  (use-package ido-vertical-mode
+    :ensure t
+    :init (ido-vertical-mode 1)
+    (setq ido-vertical-define-keys 'C-n-and-C-p-only)))
 #+end_src
 
 * Whitespace mode
