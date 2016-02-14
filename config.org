@@ -76,6 +76,7 @@ Here's some configuration for [[https://github.com/bbatsov/solarized-emacs/][bba
 
 #+begin_src emacs-lisp
 (use-package solarized-theme
+  :defer 10
   :init
   (setq solarized-use-variable-pitch nil)
   :ensure t)
@@ -83,8 +84,22 @@ Here's some configuration for [[https://github.com/bbatsov/solarized-emacs/][bba
 
 ** Monokai theme
 
-#+begin_src emacs-lisp
-(setq monokai-use-variable-pitch nil)
+#+begin_src emacs-lisp :tangle no
+(use-package monokai-theme
+  :if (window-system)
+  :ensure t
+  :init
+  (setq monokai-use-variable-pitch nil))
+#+end_src
+
+** Waher theme
+
+#+begin_src emacs-lisp :tangle no
+(use-package waher-theme
+  if (window-system)
+  :ensure t
+  :init
+  (load-theme 'waher))
 #+end_src
 
 ** Convenient theme functions
@@ -411,6 +426,7 @@ good column number to do that.
    (latex . t)
    (java . t)
    (ruby . t)
+   (lisp . t)
    (scheme . t)
    (sh . t)
    (sqlite . t)
@@ -456,6 +472,7 @@ Pandoc converts between a huge number of different file formats.
 #+begin_src emacs-lisp
 (use-package ox-pandoc
   :no-require t
+  :defer 10
   :ensure t)
 #+end_src
 
@@ -646,11 +663,12 @@ tools I use).
             :ensure t
             :commands helm-projectile
             :bind ("C-c p h" . helm-projectile))
-          (use-package helm-ag :ensure t)
+          (use-package helm-ag :defer 10  :ensure t)
           (setq helm-locate-command "mdfind -interpret -name %s %s"
                 helm-ff-newfile-prompt-p nil
                 helm-M-x-fuzzy-match t)
-          (helm-mode))
+          (helm-mode)
+          (use-package helm-swoop :bind ("H-w" . helm-swoop)))
   :bind (("C-c h" . helm-command-prefix)
          ("C-x b" . helm-mini)
          ("C-`" . helm-resume)
@@ -756,6 +774,7 @@ it.
 #+begin_src emacs-lisp
 (use-package flycheck
   :ensure t
+  :defer 10
   :config (setq flycheck-html-tidy-executable "tidy5"))
 #+end_src
 
@@ -857,7 +876,7 @@ http://batsov.com/projectile/
 
 Integrates with IPython.
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
 (use-package python-mode
   :ensure t)
 #+end_src
@@ -871,11 +890,16 @@ I get the chance.
 #+begin_src emacs-lisp
 (use-package racket-mode
   :ensure t
+  :commands racket-mode
   :config
   (setq racket-smart-open-bracket-enable t))
 
 (use-package geiser
-  :ensure t)
+  :ensure t
+  :config
+  (setq geiser-default-implementation '(racket)))
+#+end_src
+
 ** Restclient
 
 See [[http://emacsrocks.com/e15.html][Emacs Rocks! Episode 15]] to learn how restclient can help out with
@@ -896,8 +920,10 @@ string to keep things portable.
 (use-package smartparens
   :ensure t
   :diminish smartparens-mode
-  :config (progn (require 'smartparens-config)
-                 (smartparens-global-mode t)))
+  :config
+  (add-to-list 'sp--lisp-modes 'racket-mode)
+  (add-to-list 'sp--lisp-modes 'geiser-mode)
+  (require 'smartparens-config))
 #+end_src
 
 *** Smartparens org mode
@@ -910,6 +936,7 @@ activate by default; they'll only apply for wrapping regions.
 (sp-local-pair 'org-mode "/" "/" :actions '(wrap))
 (sp-local-pair 'org-mode "*" "*" :actions '(wrap))
 #+end_src
+
 ** Smartscan
 
 #+BEGIN_QUOTE
@@ -959,6 +986,13 @@ around so much.
   :ensure t)
 #+end_src
 
+** Typescript mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package typescript-mode
+  :ensure t)
+#+END_SRC
+
 ** Visual-regexp
 
 #+begin_src emacs-lisp
@@ -992,6 +1026,7 @@ idle time.
 #+begin_src emacs-lisp
 (use-package yasnippet
   :ensure t
+  :defer 10
   :diminish yas-minor-mode
   :config
   (setq yas-snippet-dirs (concat user-emacs-directory "snippets"))
@@ -1043,6 +1078,88 @@ creating a buffer to do some scratch work or reusing the initial
 (use-package scratch
   :ensure t)
 #+end_src
+
+** Shell pop
+
+#+BEGIN_SRC emacs-lisp
+(use-package shell-pop
+  :ensure t
+  :bind ("M-<f12>" . shell-pop))
+#+END_SRC
+
+** SLIME
+
+The Superior Lisp Interaction Mode for Emacs. First, Install SBCL with
+brew.
+
+#+BEGIN_SRC sh
+brew install sbcl
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package slime
+  :ensure t
+  :init
+  (setq inferior-lisp-program "/usr/local/bin/sbcl")
+  (add-to-list 'slime-contribs 'slime-fancy))
+#+END_SRC
+
+** Quickrun
+
+#+BEGIN_SRC emacs-lisp
+(use-package quickrun
+  :defer 10
+  :ensure t
+  :bind ("H-q" . quickrun))
+#+END_SRC
+
+** Visible mode
+
+I found out about this mode my looking through simple.el. I use it to
+see raw org-mode files without going to a different mode like
+text-mode, which is what I had done in order to see invisible text
+(with org hyperlinks). The entire buffer contents will be visible
+while still being in org mode.
+
+#+begin_src emacs-lisp
+(use-package visible-mode
+  :bind ("H-v" . visible-mode))
+#+end_src
+
+** Virtualenvwrapper
+
+#+BEGIN_SRC emacs-lisp
+(use-package virtualenvwrapper
+  :ensure t
+  :config
+  (setq venv-location "~/.virtualenvs"))
+#+END_SRC
+** XQuery mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package xquery-mode
+  :ensure t)
+#+END_SRC
+** LaTeX Extra
+
+#+BEGIN_SRC emacs-lisp
+(use-package latex-extra
+  :ensure t)
+#+END_SRC
+
+** LaTeX Preview Mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package latex-preview-pane
+  :ensure t)
+#+END_SRC
+
+** Undo Tree
+
+#+BEGIN_SRC emacs-lisp
+(use-package undo-tree
+  :ensure t)
+#+END_SRC
 
 * Computer-specific settings
 
@@ -1121,6 +1238,19 @@ Luckily, I can modify the way Emacs formats code with this configuration.
 (add-hook 'java-mode-hook 'my-c-mode-hook)
 #+end_src
 
+** Jasmin
+Mode for editing Jasmin Java bytecode assembler files.
+
+#+BEGIN_SRC emacs-lisp
+(use-package jasmin)
+#+END_SRC
+
+** Rust
+
+#+BEGIN_SRC emacs-lisp
+(use-package rust-mode
+  :ensure t)
+
 * Misc
 ** Display Time
 
@@ -1142,8 +1272,11 @@ characters.
 
 ** Docview keybindings
 
+Convenience bindings to use doc-view with the arrow keys.
+
 #+begin_src emacs-lisp
 (use-package doc-view
+  :commands doc-view-mode
   :config
   (define-key doc-view-mode-map (kbd "<right>") 'doc-view-next-page)
   (define-key doc-view-mode-map (kbd "<left>") 'doc-view-previous-page))
@@ -1155,13 +1288,13 @@ characters.
 (setq mouse-wheel-scroll-amount (quote (0.01)))
 #+end_src
 
-** Visible mode
+** Emacsclient
 
-I found out about this mode my looking through simple.el. I use it to
-see raw org-mode files without going to a different mode like
-text-mode, which is what I had done in order to see invisible text
-(with org hyperlinks). The entire buffer contents will be visible
-while still being in org mode.
+#+begin_src emacs-lisp
+(use-package server
+  :config
+  (server-start))
+#+end_src
 
 #+begin_src emacs-lisp
 (use-package visible-mode
