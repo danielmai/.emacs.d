@@ -3,6 +3,9 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        TeX-insert-backslash
+        TeX-insert-dollar
+        TeX-insert-sub-or-superscript
         beginning-of-visual-line
         c-electric-colon
         c-electric-delete-forward
@@ -23,9 +26,12 @@
         org-ctrl-c-ctrl-c
         org-delete-char
         org-end-of-line
+        org-force-self-insert
+        org-kill-line
         org-metaright
         org-self-insert-command
         org-shiftmetaright
+        org-yank
         other-frame
         sgml-close-tag
         sgml-slash
