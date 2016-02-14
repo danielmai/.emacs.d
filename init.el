@@ -1,3 +1,6 @@
+
+(setq gc-cons-threshold 400000000)
+
 ;;; Begin initialization
 ;; Turn off mouse interface early in startup to avoid momentary display
 (when window-system
@@ -32,3 +35,5 @@
 
 ;;; Load the config
 (org-babel-load-file (concat user-emacs-directory "config.org"))
+
+(setq gc-cons-threshold 800000)
