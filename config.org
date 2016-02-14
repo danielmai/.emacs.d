@@ -521,7 +521,11 @@ Winner mode allows you to undo/redo changes to window changes in Emacs
 and allows you.
 
 #+begin_src emacs-lisp
-(winner-mode t)
+(use-package winner
+  :config
+  (winner-mode t)
+  :bind (("M-s-<left>" . winner-undo)
+         ("M-s-<right>" . winner-redo)))
 #+end_src
 
 ** Transpose frame
