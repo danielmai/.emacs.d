@@ -7,9 +7,6 @@
  '(custom-safe-themes
    (quote
     ("f0a99f53cbf7b004ba0c1760aa14fd70f2eabafe4e62a2b3cf5cabae8203113b" default)))
- '(helm-locate-command "mdfind -interpret -name %s %s")
- '(helm-match-plugin-mode t nil (helm-match-plugin))
- '(helm-mode t)
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
    (quote
