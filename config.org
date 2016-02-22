@@ -683,7 +683,9 @@ tools I use).
                 helm-ff-newfile-prompt-p nil
                 helm-M-x-fuzzy-match t)
           (helm-mode)
-          (use-package helm-swoop :bind ("H-w" . helm-swoop)))
+          (use-package helm-swoop
+            :ensure t
+            :bind ("H-w" . helm-swoop)))
   :bind (("C-c h" . helm-command-prefix)
          ("C-x b" . helm-mini)
          ("C-`" . helm-resume)
