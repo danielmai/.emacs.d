@@ -128,7 +128,7 @@ Here's some configuration for [[https://github.com/bbatsov/solarized-emacs/][bba
 
 * Font
 
-[[http://levien.com/type/myfonts/inconsolata.html][Inconsolata]] is a nice monospaced font.
+[[http://adobe-fonts.github.io/source-code-pro/][Source Code Pro]] is a nice monospaced font.
 
 To install it on OS X, you can use Homebrew with [[http://caskroom.io/][Homebrew Cask]].
 
@@ -138,14 +138,14 @@ To install it on OS X, you can use Homebrew with [[http://caskroom.io/][Homebrew
 brew install caskroom/cask/brew-cask
 brew tap caskroom/fonts
 
-brew cask install font-inconsolata
+brew cask install font-source-code-pro
 #+end_src
 
 And here's how we tell Emacs to use the font we want to use.
 
 #+begin_src emacs-lisp
 (add-to-list 'default-frame-alist
-             '(font . "Inconsolata-14"))
+             '(font . "Source Code Pro-14"))
 #+end_src
 
 * Sane defaults
