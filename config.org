@@ -1250,6 +1250,7 @@ Mode for editing Jasmin Java bytecode assembler files.
 #+BEGIN_SRC emacs-lisp
 (use-package rust-mode
   :ensure t)
+#+END_SRC
 
 * Misc
 ** Display Time
