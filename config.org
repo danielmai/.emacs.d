@@ -335,20 +335,10 @@ source: [[http://whattheemacsd.com/sane-defaults.el-01.html][Magnars Sveen]]
 
 #+begin_src emacs-lisp
 (use-package recentf
-  :commands ido-recentf-open
-  :init
-  (progn
-    (recentf-mode t)
-    (setq recentf-max-saved-items 200)
-
-    (defun ido-recentf-open ()
-      "Use `ido-completing-read' to \\[find-file] a recent file"
-      (interactive)
-      (if (find-file (ido-completing-read "Find recent file: " recentf-list))
-          (message "Opening file...")
-        (message "Aborting")))
-
-    (bind-key "C-x C-r" 'ido-recentf-open)))
+  :bind ("C-x C-r" . helm-recentf)
+  :config
+  (recentf-mode t)
+  (setq recentf-max-saved-items 200))
 #+end_src
 
 * Org mode
