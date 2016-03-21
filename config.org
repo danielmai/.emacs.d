@@ -239,64 +239,63 @@ There are configurations to make when running Emacs on OS X (hence the
 "darwin" system-type check).
 
 #+begin_src emacs-lisp
-(let ((is-mac (string-equal system-type "darwin")))
-  (when is-mac
-    ;; delete files by moving them to the trash
-    (setq delete-by-moving-to-trash t)
-    (setq trash-directory "~/.Trash")
+(when (string-equal system-type "darwin")
+  ;; delete files by moving them to the trash
+  (setq delete-by-moving-to-trash t)
+  (setq trash-directory "~/.Trash")
 
-    ;; Don't make new frames when opening a new file with Emacs
-    (setq ns-pop-up-frames nil)
+  ;; Don't make new frames when opening a new file with Emacs
+  (setq ns-pop-up-frames nil)
 
-    ;; set the Fn key as the hyper key
-    (setq ns-function-modifier 'hyper)
+  ;; set the Fn key as the hyper key
+  (setq ns-function-modifier 'hyper)
 
-    ;; Use Command-` to switch between Emacs windows (not frames)
-    (bind-key "s-`" 'other-window)
-    
-    ;; Use Command-Shift-` to switch Emacs frames in reverse
-    (bind-key "s-~" (lambda() () (interactive) (other-window -1)))
+  ;; Use Command-` to switch between Emacs windows (not frames)
+  (bind-key "s-`" 'other-window)
+  
+  ;; Use Command-Shift-` to switch Emacs frames in reverse
+  (bind-key "s-~" (lambda() () (interactive) (other-window -1)))
 
-    ;; Because of the keybindings above, set one for `other-frame'
-    (bind-key "s-1" 'other-frame)
+  ;; Because of the keybindings above, set one for `other-frame'
+  (bind-key "s-1" 'other-frame)
 
-    ;; Fullscreen!
-    (setq ns-use-native-fullscreen nil) ; Not Lion style
-    (bind-key "<s-return>" 'toggle-frame-fullscreen)
+  ;; Fullscreen!
+  (setq ns-use-native-fullscreen nil) ; Not Lion style
+  (bind-key "<s-return>" 'toggle-frame-fullscreen)
 
-    ;; buffer switching
-    (bind-key "s-{" 'previous-buffer)
-    (bind-key "s-}" 'next-buffer)
+  ;; buffer switching
+  (bind-key "s-{" 'previous-buffer)
+  (bind-key "s-}" 'next-buffer)
 
-    ;; Compiling
-    (bind-key "H-c" 'compile)
-    (bind-key "H-r" 'recompile)
-    (bind-key "H-s" (defun save-and-recompile () (interactive) (save-buffer) (recompile)))
+  ;; Compiling
+  (bind-key "H-c" 'compile)
+  (bind-key "H-r" 'recompile)
+  (bind-key "H-s" (defun save-and-recompile () (interactive) (save-buffer) (recompile)))
 
-    ;; disable the key that minimizes emacs to the dock because I don't
-    ;; minimize my windows
-    ;; (global-unset-key (kbd "C-z"))
+  ;; disable the key that minimizes emacs to the dock because I don't
+  ;; minimize my windows
+  ;; (global-unset-key (kbd "C-z"))
 
-    (defun open-dir-in-finder ()
-      "Open a new Finder window to the path of the current buffer"
-      (interactive)
-      (shell-command "open ."))
-    (bind-key "s-/" 'open-dir-in-finder)
+  (defun open-dir-in-finder ()
+    "Open a new Finder window to the path of the current buffer"
+    (interactive)
+    (start-process "mai-open-dir-process" nil "open" "."))
+  (bind-key "C-c o f" 'open-dir-in-finder)
 
-    (defun open-dir-in-iterm ()
-      "Open the current directory of the buffer in iTerm."
-      (interactive)
-      (let* ((iterm-app-path "/Applications/iTerm.app")
-             (iterm-brew-path "/opt/homebrew-cask/Caskroom/iterm2/1.0.0/iTerm.app")
-             (iterm-path (if (file-directory-p iterm-app-path)
-                             iterm-app-path
-                           iterm-brew-path)))
-        (shell-command (concat "open -a " iterm-path " ."))))
-    (bind-key "s-=" 'open-dir-in-iterm)
+  (defun open-dir-in-iterm ()
+    "Open the current directory of the buffer in iTerm."
+    (interactive)
+    (let* ((iterm-app-path "/Applications/iTerm.app")
+           (iterm-brew-path "/opt/homebrew-cask/Caskroom/iterm2/1.0.0/iTerm.app")
+           (iterm-path (if (file-directory-p iterm-app-path)
+                           iterm-app-path
+                         iterm-brew-path)))
+      (start-process "mai-open-dir-process" nil "open" "-a" iterm-path ".")))
+  (bind-key "C-c o t" 'open-dir-in-iterm)
 
-    ;; Not going to use these commands
-    (put 'ns-print-buffer 'disabled t)
-    (put 'suspend-frame 'disabled t)))
+  ;; Not going to use these commands
+  (put 'ns-print-buffer 'disabled t)
+  (put 'suspend-frame 'disabled t))
 #+end_src
 
 ~exec-path-from-shell~ makes the command-line path with Emacs's shell
