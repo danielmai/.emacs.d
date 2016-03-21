@@ -483,13 +483,6 @@ search list as you type a query.
 (setq locate-command "mdfind")
 #+end_src
 
-* Shell
-
-#+begin_src emacs-lisp
-(bind-key "C-x m" 'shell)
-(bind-key "C-x M" 'ansi-term)
-#+end_src
-
 * Window
 
 Convenient keybindings to resize windows.
