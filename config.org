@@ -412,6 +412,9 @@ speed keys in Org mode]].
 (setq org-image-actual-width 550)
 #+end_src
 
+#+BEGIN_SRC emacs-lisp
+(setq org-highlight-latex-and-related '(latex script entities))
+#+END_SRC
 
 ** Org tags
 
@@ -483,6 +486,14 @@ Pandoc converts between a huge number of different file formats.
   :defer 10
   :ensure t)
 #+end_src
+*** LaTeX exporting
+
+I've had issues with getting BiBTeX to work correctly with the LaTeX exporter for PDF exporting. By changing the command to `latexmk` references appear in the PDF output like they should. Source: http://tex.stackexchange.com/a/161619.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-latex-pdf-process (list "latexmk -pdf %f"))
+#+END_SRC
+
 
 * Tramp
 
