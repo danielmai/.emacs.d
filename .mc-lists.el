@@ -35,6 +35,8 @@
         other-frame
         sgml-close-tag
         sgml-slash
+        slime-autodoc-space
+        string-rectangle
         transpose-words
         yas-expand
         ))
