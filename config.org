@@ -309,6 +309,25 @@ match the same one on OS X.
   (exec-path-from-shell-initialize))
 #+end_src
 
+** El Capitan fixes
+
+http://stuff-things.net/2015/10/05/emacs-visible-bell-work-around-on-os-x-el-capitan/
+
+#+BEGIN_SRC emacs-lisp
+(require 's)
+(let* ((cmd "sw_vers -productVersion")
+       (osx-version (string-to-int
+                     (cadr (s-split "\\."
+                                    (shell-command-to-string cmd)))))
+       (elcapitan-version 11))
+  (when (>= osx-version elcapitan-version)
+    (setq visible-bell nil)
+    (setq ring-bell-function 'ignore)
+
+    ;; El Capitan full screen animation is quick and delightful (enough to start using it).
+    (setq ns-use-native-fullscreen t)))
+#+END_SRC
+
 * List buffers
 
 ibuffer is the improved version of list-buffers.
