@@ -575,6 +575,7 @@ and allows you.
   (ido-mode t)
   (use-package ido-vertical-mode
     :ensure t
+    :defer t
     :init (ido-vertical-mode 1)
     (setq ido-vertical-define-keys 'C-n-and-C-p-only)))
 #+end_src
@@ -625,7 +626,8 @@ what I have them set to (with respect to Dvorak, of course).
 
 #+begin_src emacs-lisp
 (use-package android-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 #+end_src
 
 ** C-Eldoc
@@ -646,6 +648,7 @@ This package displays function signatures in the mode line.
 
 #+begin_src emacs-lisp
 (use-package clojure-mode
+  :defer t
   :ensure t)
 #+end_src
 
@@ -697,6 +700,7 @@ access magit.
 #+begin_src emacs-lisp
 (use-package magit
   :ensure t
+  :defer t
   :bind ("C-c g" . magit-status)
   :config
   (define-key magit-status-mode-map (kbd "q") 'magit-quit-session))
@@ -748,6 +752,7 @@ used.
 #+begin_src emacs-lisp :tangle no
 (use-package elfeed
   :ensure t
+  :defer t
   :config (setq elfeed-feeds
                 '("http://feeds.feedburner.com/gonintendo/news"
                   "http://usesthis.com/feed/")))
@@ -756,7 +761,8 @@ used.
 ** Emacs IPython Notebook
 #+begin_src emacs-lisp
 (use-package ein
-  :ensure t)
+  :ensure t
+  :defer t)
 #+end_src
 
 ** Expand region
@@ -773,7 +779,8 @@ Using [[https://floobits.com/][Floobits]] for code collaboration.
 
 #+begin_src emacs-lisp :tangle no
 (use-package floobits
-  :ensure t)
+  :ensure t
+  :defer t)
 #+end_src
 
 ** Flycheck
@@ -859,6 +866,7 @@ Workspaces in Emacs.
 #+begin_src emacs-lisp :tangle no
 (use-package perspective
   :ensure t
+  :defer t
   :config (persp-mode))
 #+end_src
 
@@ -890,6 +898,7 @@ Integrates with IPython.
 
 #+begin_src emacs-lisp
 (use-package python-mode
+  :defer t
   :ensure t)
 #+end_src
 
@@ -908,6 +917,7 @@ I get the chance.
 
 (use-package geiser
   :ensure t
+  :defer t
   :config
   (setq geiser-default-implementation '(racket)))
 #+end_src
@@ -931,22 +941,18 @@ string to keep things portable.
 #+begin_src emacs-lisp
 (use-package smartparens
   :ensure t
+  :defer t
   :diminish smartparens-mode
   :config
   (add-to-list 'sp--lisp-modes 'racket-mode)
   (add-to-list 'sp--lisp-modes 'geiser-mode)
-  (require 'smartparens-config))
-#+end_src
+  (require 'smartparens-config)
 
-*** Smartparens org mode
-
-Set up some pairings for org mode markup. These pairings won't
-activate by default; they'll only apply for wrapping regions.
-
-#+begin_src emacs-lisp
-(sp-local-pair 'org-mode "~" "~" :actions '(wrap))
-(sp-local-pair 'org-mode "/" "/" :actions '(wrap))
-(sp-local-pair 'org-mode "*" "*" :actions '(wrap))
+  ;; Set up some pairings for org mode markup. These pairings won't
+  ;; activate by default; they'll only apply for wrapping regions.
+  (sp-local-pair 'org-mode "~" "~" :actions '(wrap))
+  (sp-local-pair 'org-mode "/" "/" :actions '(wrap))
+  (sp-local-pair 'org-mode "*" "*" :actions '(wrap)))
 #+end_src
 
 ** Smartscan
@@ -1002,7 +1008,8 @@ around so much.
 
 #+BEGIN_SRC emacs-lisp
 (use-package typescript-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 #+END_SRC
 
 ** Visual-regexp
@@ -1038,7 +1045,7 @@ idle time.
 #+begin_src emacs-lisp
 (use-package yasnippet
   :ensure t
-  :defer 10
+  :defer t
   :diminish yas-minor-mode
   :config
   (setq yas-snippet-dirs (concat user-emacs-directory "snippets"))
@@ -1088,7 +1095,8 @@ creating a buffer to do some scratch work or reusing the initial
 
 #+begin_src emacs-lisp
 (use-package scratch
-  :ensure t)
+  :ensure t
+  :commands scratch)
 #+end_src
 
 ** Shell pop
@@ -1111,6 +1119,7 @@ brew install sbcl
 #+BEGIN_SRC emacs-lisp
 (use-package slime
   :ensure t
+  :defer 10
   :init
   (setq inferior-lisp-program "/usr/local/bin/sbcl")
   (add-to-list 'slime-contribs 'slime-fancy))
@@ -1143,6 +1152,7 @@ while still being in org mode.
 #+BEGIN_SRC emacs-lisp
 (use-package virtualenvwrapper
   :ensure t
+  :defer t
   :config
   (setq venv-location "~/.virtualenvs"))
 #+END_SRC
@@ -1150,12 +1160,14 @@ while still being in org mode.
 
 #+BEGIN_SRC emacs-lisp
 (use-package xquery-mode
-  :ensure t)
+  :ensure t
+  :defer t)
 #+END_SRC
 ** LaTeX Extra
 
 #+BEGIN_SRC emacs-lisp
 (use-package latex-extra
+  :defer t
   :ensure t)
 #+END_SRC
 
@@ -1163,9 +1175,9 @@ while still being in org mode.
 
 #+BEGIN_SRC emacs-lisp
 (use-package latex-preview-pane
-  :ensure t)
+  :ensure t
+  :defer t)
 #+END_SRC
-
 ** Undo Tree
 
 #+BEGIN_SRC emacs-lisp
@@ -1271,7 +1283,9 @@ Mode for editing Jasmin Java bytecode assembler files.
 
 #+BEGIN_SRC emacs-lisp
 (use-package rust-mode
-  :ensure t)
+  :ensure t
+  :defer t)
+#+END_SRC
 
 * Misc
 ** Display Time
