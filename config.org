@@ -1335,6 +1335,4 @@ Convenience bindings to use doc-view with the arrow keys.
 #+end_src
 
 #+begin_src emacs-lisp
-(use-package visible-mode
-  :bind ("H-v" . visible-mode))
 #+end_src
