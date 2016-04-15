@@ -1138,7 +1138,7 @@ brew install sbcl
 
 ** Visible mode
 
-I found out about this mode my looking through simple.el. I use it to
+I found out about this mode by looking through simple.el. I use it to
 see raw org-mode files without going to a different mode like
 text-mode, which is what I had done in order to see invisible text
 (with org hyperlinks). The entire buffer contents will be visible
