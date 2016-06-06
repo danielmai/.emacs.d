@@ -591,6 +591,14 @@ and allows you.
 
 These are the packages that are not built into Emacs.
 
+** Ag
+
+#+BEGIN_SRC emacs-lisp
+(use-package ag
+  :commands ag
+  :ensure t)
+#+END_SRC
+
 ** Ace Jump Mode
 
 A quick way to jump around text in buffers.
@@ -879,19 +887,16 @@ Project navigation and management library for Emacs.
 #+END_QUOTE
 http://batsov.com/projectile/
 
-
 #+begin_src emacs-lisp
 (use-package projectile
   :ensure t
   :diminish projectile-mode
-  :commands projectile-mode
+  :commands (projectile-mode projectile-switch-project)
+  :bind ("C-c p p" . projectile-switch-project)
   :config
-  (progn
-    (projectile-global-mode t)
-    (setq projectile-enable-caching t)
-    (use-package ag
-      :commands ag
-      :ensure t)))
+  (projectile-global-mode t)
+  (setq projectile-enable-caching t)
+  (setq projectile-switch-project-action 'projectile-dired))
 #+end_src
 
 ** Python
