@@ -1083,7 +1083,8 @@ Changing the =frame-zoom-font-difference= essentially enables a
 (use-package zoom-frm
   :ensure t
   :bind (("C-M-=" . zoom-in/out)
-         ("H-z"   . toggle-zoom-frame))
+         ("H-z"   . toggle-zoom-frame)
+         ("s-<f1>" . toggle-zoom-frame))
   :config
   (setq frame-zoom-font-difference 10))
 #+end_src
@@ -1146,7 +1147,8 @@ while still being in org mode.
 
 #+begin_src emacs-lisp
 (use-package visible-mode
-  :bind ("H-v" . visible-mode))
+  :bind (("H-v" . visible-mode)
+         ("s-<f2>" . visible-mode)))
 #+end_src
 
 ** Virtualenvwrapper
