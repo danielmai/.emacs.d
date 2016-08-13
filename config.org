@@ -276,23 +276,6 @@ There are configurations to make when running Emacs on OS X (hence the
   ;; minimize my windows
   ;; (global-unset-key (kbd "C-z"))
 
-  (defun open-dir-in-finder ()
-    "Open a new Finder window to the path of the current buffer"
-    (interactive)
-    (start-process "mai-open-dir-process" nil "open" "."))
-  (bind-key "C-c o f" 'open-dir-in-finder)
-
-  (defun open-dir-in-iterm ()
-    "Open the current directory of the buffer in iTerm."
-    (interactive)
-    (let* ((iterm-app-path "/Applications/iTerm.app")
-           (iterm-brew-path "/opt/homebrew-cask/Caskroom/iterm2/1.0.0/iTerm.app")
-           (iterm-path (if (file-directory-p iterm-app-path)
-                           iterm-app-path
-                         iterm-brew-path)))
-      (start-process "mai-open-dir-process" nil "open" "-a" iterm-path ".")))
-  (bind-key "C-c o t" 'open-dir-in-iterm)
-
   ;; Not going to use these commands
   (put 'ns-print-buffer 'disabled t)
   (put 'suspend-frame 'disabled t))
@@ -308,6 +291,34 @@ match the same one on OS X.
   :init
   (exec-path-from-shell-initialize))
 #+end_src
+
+** Open from Emacs to other apps
+
+#+BEGIN_SRC emacs-lisp
+(defun open-dir-in-finder ()
+  "Open a new Finder window to the path of the current buffer"
+  (interactive)
+  (start-process "mai-open-dir-process" nil "open" "."))
+
+(defun open-dir-in-iterm ()
+  "Open the current directory of the buffer in iTerm."
+  (interactive)
+  (let* ((iterm-app-path "/Applications/iTerm.app")
+         (iterm-brew-path "/opt/homebrew-cask/Caskroom/iterm2/1.0.0/iTerm.app")
+         (iterm-path (if (file-directory-p iterm-app-path)
+                         iterm-app-path
+                       iterm-brew-path)))
+    (start-process "mai-open-dir-process" nil "open" "-a" iterm-path ".")))
+
+(defun open-dir-in-studio ()
+  "Open the current directory in Android Studio."
+  (interactive)
+  (start-process "mai-open-dir-process" nil "studio" "."))
+
+(bind-key "C-c o f" 'open-dir-in-finder)
+(bind-key "C-c o t" 'open-dir-in-iterm)
+(bind-key "C-c o a" 'open-dir-in-studio)
+#+END_SRC
 
 ** El Capitan fixes
 
