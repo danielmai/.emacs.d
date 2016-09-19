@@ -152,8 +152,10 @@ Display emojis. Source of system-specific fonts is in [[https://github.com/syohe
 the emacs-ac-emoji package.]]
 
 #+BEGIN_SRC emacs-lisp
-(let ((font (cond ((string-equal system-type "darwin")    "Apple Color Emoji")
-                  ((string-equal system-type "gnu/linux") "Symbola"))))
+(let ((font (if (= emacs-major-version 25)
+                "Symbola"
+              (cond ((string-equal system-type "darwin")    "Apple Color Emoji")
+                    ((string-equal system-type "gnu/linux") "Symbola")))))
   (set-fontset-font t 'unicode font nil 'prepend))
 #+END_SRC
 
