@@ -148,6 +148,15 @@ And here's how we tell Emacs to use the font we want to use.
              '(font . "Source Code Pro-14"))
 #+end_src
 
+Display emojis. Source of system-specific fonts is in [[https://github.com/syohex/emacs-ac-emoji][the README for
+the emacs-ac-emoji package.]]
+
+#+BEGIN_SRC emacs-lisp
+(let ((font (cond ((string-equal system-type "darwin")    "Apple Color Emoji")
+                  ((string-equal system-type "gnu/linux") "Symbola"))))
+  (set-fontset-font t 'unicode font nil 'prepend))
+#+END_SRC
+
 * Sane defaults
 
 Let's start with some sane defaults, shall we?
@@ -493,7 +502,6 @@ I've had issues with getting BiBTeX to work correctly with the LaTeX exporter fo
 #+BEGIN_SRC emacs-lisp
 (setq org-latex-pdf-process (list "latexmk -pdf %f"))
 #+END_SRC
-
 
 * Tramp
 
