@@ -450,7 +450,7 @@ good column number to do that.
    (ruby . t)
    (lisp . t)
    (scheme . t)
-   (sh . t)
+   (shell . t)
    (sqlite . t)
    (js . t)))
 
