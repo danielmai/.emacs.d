@@ -16,10 +16,10 @@ make sense for any layout.
 
 * Installing Emacs
 
-On OS X, [[http://brew.sh/][homebrew]] is an easy way to install emacs.
+On macOS, [[http://brew.sh/][homebrew]] is an easy way to install emacs.
 
 Here's what the parameter means.
-- ~--with-cocoa~ :: installs emacs with the OS X GUI version
+- ~--with-cocoa~ :: installs emacs with the macOS GUI version
 - ~--with-imagemagick~ :: installs emacs with imagemagick support for image processing
 - ~--with-gnutls~ :: installs emacs with GnuTLS to utilize encrypted SSL and TLS connections
 
@@ -130,7 +130,7 @@ Here's some configuration for [[https://github.com/bbatsov/solarized-emacs/][bba
 
 [[http://adobe-fonts.github.io/source-code-pro/][Source Code Pro]] is a nice monospaced font.
 
-To install it on OS X, you can use Homebrew with [[http://caskroom.io/][Homebrew Cask]].
+To install it on macOS, you can use Homebrew with [[http://caskroom.io/][Homebrew Cask]].
 
 #+begin_src sh :tangle no
 # You may need to run these two lines if you haven't set up Homebrew
@@ -246,7 +246,7 @@ Page-Breaks in GNU Emacs" by Eric J. M. Ritz.]]
 
 * Mac customizations
 
-There are configurations to make when running Emacs on OS X (hence the
+There are configurations to make when running Emacs on macOS (hence the
 "darwin" system-type check).
 
 #+begin_src emacs-lisp
@@ -310,7 +310,7 @@ There are configurations to make when running Emacs on OS X (hence the
 #+end_src
 
 ~exec-path-from-shell~ makes the command-line path with Emacs's shell
-match the same one on OS X.
+match the same one on macOS.
 
 #+begin_src emacs-lisp
 (use-package exec-path-from-shell
@@ -326,12 +326,12 @@ http://stuff-things.net/2015/10/05/emacs-visible-bell-work-around-on-os-x-el-cap
 
 #+BEGIN_SRC emacs-lisp
 (let* ((cmd "sw_vers -productVersion")
-       (osx-version (string-to-int
+       (macos-version (string-to-int
                      (cadr (split-string
                             (shell-command-to-string cmd)
                             "\\."))))
        (elcapitan-version 11))
-  (when (>= osx-version elcapitan-version)
+  (when (>= macos-version elcapitan-version)
     (setq visible-bell nil)
     (setq ring-bell-function 'ignore)
 
@@ -528,7 +528,7 @@ I've had issues with getting BiBTeX to work correctly with the LaTeX exporter fo
 
 * Locate
 
-Using OS X Spotlight within Emacs by modifying the ~locate~ function.
+Using macOS Spotlight within Emacs by modifying the ~locate~ function.
 
 I usually use [[*Helm][~helm-locate~]], which does live updates the spotlight
 search list as you type a query.
@@ -687,7 +687,7 @@ This package displays function signatures in the mode line.
 
 ** Dash
 
-Integration with [[http://kapeli.com/dash][Dash, the API documentation browser on OS X]]. The
+Integration with [[http://kapeli.com/dash][Dash, the API documentation browser on macOS]]. The
 binding ~s-D~ is the same as Cmd-Shift-D, the same binding that dash
 uses in Android Studio (trying to keep things consistent with the
 tools I use).
