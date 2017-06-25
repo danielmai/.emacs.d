@@ -325,11 +325,11 @@ match the same one on OS X.
 http://stuff-things.net/2015/10/05/emacs-visible-bell-work-around-on-os-x-el-capitan/
 
 #+BEGIN_SRC emacs-lisp
-(require 's)
 (let* ((cmd "sw_vers -productVersion")
        (osx-version (string-to-int
-                     (cadr (s-split "\\."
-                                    (shell-command-to-string cmd)))))
+                     (cadr (split-string
+                            (shell-command-to-string cmd)
+                            "\\."))))
        (elcapitan-version 11))
   (when (>= osx-version elcapitan-version)
     (setq visible-bell nil)
@@ -1226,22 +1226,17 @@ username, I use the hostname. The shell command ~hostname -s~ gets the
 hostname for the computer without any "domain information," such as
 the ".local" suffix.
 
-I use the ~s-trim~ function, which comes from the [[https://github.com/magnars/s.el][s string library]]. I
-~require~ it here, though a handful of the ELPA packages that are
-loaded earlier in the config depend on it already. That means the
-~require~ is redundant, but better to be explicit about it.
-
 #+begin_src emacs-lisp
+(require 'subr-x) ;; #'string-trim
 (defvar mai/user-settings-dir nil
   "The directory with user-specific Emacs settings for this
   user.")
 
 ;; Settings for currently logged in user
-(require 's)
 (setq mai/user-settings-dir
       (concat user-emacs-directory
               "users/"
-              (s-trim (shell-command-to-string "hostname -s"))))
+              (string-trim (shell-command-to-string "hostname -s"))))
 (add-to-list 'load-path mai/user-settings-dir)
 
 ;; Load settings specific for the current user
