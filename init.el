@@ -16,6 +16,10 @@
 (require 'package)
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+(when (boundp 'package-pinned-packages)
+  (setq package-pinned-packages
+        '((org-plus-contrib . "org"))))
 (package-initialize)
 
 ;;; Bootstrap use-package

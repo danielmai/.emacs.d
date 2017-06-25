@@ -379,6 +379,21 @@ of its agenda, timestamping, and capturing features.
 
 It goes without saying that I also use it to manage my Emacs config.
 
+** Installation
+
+Although Org mode ships with Emacs, the latest version can be installed externally. The configuration here follows the [[http://orgmode.org/elpa.html][Org mode ELPA installation instructions]].
+
+#+BEGIN_SRC emacs-lisp
+(use-package org
+  :ensure org-plus-contrib)
+#+END_SRC
+
+On Org mode version 9 I wasn't able to execute source blocks out of the box. [[https://emacs.stackexchange.com/a/28604][Others have ran into the same issue too]]. The solution is to remove the .elc files from the package directory:
+
+#+BEGIN_SRC sh :var ORG_DIR=(let* ((org-v (cadr (split-string (org-version nil t) "@"))) (len (length org-v))) (substring org-v 1 (- len 2)))
+rm ${ORG_DIR}/*.elc
+#+END_SRC
+
 ** Org activation bindings
 
 Set up some global key bindings that integrate with Org Mode features.
