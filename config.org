@@ -1073,13 +1073,16 @@ It takes a few seconds to load and I don't need them immediately when
 Emacs starts up, so we can defer loading yasnippet until there's some
 idle time.
 
+Setting =yas-indent-line= to ='fixed= fixes Python indentation
+behavior when typing a templated snippet.
+
 #+begin_src emacs-lisp
 (use-package yasnippet
   :ensure t
-  :defer t
   :diminish yas-minor-mode
   :config
   (setq yas-snippet-dirs (concat user-emacs-directory "snippets"))
+  (setq yas-indent-line 'fixed)
   (yas-global-mode))
 #+end_src
 
