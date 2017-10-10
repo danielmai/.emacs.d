@@ -1,4 +1,3 @@
-
 (setq gc-cons-threshold 400000000)
 
 ;;; Begin initialization
@@ -34,7 +33,6 @@
   (require 'use-package))
 (require 'diminish)                ;; if you use :diminish
 (require 'bind-key)
-;; (setq use-package-verbose t)
 (server-start)
 
 ;;; Load the config
