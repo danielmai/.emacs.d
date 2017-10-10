@@ -915,7 +915,8 @@ http://batsov.com/projectile/
   :ensure t
   :diminish projectile-mode
   :commands (projectile-mode projectile-switch-project)
-  :bind ("C-c p p" . projectile-switch-project)
+  :bind (("C-c p p" . projectile-switch-project)
+         ("C-c p s s" . projectile-ag))
   :config
   (projectile-global-mode t)
   (setq projectile-enable-caching t)
