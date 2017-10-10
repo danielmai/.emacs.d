@@ -892,14 +892,6 @@ We'll also need to ~(require 'multiple-cusors)~ because of [[https://github.com/
          ("s-d"         . mc/mark-all-dwim)))
 #+end_src
 
-** Olivetti
-
-#+begin_src emacs-lisp
-(use-package olivetti
-  :ensure t
-  :bind ("s-<f6>" . olivetti-mode))
-#+end_src
-
 ** Perspective
 
 Workspaces in Emacs.
