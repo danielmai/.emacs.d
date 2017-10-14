@@ -33,7 +33,6 @@
   (require 'use-package))
 (require 'diminish)                ;; if you use :diminish
 (require 'bind-key)
-(server-start)
 
 ;;; Load the config
 (org-babel-load-file (concat user-emacs-directory "config.org"))
