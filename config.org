@@ -309,7 +309,7 @@ match the same one on macOS.
   (exec-path-from-shell-initialize))
 #+end_src
 
-** Open from Emacs to other apps
+** Open other apps from Emacs
 
 #+BEGIN_SRC emacs-lisp
 (defun open-dir-in-finder ()
