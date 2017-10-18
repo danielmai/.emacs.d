@@ -1330,6 +1330,20 @@ Mode for editing Jasmin Java bytecode assembler files.
 #+END_SRC
 
 * Misc
+** Non-ELPA packages
+
+Some packages aren't in ELPA, so they're stored in the [[file:site-lisp][site-lisp]]
+directory and loaded here.
+
+*** Titlecase
+
+As in the titlecase package instructions, the titlecase command needs to be the $PATH for this to work.
+
+#+BEGIN_SRC emacs-lisp
+(use-package titlecase
+  :load-path "~/.emacs.d/site-lisp")
+#+END_SRC
+
 ** Display Time
 
 When displaying the time with =display-time-mode=, I don't care about
