@@ -1337,7 +1337,7 @@ directory and loaded here.
 
 *** Titlecase
 
-As in the titlecase package instructions, the titlecase command needs to be the $PATH for this to work.
+As in the titlecase package instructions, the titlecase command needs to be in the $PATH for this to work.
 
 #+BEGIN_SRC emacs-lisp
 (use-package titlecase
