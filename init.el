@@ -1,5 +1,3 @@
-(setq gc-cons-threshold 400000000)
-
 ;;; Begin initialization
 ;; Turn off mouse interface early in startup to avoid momentary display
 (when window-system
@@ -26,7 +24,8 @@
 ;; use-package is used to configure the rest of the packages.
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
-  (package-install 'use-package))
+  (package-install 'use-package)
+  (package-install 'diminish))
 
 ;; From use-package README
 (eval-when-compile
@@ -36,5 +35,3 @@
 
 ;;; Load the config
 (org-babel-load-file (concat user-emacs-directory "config.org"))
-
-(setq gc-cons-threshold 800000)

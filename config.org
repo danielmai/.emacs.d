@@ -45,12 +45,23 @@ customize settings in [[file:init.el][init.el]].
 #+end_src
 
 * Theme
+
+** Doom theme
+
+#+BEGIN_SRC emacs-lisp
+(use-package doom-themes
+  :ensure t
+  :config
+  (doom-themes-visual-bell-config)
+  (doom-themes-org-config)
+  (load-theme 'doom-one t))
+#+END_SRC
 ** Cyberpunk theme
 
 The [[https://github.com/n3mo/cyberpunk-theme.el][cyberpunk theme]] is dark and colorful. However, I don't like the
 boxes around the mode line.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package cyberpunk-theme
   :if (window-system)
   :ensure t
@@ -74,7 +85,7 @@ theme I want to go to.
 
 Here's some configuration for [[https://github.com/bbatsov/solarized-emacs/][bbatsov's solarized themes]].
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package solarized-theme
   :defer 10
   :init
@@ -145,7 +156,7 @@ And here's how we tell Emacs to use the font we want to use.
 
 #+begin_src emacs-lisp
 (add-to-list 'default-frame-alist
-             '(font . "Source Code Pro-14"))
+             '(font . "Inconsolata-14"))
 #+end_src
 
 Note: To view all fonts that are available to use, run the following:
@@ -382,10 +393,9 @@ source: [[http://whattheemacsd.com/sane-defaults.el-01.html][Magnars Sveen]]
 
 #+begin_src emacs-lisp
 (use-package recentf
-  :bind ("C-x C-r" . helm-recentf)
   :config
   (recentf-mode t)
-  (setq recentf-max-saved-items 200))
+  (setq recentf-max-saved-items 500))
 #+end_src
 
 * Org mode
@@ -471,7 +481,7 @@ good column number to do that.
 
 ** Org babel languages
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((python . t)
@@ -672,14 +682,6 @@ what I have them set to (with respect to Dvorak, of course).
 #+end_src
 #+end_src
 
-** Android mode
-
-#+begin_src emacs-lisp
-(use-package android-mode
-  :ensure t
-  :defer t)
-#+end_src
-
 ** C-Eldoc
    :PROPERTIES:
    :GitHub:   https://github.com/mooz/c-eldoc
@@ -722,25 +724,31 @@ tools I use).
 (use-package helm
   :ensure t
   :diminish helm-mode
-  :init (progn
-          (require 'helm-config)
-          (use-package helm-projectile
-            :ensure t
-            :commands helm-projectile
-            :bind ("C-c p h" . helm-projectile))
-          (use-package helm-ag :defer 10  :ensure t)
-          (setq helm-locate-command "mdfind -interpret -name %s %s"
-                helm-ff-newfile-prompt-p nil
-                helm-M-x-fuzzy-match t)
-          (helm-mode)
-          (use-package helm-swoop
-            :ensure t
-            :bind ("H-w" . helm-swoop)))
   :bind (("C-c h" . helm-command-prefix)
          ("C-x b" . helm-mini)
          ("C-`" . helm-resume)
          ("M-x" . helm-M-x)
-         ("C-x C-f" . helm-find-files)))
+         ("C-x C-f" . helm-find-files)
+         ("C-x C-r" . helm-recentf))
+  :init 
+  (require 'helm-config)
+  :config
+  (setq helm-locate-command "mdfind -interpret -name %s %s"
+        helm-ff-newfile-prompt-p nil
+        helm-M-x-fuzzy-match t)
+  (helm-mode))
+(use-package helm-projectile
+  :ensure t
+  :after helm
+  :commands helm-projectile
+  :bind ("C-c p h" . helm-projectile))
+(use-package helm-ag
+  :ensure t
+  :after helm)
+(use-package helm-swoop
+  :ensure t
+  :after helm
+  :bind ("H-w" . helm-swoop))
 #+end_src
 
 ** Magit
@@ -800,19 +808,9 @@ used.
 #+end_src
 
 ** Elfeed
-
+   
 #+begin_src emacs-lisp :tangle no
 (use-package elfeed
-  :ensure t
-  :defer t
-  :config (setq elfeed-feeds
-                '("http://feeds.feedburner.com/gonintendo/news"
-                  "http://usesthis.com/feed/")))
-#+end_src
-
-** Emacs IPython Notebook
-#+begin_src emacs-lisp
-(use-package ein
   :ensure t
   :defer t)
 #+end_src
@@ -823,16 +821,6 @@ used.
 (use-package expand-region
   :ensure t
   :bind ("C-@" . er/expand-region))
-#+end_src
-
-** Floobits
-
-Using [[https://floobits.com/][Floobits]] for code collaboration.
-
-#+begin_src emacs-lisp :tangle no
-(use-package floobits
-  :ensure t
-  :defer t)
 #+end_src
 
 ** Flycheck
@@ -859,14 +847,6 @@ brew install tidy
 npm install -g jshint
 npm install -g csslint
 #+end_src
-
-** Gists
-
-#+BEGIN_SRC emacs-lisp
-(use-package gist
-  :ensure t
-  :commands gist-list)
-#+END_SRC
 
 ** Macrostep
 
@@ -901,17 +881,6 @@ We'll also need to ~(require 'multiple-cusors)~ because of [[https://github.com/
          ("C-c C-<"     . mc/mark-all-like-this)
          ("C-!"         . mc/mark-next-symbol-like-this)
          ("s-d"         . mc/mark-all-dwim)))
-#+end_src
-
-** Perspective
-
-Workspaces in Emacs.
-
-#+begin_src emacs-lisp :tangle no
-(use-package perspective
-  :ensure t
-  :defer t
-  :config (persp-mode))
 #+end_src
 
 ** Projectile
@@ -978,25 +947,6 @@ string to keep things portable.
   :mode ("\\.restclient\\'" . restclient-mode))
 #+end_src
 
-** Smartparens mode
-
-#+begin_src emacs-lisp
-(use-package smartparens
-  :ensure t
-  :defer t
-  :diminish smartparens-mode
-  :config
-  (add-to-list 'sp--lisp-modes 'racket-mode)
-  (add-to-list 'sp--lisp-modes 'geiser-mode)
-  (require 'smartparens-config)
-
-  ;; Set up some pairings for org mode markup. These pairings won't
-  ;; activate by default; they'll only apply for wrapping regions.
-  (sp-local-pair 'org-mode "~" "~" :actions '(wrap))
-  (sp-local-pair 'org-mode "/" "/" :actions '(wrap))
-  (sp-local-pair 'org-mode "*" "*" :actions '(wrap)))
-#+end_src
-
 ** Smartscan
 
 #+BEGIN_QUOTE
@@ -1025,17 +975,6 @@ Smex integrates ido with ~M-x~. I used to use this before moving on to
   :bind ("M-x" . smex))
 #+end_src
 
-** Skewer mode
-
-Live coding for HTML/CSS/JavaScript.
-
-#+begin_src emacs-lisp
-(use-package skewer-mode
-  :commands skewer-mode
-  :ensure t
-  :config (skewer-setup))
-#+end_src
-
 ** Smoothscrolling
 
 This makes it so ~C-n~-ing and ~C-p~-ing won't make the buffer jump
@@ -1044,28 +983,6 @@ around so much.
 #+begin_src emacs-lisp
 (use-package smooth-scrolling
   :ensure t)
-#+end_src
-
-** Typescript mode
-
-#+BEGIN_SRC emacs-lisp
-(use-package typescript-mode
-  :ensure t
-  :defer t)
-#+END_SRC
-
-** Visual-regexp
-
-#+begin_src emacs-lisp
-(use-package visual-regexp
-  :ensure t
-  :init
-  (use-package visual-regexp-steroids :ensure t)
-  :bind (("C-c r" . vr/replace)
-         ("C-c q" . vr/query-replace)
-         ("C-c m" . vr/mc-mark) ; Need multiple cursors
-         ("C-M-r" . vr/isearch-backward)
-         ("C-M-s" . vr/isearch-forward)))
 #+end_src
 
 ** Webmode
@@ -1087,7 +1004,7 @@ idle time.
 Setting =yas-indent-line= to ='fixed= fixes Python indentation
 behavior when typing a templated snippet.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package yasnippet
   :ensure t
   :diminish yas-minor-mode
@@ -1124,7 +1041,7 @@ Changing the =frame-zoom-font-difference= essentially enables a
 
 #+begin_src emacs-lisp
 (use-package zoom-frm
-  :ensure t
+  :load-path "site-lisp/zoom-frm"
   :bind (("C-M-=" . zoom-in/out)
          ("H-z"   . toggle-zoom-frame)
          ("s-<f1>" . toggle-zoom-frame))
@@ -1194,37 +1111,6 @@ while still being in org mode.
          ("s-<f2>" . visible-mode)))
 #+end_src
 
-** Virtualenvwrapper
-
-#+BEGIN_SRC emacs-lisp
-(use-package virtualenvwrapper
-  :ensure t
-  :defer t
-  :config
-  (setq venv-location "~/.virtualenvs"))
-#+END_SRC
-** XQuery mode
-
-#+BEGIN_SRC emacs-lisp
-(use-package xquery-mode
-  :ensure t
-  :defer t)
-#+END_SRC
-** LaTeX Extra
-
-#+BEGIN_SRC emacs-lisp
-(use-package latex-extra
-  :defer t
-  :ensure t)
-#+END_SRC
-
-** LaTeX Preview Mode
-
-#+BEGIN_SRC emacs-lisp
-(use-package latex-preview-pane
-  :ensure t
-  :defer t)
-#+END_SRC
 ** Undo Tree
 
 #+BEGIN_SRC emacs-lisp
@@ -1240,7 +1126,7 @@ Collection of Ridiculously Useful eXtensions
 (use-package crux
   :ensure t
   :bind (("C-c o o" . crux-open-with)
-         ("C-c u" . crux-view-url)))
+         ("C-c o u" . crux-view-url)))
 #+END_SRC
 * Computer-specific settings
 
@@ -1271,6 +1157,12 @@ the ".local" suffix.
 (when (file-exists-p mai/user-settings-dir)
   (mapc 'load (directory-files mai/user-settings-dir nil "^[^#].*el$")))
 #+end_src
+
+** Finda
+
+#+BEGIN_SRC emacs-lisp
+(load "~/.finda/integrations/emacs/finda.el")
+#+END_SRC
 
 * Languages
 ** C/Java
@@ -1313,21 +1205,6 @@ Luckily, I can modify the way Emacs formats code with this configuration.
 (add-hook 'c-mode-hook 'my-c-mode-hook)
 (add-hook 'java-mode-hook 'my-c-mode-hook)
 #+end_src
-
-** Jasmin
-Mode for editing Jasmin Java bytecode assembler files.
-
-#+BEGIN_SRC emacs-lisp
-(use-package jasmin)
-#+END_SRC
-
-** Rust
-
-#+BEGIN_SRC emacs-lisp
-(use-package rust-mode
-  :ensure t
-  :defer t)
-#+END_SRC
 
 * Misc
 ** Non-ELPA packages
@@ -1388,5 +1265,3 @@ Convenience bindings to use doc-view with the arrow keys.
   (server-start))
 #+end_src
 
-#+begin_src emacs-lisp
-#+end_src
