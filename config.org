@@ -354,7 +354,7 @@ http://stuff-things.net/2015/10/05/emacs-visible-bell-work-around-on-os-x-el-cap
 
 #+BEGIN_SRC emacs-lisp
 (let* ((cmd "sw_vers -productVersion")
-       (macos-version (string-to-int
+       (macos-version (string-to-number
                      (cadr (split-string
                             (shell-command-to-string cmd)
                             "\\."))))
