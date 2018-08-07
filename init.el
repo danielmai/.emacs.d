@@ -22,7 +22,8 @@
 ;;; Bootstrap use-package
 ;; Install use-package if it's not already installed.
 ;; use-package is used to configure the rest of the packages.
-(unless (package-installed-p 'use-package)
+(unless (or (package-installed-p 'use-package)
+            (package-installed-p 'diminish))
   (package-refresh-contents)
   (package-install 'use-package)
   (package-install 'diminish))
