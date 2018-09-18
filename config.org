@@ -804,7 +804,9 @@ access magit.
 (use-package magit
   :ensure t
   :defer t
-  :bind ("C-c g" . magit-status)
+  :bind (("C-c g" . magit-status)
+         ("C-c m l" . magit-log-buffer-file)
+         ("C-c m b" . magit-blame))
   :config
   (define-key magit-status-mode-map (kbd "q") 'magit-quit-session))
 #+end_src
