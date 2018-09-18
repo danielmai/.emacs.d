@@ -1128,6 +1128,41 @@ Collection of Ridiculously Useful eXtensions
   :bind (("C-c o o" . crux-open-with)
          ("C-c o u" . crux-view-url)))
 #+END_SRC
+** graphql-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package graphql-mode
+  :ensure t)
+#+END_SRC
+
+** json-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package json-mode
+  :ensure t)
+#+END_SRC
+** yaml-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode
+  :ensure t)
+#+END_SRC
+
+** go-mode
+
+In order for godef- commands to work, godef must be installed:
+
+#+BEGIN_SRC sh
+go get github.com/rogpeppe/godef
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package go-mode
+  :ensure t
+  :config
+  (bind-key "C-." #'godef-jump go-mode-map)
+  (bind-key "C-x 4 C-." #'godef-jump-other-window go-mode-map))
+#+END_SRC
 * Computer-specific settings
 
 Load some computer-specific settings, such as the name and and email
