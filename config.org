@@ -368,6 +368,17 @@ http://stuff-things.net/2015/10/05/emacs-visible-bell-work-around-on-os-x-el-cap
     (setq ns-use-native-fullscreen t)))
 #+END_SRC
 
+
+** Title bar appearance
+
+#+BEGIN_SRC emacs-lisp
+(when (string-equal system-type "darwin")
+  (add-to-list 'default-frame-alist
+               '(ns-transparent-titlebar . t))
+  (add-to-list 'default-frame-alist
+               '(ns-appearance . dark))) ;; light or dark
+#+END_SRC
+
 * List buffers
 
 ibuffer is the improved version of list-buffers.
