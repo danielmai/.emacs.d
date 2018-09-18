@@ -493,7 +493,8 @@ good column number to do that.
    (scheme . t)
    (shell . t)
    (sqlite . t)
-   (js . t)))
+   (js . t)
+   (restclient . t)))
 
 (defun my-org-confirm-babel-evaluate (lang body)
   "Do not confirm evaluation for these languages."
