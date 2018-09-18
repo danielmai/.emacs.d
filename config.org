@@ -53,7 +53,6 @@ customize settings in [[file:init.el][init.el]].
   :ensure t
   :config
   (doom-themes-visual-bell-config)
-  (doom-themes-org-config)
   (load-theme 'doom-one t))
 #+END_SRC
 ** Cyberpunk theme
@@ -621,6 +620,7 @@ and allows you.
 
 #+begin_src emacs-lisp
 (use-package ido
+  :disabled t
   :init
   (setq ido-enable-flex-matching t)
   (setq ido-everywhere t)
@@ -722,6 +722,7 @@ tools I use).
 
 #+begin_src emacs-lisp
 (use-package helm
+  :disabled t
   :ensure t
   :diminish helm-mode
   :bind (("C-c h" . helm-command-prefix)
@@ -739,17 +740,58 @@ tools I use).
   (helm-mode))
 (use-package helm-projectile
   :ensure t
-  :after helm
+  :after helm-mode
   :commands helm-projectile
   :bind ("C-c p h" . helm-projectile))
 (use-package helm-ag
   :ensure t
-  :after helm)
+  :after helm-mode)
 (use-package helm-swoop
   :ensure t
-  :after helm
+  :after helm-mode
   :bind ("H-w" . helm-swoop))
 #+end_src
+
+** Ivy
+
+#+BEGIN_SRC emacs-lisp
+(use-package ivy
+  :ensure t
+  :diminish (ivy-mode . "")
+  :bind
+  (:map ivy-mode-map
+   ("C-'" . ivy-avy))
+  :config
+  (ivy-mode 1)
+  ;; add ‘recentf-mode’ and bookmarks to ‘ivy-switch-buffer’.
+  (setq ivy-use-virtual-buffers t)
+  ;; number of result lines to display
+  (setq ivy-height 10)
+  ;; Show candidate index and total count
+  (setq ivy-count-format "(%d/%d) ")
+  ;; no regexp by default
+  (setq ivy-initial-inputs-alist nil)
+  ;; configure regexp engine.
+  (setq ivy-re-builders-alist
+	;; allow input not in order
+        '((t   . ivy--regex-ignore-order))))
+(use-package counsel
+  :ensure t
+  :bind (("M-x" . counsel-M-x)
+         ("C-x C-r" . counsel-recentf)
+         ("C-c h i" . counsel-imenu)
+         ("C-h v" . counsel-describe-variable)
+         ("C-h f" . counsel-describe-function)))
+(use-package counsel-projectile
+  :ensure t
+  :config
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (counsel-projectile-mode)
+  (setq counsel-projectile-switch-project-action 'dired))
+(use-package swiper
+  :ensure t
+  :bind (("H-w" . swiper)))
+#+END_SRC
 
 ** Magit
 
@@ -971,6 +1013,7 @@ Smex integrates ido with ~M-x~. I used to use this before moving on to
 #+begin_src emacs-lisp
 (use-package smex
   :if (not (featurep 'helm-mode))
+  :disabled t
   :ensure t
   :bind ("M-x" . smex))
 #+end_src
