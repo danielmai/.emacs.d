@@ -267,6 +267,8 @@ There are configurations to make when running Emacs on macOS (hence the
 
 #+begin_src emacs-lisp
 (when (string-equal system-type "darwin")
+  ;; Non-native fullscreen
+  (setq ns-use-native-fullscreen nil)
   ;; delete files by moving them to the trash
   (setq delete-by-moving-to-trash t)
   (setq trash-directory "~/.Trash")
