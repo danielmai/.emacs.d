@@ -448,6 +448,7 @@ Learned about [[https://github.com/sachac/.emacs.d/blob/83d21e473368adb1f63e582a
 #+begin_src emacs-lisp
 (bind-key "C-c c" 'org-capture)
 (setq org-default-notes-file "~/Dropbox/Notes/notes.org")
+(setq org-capture-bookmark nil)
 #+end_src
 
 ** Org setup
