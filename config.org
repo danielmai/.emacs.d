@@ -155,7 +155,7 @@ And here's how we tell Emacs to use the font we want to use.
 
 #+begin_src emacs-lisp
 (add-to-list 'default-frame-alist
-             '(font . "Inconsolata-14"))
+             '(font . "Fira Code-14"))
 #+end_src
 
 Note: To view all fonts that are available to use, run the following:
