@@ -1040,6 +1040,12 @@ Changing the =frame-zoom-font-difference= essentially enables a
 "presentation mode" when calling =toggle-zoom-frame=.
 
 #+begin_src emacs-lisp
+(use-package frame-fns
+  :load-path "site-lisp/frame-fns"
+  :no-require t)
+(use-package frame-cmds
+  :load-path "site-lisp/frame-cmds"
+  :no-require t)
 (use-package zoom-frm
   :load-path "site-lisp/zoom-frm"
   :bind (("C-M-=" . zoom-in/out)
