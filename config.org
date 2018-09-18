@@ -1029,7 +1029,9 @@ around so much.
 
 #+begin_src emacs-lisp
 (use-package smooth-scrolling
-  :ensure t)
+  :ensure t
+  :config
+  (smooth-scrolling-mode))
 #+end_src
 
 ** Webmode
