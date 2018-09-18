@@ -640,7 +640,7 @@ and allows you.
 
 #+begin_src emacs-lisp
 (use-package whitespace
-  :bind ("s-<f10>" . whitespace-mode))
+  :bind ("<f10>" . whitespace-mode))
 #+end_src
 
 * ELPA packages
