@@ -1248,7 +1248,7 @@ go get github.com/rogpeppe/godef
 (use-package go-mode
   :ensure t
   :config
-  (bind-key "C-." #'godef-jump go-mo
+  (bind-key "C-." #'godef-jump go-mode-map)
   (bind-key "C-x 4 C-." #'godef-jump-other-window go-mode-map)
   (bind-key "C-c C-r" #'go-remove-unused-imports)
   (add-hook 'before-save-hook #'gofmt-before-save)
