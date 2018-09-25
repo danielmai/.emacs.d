@@ -1262,6 +1262,19 @@ go get github.com/rogpeppe/godef
   (go-eldoc-setup))
 #+END_SRC
 
+** company-mode
+
+Auto completion.
+
+#+BEGIN_SRC emacs-lisp
+(use-package company
+  :ensure t
+  :config
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 1)
+  (define-key company-active-map (kbd "C-n") #'company-select-next)
+  (define-key company-active-map (kbd "C-p") #'company-select-previous)
+  (global-company-mode))
 #+END_SRC
 * Computer-specific settings
 
