@@ -494,7 +494,12 @@ good column number to do that.
 
 ** Org babel languages
 
-#+begin_src emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp
+(use-package ob-restclient
+  :ensure t)
+#+END_SRC
+
+#+begin_src emacs-lisp
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((python . t)
