@@ -633,7 +633,7 @@ and allows you.
 #+begin_src emacs-lisp
 (use-package transpose-frame
   :ensure t
-  :bind ("H-t" . transpose-frame))
+  :bind ("C-c t" . transpose-frame))
 #+end_src
 
 * Ido
@@ -658,6 +658,13 @@ and allows you.
 (use-package whitespace
   :bind ("<f10>" . whitespace-mode))
 #+end_src
+
+* Keybindings
+
+** Revert buffer
+#+BEGIN_SRC emacs-lisp
+(bind-key "C-c u" #'revert-buffer)
+#+END_SRC
 
 * ELPA packages
 
@@ -810,7 +817,7 @@ tools I use).
   (setq counsel-projectile-switch-project-action 'dired))
 (use-package swiper
   :ensure t
-  :bind (("H-w" . swiper)))
+  :bind (("C-c s" . swiper)))
 #+END_SRC
 
 ** Magit
@@ -1175,7 +1182,7 @@ brew install sbcl
 (use-package quickrun
   :defer 10
   :ensure t
-  :bind ("H-q" . quickrun))
+  :bind ("C-c r" . quickrun))
 #+END_SRC
 
 ** Visible mode
