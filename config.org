@@ -315,7 +315,6 @@ match the same one on macOS.
 
 #+begin_src emacs-lisp
 (use-package exec-path-from-shell
-  :if (memq window-system '(mac ns))
   :ensure t
   :init
   (exec-path-from-shell-initialize))
@@ -354,18 +353,19 @@ match the same one on macOS.
 http://stuff-things.net/2015/10/05/emacs-visible-bell-work-around-on-os-x-el-capitan/
 
 #+BEGIN_SRC emacs-lisp
-(let* ((cmd "sw_vers -productVersion")
-       (macos-version (string-to-number
-                     (cadr (split-string
-                            (shell-command-to-string cmd)
-                            "\\."))))
-       (elcapitan-version 11))
-  (when (>= macos-version elcapitan-version)
-    (setq visible-bell nil)
-    (setq ring-bell-function 'ignore)
+(when (string-equal system-type "darwin")
+  (let* ((cmd "sw_vers -productVersion")
+         (macos-version (string-to-number
+                         (cadr (split-string
+                                (shell-command-to-string cmd)
+                                "\\."))))
+         (elcapitan-version 11))
+    (when (>= macos-version elcapitan-version)
+      (setq visible-bell nil)
+      (setq ring-bell-function 'ignore)
 
-    ;; El Capitan full screen animation is quick and delightful (enough to start using it).
-    (setq ns-use-native-fullscreen t)))
+      ;; El Capitan full screen animation is quick and delightful (enough to start using it).
+      (setq ns-use-native-fullscreen t))))
 #+END_SRC
 
 
@@ -1265,7 +1265,7 @@ the ".local" suffix.
 ** Finda
 
 #+BEGIN_SRC emacs-lisp
-(load "~/.finda/integrations/emacs/finda.el")
+(load "~/.finda/integrations/emacs/finda.el" t)
 #+END_SRC
 
 * Languages
