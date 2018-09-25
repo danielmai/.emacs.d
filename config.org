@@ -907,6 +907,13 @@ npm install -g jshint
 npm install -g csslint
 #+end_src
 
+** Git Link
+
+#+BEGIN_SRC emacs-lisp
+(use-package git-link
+  :ensure t)
+#+END_SRC
+
 ** Macrostep
 
 Macrostep allows you to see what Elisp macros expand to. Learned about
