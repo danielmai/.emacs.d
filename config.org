@@ -939,11 +939,15 @@ it from the [[https://www.youtube.com/watch?v%3D2TSKxxYEbII][package highlight t
 
 ** Markdown mode
 
+Install [[https://github.com/commonmark/cmark][cmark]] or your Markdown processor of choice and set it as ~markdown-command~ before using the live previewer commands.
+
 #+begin_src emacs-lisp
 (use-package markdown-mode
   :ensure t
   :mode (("\\.markdown\\'" . markdown-mode)
-         ("\\.md\\'"       . markdown-mode)))
+         ("\\.md\\'"       . markdown-mode))
+  :config
+  (setq markdown-command "cmark"))
 #+end_src
 
 ** Multiple cursors
