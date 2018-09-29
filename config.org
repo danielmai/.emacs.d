@@ -962,7 +962,7 @@ We'll also need to ~(require 'multiple-cusors)~ because of [[https://github.com/
          ("C-<"         . mc/mark-previous-like-this)
          ("C-c C-<"     . mc/mark-all-like-this)
          ("C-!"         . mc/mark-next-symbol-like-this)
-         ("s-d"         . mc/mark-all-dwim)))
+         ("C-c d"       . mc/mark-all-dwim)))
 #+end_src
 
 ** Projectile
