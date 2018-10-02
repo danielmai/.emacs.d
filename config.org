@@ -1280,6 +1280,17 @@ Auto completion.
   (define-key company-active-map (kbd "C-p") #'company-select-previous)
   (global-company-mode))
 #+END_SRC
+** jade-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package jade-mode
+  :ensure t
+  :config
+  (add-hook 'jade-mode-hook
+            #'(lambda ()
+                (setq tab-width 2)
+                (setq indent-tabs-mode t))))
+#+END_SRC
 * Computer-specific settings
 
 Load some computer-specific settings, such as the name and and email
