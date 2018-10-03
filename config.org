@@ -1264,7 +1264,10 @@ go get github.com/rogpeppe/godef
   (bind-key "C-x 4 C-." #'godef-jump-other-window go-mode-map)
   (bind-key "C-c C-r" #'go-remove-unused-imports)
   (add-hook 'before-save-hook #'gofmt-before-save)
-  (setq gofmt-command "goimports"))
+  (setq gofmt-command "goimports")
+  (customize-set-variable 'go-mode-hook
+                          #'(lambda ()
+                              (setq tab-width 4))))
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -1272,6 +1275,13 @@ go get github.com/rogpeppe/godef
   :ensure t
   :config
   (go-eldoc-setup))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package go-guru
+  :ensure t
+  :config
+  (customize-set-variable 'go-guru-scope "..."))
 #+END_SRC
 
 ** company-mode
