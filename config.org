@@ -554,6 +554,18 @@ consistent as it doesn't pad source blocks with leading spaces.
       org-src-tab-acts-natively t)
 #+end_src
 
+** Org templates
+
+Source block templates
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'org-structure-template-alist '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC" ""))
+(add-to-list 'org-structure-template-alist '("py" "#+BEGIN_SRC python\n?\n#+END_SRC" ""))
+(add-to-list 'org-structure-template-alist '("sh" "#+BEGIN_SRC sh\n?\n#+END_SRC" ""))
+(add-to-list 'org-structure-template-alist '("md" "#+BEGIN_SRC markdown\n?\n#+END_SRC" ""))
+(add-to-list 'org-structure-template-alist '("gq" "#+BEGIN_SRC graphql\n?\n#+END_SRC" ""))
+#+END_SRC
+
 ** Org exporting
 
 *** Pandoc exporter
