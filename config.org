@@ -1293,7 +1293,8 @@ go get github.com/rogpeppe/godef
 (use-package go-guru
   :ensure t
   :config
-  (customize-set-variable 'go-guru-scope "..."))
+  (customize-set-variable 'go-guru-scope "...")
+  (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode))
 #+END_SRC
 
 ** company-mode
@@ -1304,12 +1305,24 @@ Auto completion.
 (use-package company
   :ensure t
   :config
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 1)
+  (setq company-tooltip-limit 20)
+  (setq company-idle-delay .3)
+  (setq company-ech-delay 0)
+  (setq company-minimum-prefix-length 3)
   (define-key company-active-map (kbd "C-n") #'company-select-next)
-  (define-key company-active-map (kbd "C-p") #'company-select-previous)
-  (global-company-mode))
+  (define-key company-active-map (kbd "C-p") #'company-select-previous))
 #+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package company-go
+  :ensure t
+  :config
+  (add-hook 'go-mode-hook (lambda ()
+                            (set (make-local-variable 'company-backends)
+                                 '(company-go))
+                            (company-mode))))
+#+END_SRC
+
 ** jade-mode
 
 #+BEGIN_SRC emacs-lisp
