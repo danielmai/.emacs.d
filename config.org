@@ -52,7 +52,6 @@ customize settings in [[file:init.el][init.el]].
 (use-package doom-themes
   :ensure t
   :config
-  (doom-themes-visual-bell-config)
   (load-theme 'doom-one t))
 #+END_SRC
 ** Cyberpunk theme
