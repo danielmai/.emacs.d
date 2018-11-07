@@ -759,6 +759,7 @@ tools I use).
 
 #+begin_src emacs-lisp
 (use-package dash-at-point
+  :if (string-equal system-type "darwin")
   :ensure t
   :bind (("s-D"     . dash-at-point)
          ("C-c e"   . dash-at-point-with-docset)))
