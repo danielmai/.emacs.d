@@ -1334,6 +1334,14 @@ Auto completion.
                 (setq tab-width 2)
                 (setq indent-tabs-mode t))))
 #+END_SRC
+** nginx-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package nginx-mode
+  :ensure t
+  :config
+  (setq nginx-indent-level 2))
+#+END_SRC
 * Computer-specific settings
 
 Load some computer-specific settings, such as the name and and email
