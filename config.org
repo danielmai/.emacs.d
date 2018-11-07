@@ -1306,9 +1306,9 @@ Auto completion.
   :ensure t
   :config
   (setq company-tooltip-limit 20)
-  (setq company-idle-delay .3)
-  (setq company-ech-delay 0)
-  (setq company-minimum-prefix-length 3)
+  (setq company-idle-delay .15)
+  (setq company-echo-delay 0)
+  (setq company-begin-commands '(self-insert-command))
   (define-key company-active-map (kbd "C-n") #'company-select-next)
   (define-key company-active-map (kbd "C-p") #'company-select-previous))
 #+END_SRC
