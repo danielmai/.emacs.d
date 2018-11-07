@@ -1342,6 +1342,25 @@ Auto completion.
   :config
   (setq nginx-indent-level 2))
 #+END_SRC
+** Keychain
+
+Install [[https://www.funtoo.org/Keychain][~keychain~]] first, which will manage the SSH agent on Linux
+systems. This is useful when using SSH keys with passwords, such as
+with SSH git access or SSHing into other machines. The following must
+be run already before starting Emacs.
+
+#+BEGIN_SRC sh
+eval "$(keychain --eval --agents ssh id_rsa)"
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+(use-package keychain-environment
+  :if (string-equal system-type "gnu/linux")
+  :ensure t
+  :config
+  (keychain-refresh-environment))
+#+END_SRC
+
 * Computer-specific settings
 
 Load some computer-specific settings, such as the name and and email
