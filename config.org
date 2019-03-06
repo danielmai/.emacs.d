@@ -1171,7 +1171,7 @@ creating a buffer to do some scratch work or reusing the initial
 #+begin_src emacs-lisp
 (use-package scratch
   :ensure t
-  :commands scratch)
+  :commands scratch))
 #+end_src
 
 ** Shell pop
