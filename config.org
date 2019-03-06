@@ -726,7 +726,6 @@ what I have them set to (with respect to Dvorak, of course).
   (ace-window-display-mode)
   :bind ("s-o" . ace-window))
 #+end_src
-#+end_src
 
 ** C-Eldoc
    :PROPERTIES:
