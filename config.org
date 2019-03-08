@@ -1000,7 +1000,7 @@ http://batsov.com/projectile/
   :bind (("C-c p p" . projectile-switch-project)
          ("C-c p s s" . projectile-ag))
   :config
-  (setq projectile-keymap-prefix "p")
+  (setq projectile-keymap-prefix (kbd "C-c p"))
   (projectile-global-mode t)
   (setq projectile-enable-caching t)
   (setq projectile-switch-project-action 'projectile-dired))
