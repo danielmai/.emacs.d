@@ -208,7 +208,6 @@ Sources for this section include [[https://github.com/magnars/.emacs.d/blob/mast
 (set-keyboard-coding-system 'utf-8) ; pretty
 (set-selection-coding-system 'utf-8) ; please
 (prefer-coding-system 'utf-8) ; with sugar on top
-(setq-default indent-tabs-mode nil)
 
 ;; Turn off the blinking cursor
 (blink-cursor-mode -1)
