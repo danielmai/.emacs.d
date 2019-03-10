@@ -1378,7 +1378,7 @@ eval "$(keychain --eval --agents ssh id_rsa)"
 
 * Computer-specific settings
 
-Load some computer-specific settings, such as the name and and email
+Load some computer-specific settings, such as the name and email
 address. The way the settings are loaded is based off of [[https://github.com/magnars/.emacs.d][Magnar
 Sveen's]] config.
 
