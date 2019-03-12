@@ -1382,21 +1382,17 @@ Sveen's]] config.
 
 In my case, the computers I use usually use the same username (my
 name, go figure), so instead of basing the specific settings from the
-username, I use the hostname. The shell command ~hostname -s~ gets the
-hostname for the computer without any "domain information," such as
-the ".local" suffix.
+username, I use the hostname. The ~system-name~ is a built-in function
+which returns the host name of the machine you are running on, as a string.
 
 #+begin_src emacs-lisp
-(require 'subr-x) ;; #'string-trim
 (defvar mai/user-settings-dir nil
   "The directory with user-specific Emacs settings for this
   user.")
 
 ;; Settings for currently logged in user
 (setq mai/user-settings-dir
-      (concat user-emacs-directory
-              "users/"
-              (string-trim (shell-command-to-string "hostname -s"))))
+      (concat user-emacs-directory "users/" (system-name)))
 (add-to-list 'load-path mai/user-settings-dir)
 
 ;; Load settings specific for the current user
