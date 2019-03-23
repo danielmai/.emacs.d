@@ -46,14 +46,40 @@ customize settings in [[file:init.el][init.el]].
 
 * Theme
 
+** Convenient theme functions
+
+#+begin_src emacs-lisp
+(defun switch-theme (theme)
+  "Disables any currently active themes and loads THEME."
+  ;; This interactive call is taken from `load-theme'
+  (interactive
+   (list
+    (intern (completing-read "Load custom theme: "
+                             (mapc 'symbol-name
+                                   (custom-available-themes))))))
+  (let ((enabled-themes custom-enabled-themes))
+    (mapc #'disable-theme custom-enabled-themes)
+    (load-theme theme t)))
+
+(defun disable-active-themes ()
+  "Disables any currently active themes listed in `custom-enabled-themes'."
+  (interactive)
+  (mapc #'disable-theme custom-enabled-themes))
+
+(bind-key "s-<f12>" 'switch-theme)
+(bind-key "s-<f11>" 'disable-active-themes)
+#+end_src
+
 ** Doom theme
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package doom-themes
   :ensure t
   :config
-  (load-theme 'doom-one t))
+  (customize-set-variable 'doom-molokai-brighter-comments t)
+  (switch-theme 'doom-molokai))
 #+END_SRC
+
 ** Cyberpunk theme
 
 The [[https://github.com/n3mo/cyberpunk-theme.el][cyberpunk theme]] is dark and colorful. However, I don't like the
@@ -85,20 +111,22 @@ Here's some configuration for [[https://github.com/bbatsov/solarized-emacs/][bba
 
 #+begin_src emacs-lisp :tangle no
 (use-package solarized-theme
-  :defer 10
+  :ensure t
   :init
   (setq solarized-use-variable-pitch nil)
-  :ensure t)
+  :config
+  (switch-theme 'solarized-dark))
 #+end_src
 
 ** Monokai theme
 
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
 (use-package monokai-theme
   :if (window-system)
   :ensure t
   :init
-  (setq monokai-use-variable-pitch nil))
+  (setq monokai-use-variable-pitch nil)
+  (switch-theme 'monokai))
 #+end_src
 
 ** Waher theme
@@ -109,30 +137,6 @@ Here's some configuration for [[https://github.com/bbatsov/solarized-emacs/][bba
   :ensure t
   :init
   (load-theme 'waher))
-#+end_src
-
-** Convenient theme functions
-
-#+begin_src emacs-lisp
-(defun switch-theme (theme)
-  "Disables any currently active themes and loads THEME."
-  ;; This interactive call is taken from `load-theme'
-  (interactive
-   (list
-    (intern (completing-read "Load custom theme: "
-                             (mapc 'symbol-name
-                                   (custom-available-themes))))))
-  (let ((enabled-themes custom-enabled-themes))
-    (mapc #'disable-theme custom-enabled-themes)
-    (load-theme theme t)))
-
-(defun disable-active-themes ()
-  "Disables any currently active themes listed in `custom-enabled-themes'."
-  (interactive)
-  (mapc #'disable-theme custom-enabled-themes))
-
-(bind-key "s-<f12>" 'switch-theme)
-(bind-key "s-<f11>" 'disable-active-themes)
 #+end_src
 
 * Font
@@ -287,7 +291,7 @@ There are configurations to make when running Emacs on macOS (hence the
 
   ;; Use Command-` to switch between Emacs windows (not frames)
   (bind-key "s-`" 'other-window)
-  
+
   ;; Use Command-Shift-` to switch Emacs frames in reverse
   (bind-key "s-~" (lambda() () (interactive) (other-window -1)))
 
@@ -519,7 +523,8 @@ good column number to do that.
    (shell . t)
    (sqlite . t)
    (js . t)
-   (restclient . t)))
+   (restclient . t)
+   (ledger . t)))
 
 (defun my-org-confirm-babel-evaluate (lang body)
   "Do not confirm evaluation for these languages."
@@ -557,18 +562,18 @@ consistent as it doesn't pad source blocks with leading spaces.
 Source block templates
 
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'org-structure-template-alist '("el" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC" ""))
-(add-to-list 'org-structure-template-alist '("py" "#+BEGIN_SRC python\n?\n#+END_SRC" ""))
-(add-to-list 'org-structure-template-alist '("sh" "#+BEGIN_SRC sh\n?\n#+END_SRC" ""))
-(add-to-list 'org-structure-template-alist '("md" "#+BEGIN_SRC markdown\n?\n#+END_SRC" ""))
-(add-to-list 'org-structure-template-alist '("gq" "#+BEGIN_SRC graphql\n?\n#+END_SRC" ""))
+(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+(add-to-list 'org-structure-template-alist '("py" . "src python"))
+(add-to-list 'org-structure-template-alist '("sh" . "src sh"))
+(add-to-list 'org-structure-template-alist '("md" . "src markdown"))
+(add-to-list 'org-structure-template-alist '("gq" . "src graphql"))
 #+END_SRC
 
 ** Org exporting
 
 *** Pandoc exporter
 
-Pandoc converts between a huge number of different file formats. 
+Pandoc converts between a huge number of different file formats.
 
 #+begin_src emacs-lisp
 (use-package ox-pandoc
@@ -642,8 +647,8 @@ and allows you.
 (use-package winner
   :config
   (winner-mode t)
-  :bind (("M-s-<left>" . winner-undo)
-         ("M-s-<right>" . winner-redo)))
+  :bind (("C-c <left>" . winner-undo)
+         ("C-c <right>" . winner-redo)))
 #+end_src
 
 ** Transpose frame
@@ -684,6 +689,23 @@ and allows you.
 (bind-key "C-c u" #'revert-buffer)
 #+END_SRC
 
+* hippie-expand
+
+#+BEGIN_SRC emacs-lisp
+(use-package hippie-exp
+  :bind (("C-c /" . hippie-expand)))
+#+END_SRC
+
+* auth-sources
+
+#+BEGIN_SRC emacs-lisp
+(use-package auth-source
+  :config
+  (customize-set-variable 'auth-sources
+                          '((:source "~/.authinfo.gpg"))))
+#+END_SRC
+
+
 * ELPA packages
 
 These are the packages that are not built into Emacs.
@@ -695,20 +717,6 @@ These are the packages that are not built into Emacs.
   :commands ag
   :ensure t)
 #+END_SRC
-
-** Ace Jump Mode
-
-A quick way to jump around text in buffers.
-
-[[http://emacsrocks.com/e10.html][See Emacs Rocks Episode 10 for a screencast.]]
-
-#+begin_src emacs-lisp
-(use-package ace-jump-mode
-  :ensure t
-  :diminish ace-jump-mode
-  :commands ace-jump-mode
-  :bind ("C-S-s" . ace-jump-mode))
-#+end_src
 
 ** Ace Window
 
@@ -748,6 +756,13 @@ This package displays function signatures in the mode line.
   :ensure t)
 #+end_src
 
+*** Cider
+
+#+begin_src emacs-lisp
+(use-package cider
+  :ensure t)
+#+end_src
+
 ** Dash
 
 Integration with [[http://kapeli.com/dash][Dash, the API documentation browser on macOS]]. The
@@ -763,6 +778,31 @@ tools I use).
          ("C-c e"   . dash-at-point-with-docset)))
 #+end_src
 
+** Docker
+
+#+BEGIN_SRC emacs-lisp
+(use-package docker
+  :ensure t
+  :bind (("C-c d c" . docker-containers)
+         ("C-c d i" . docker-images)
+         ("C-c d v" . docker-volumes)))
+#+END_SRC
+
+** Dockerfile
+
+#+BEGIN_SRC emacs-lisp
+(use-package dockerfile-mode
+  :ensure t)
+#+END_SRC
+
+** Kubernetes
+
+#+BEGIN_SRC emacs-lisp
+(use-package kubernetes
+  :ensure t
+  :commands (kubernetes-overview))
+#+END_SRC
+
 ** Helm
 
 #+begin_src emacs-lisp
@@ -776,7 +816,7 @@ tools I use).
          ("M-x" . helm-M-x)
          ("C-x C-f" . helm-find-files)
          ("C-x C-r" . helm-recentf))
-  :init 
+  :init
   (require 'helm-config)
   :config
   (setq helm-locate-command "mdfind -interpret -name %s %s"
@@ -820,6 +860,9 @@ tools I use).
   (setq ivy-re-builders-alist
 	;; allow input not in order
         '((t   . ivy--regex-ignore-order))))
+(use-package avy
+  :ensure t
+  :bind ("C-S-s" . avy-goto-char))
 (use-package counsel
   :ensure t
   :bind (("M-x" . counsel-M-x)
@@ -849,10 +892,12 @@ access magit.
   :ensure t
   :defer t
   :bind (("C-c g" . magit-status)
+         ("C-c G" . magit-dispatch)
          ("C-c m l" . magit-log-buffer-file)
          ("C-c m b" . magit-blame))
   :config
-  (define-key magit-status-mode-map (kbd "q") 'magit-quit-session))
+  (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
+  (setq magit-diff-refine-hunk t))
 #+end_src
 
 *** Fullscreen magit
@@ -865,7 +910,7 @@ No more juggling windows after commiting. It's magit bliss.
 #+END_QUOTE
 [[http://whattheemacsd.com/setup-magit.el-01.html][Source: Magnar Sveen]]
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 ;; full screen magit-status
 (defadvice magit-status (around magit-fullscreen activate)
   (window-configuration-to-register :magit-fullscreen)
@@ -878,6 +923,16 @@ No more juggling windows after commiting. It's magit bliss.
   (kill-buffer)
   (jump-to-register :magit-fullscreen))
 #+end_src
+
+*** Forge
+
+Magit extension to interact with GitHub/GitLab.
+
+#+BEGIN_SRC emacs-lisp
+(use-package forge
+  :ensure t
+  :after magit)
+#+END_SRC
 
 ** Edit With Emacs
 
@@ -897,7 +952,7 @@ used.
 #+end_src
 
 ** Elfeed
-   
+
 #+begin_src emacs-lisp :tangle no
 (use-package elfeed
   :ensure t
@@ -944,6 +999,16 @@ npm install -g csslint
   :ensure t)
 #+END_SRC
 
+** graphviz-dot-mode
+
+Create a ~.dot~ buffer in dot-mode and then quickly preview the rendered dot
+diagram with ~C-c C-p~.
+
+#+begin_src emacs-lisp
+(use-package graphviz-dot-mode
+  :ensure t)
+#+end_src
+
 ** Macrostep
 
 Macrostep allows you to see what Elisp macros expand to. Learned about
@@ -979,8 +1044,24 @@ We'll also need to ~(require 'multiple-cusors)~ because of [[https://github.com/
          ("C->"         . mc/mark-next-like-this)
          ("C-<"         . mc/mark-previous-like-this)
          ("C-c C-<"     . mc/mark-all-like-this)
-         ("C-!"         . mc/mark-next-symbol-like-this)
-         ("C-c d"       . mc/mark-all-dwim)))
+         ("C-!"         . mc/mark-next-symbol-like-this)))
+#+end_src
+
+** Mustache
+
+#+BEGIN_SRC emacs-lisp
+(use-package mustache-mode
+  :ensure t)
+#+END_SRC
+
+** pinentry
+
+#+begin_src emacs-lisp
+(use-package pinentry
+  :ensure t
+  :if (string-equal system-type "gnu/linux")
+  :config
+  (pinentry-start))
 #+end_src
 
 ** Projectile
@@ -996,7 +1077,8 @@ http://batsov.com/projectile/
   :diminish projectile-mode
   :commands (projectile-mode projectile-switch-project)
   :bind (("C-c p p" . projectile-switch-project)
-         ("C-c p s s" . projectile-ag))
+         ("C-c p s s" . projectile-ag)
+         ("C-c p s r" . projectile-ripgrep))
   :config
   (setq projectile-keymap-prefix (kbd "C-c p"))
   (projectile-global-mode t)
@@ -1128,7 +1210,7 @@ According to [[http://emmet.io/][their website]], "Emmet — the essential toolk
   :commands emmet-mode
   :config
   (add-hook 'html-mode-hook 'emmet-mode)
-  (add-hook 'css-mode-hook 'emmet-mode))
+  (add-hook 'css-mode-hookg 'emmet-mode))
 #+end_src
 
 ** Zoom-frm
@@ -1242,6 +1324,7 @@ Collection of Ridiculously Useful eXtensions
 
 #+BEGIN_SRC emacs-lisp
 (use-package graphql-mode
+  :mode (("\\.q\\'" . graphql-mode))
   :ensure t)
 #+END_SRC
 
@@ -1249,8 +1332,21 @@ Collection of Ridiculously Useful eXtensions
 
 #+BEGIN_SRC emacs-lisp
 (use-package json-mode
-  :ensure t)
+  :ensure t
+  :config
+  (customize-set-variable 'json-mode-hook
+                          #'(lambda ()
+                              (setq tab-width 2))))
 #+END_SRC
+
+** terminal-here
+
+#+begin_src emacs-lisp
+(use-package terminal-here
+  :ensure t
+  :bind (("C-c o t" . terminal-here-launch)
+         ("C-c o p" . terminal-here-project-launch)))
+#+end_src
 ** yaml-mode
 
 #+BEGIN_SRC emacs-lisp
@@ -1262,7 +1358,7 @@ Collection of Ridiculously Useful eXtensions
 
 Auto completion.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package company
   :ensure t
   :config
@@ -1295,7 +1391,8 @@ This includes tools like, ~godef~, ~goimports~, and ~guru~ which are used in thi
   (setq gofmt-command "goimports")
   (customize-set-variable 'go-mode-hook
                           #'(lambda ()
-                              (setq tab-width 4))))
+                              (setq tab-width 4)
+                              (setq display-line-numbers 'relative))))
 #+END_SRC
 
 Use ~go-eldoc~ to see things like function signatures in the modeline
@@ -1507,3 +1604,22 @@ Convenience bindings to use doc-view with the arrow keys.
   (server-start))
 #+end_src
 
+** Dired
+
+#+BEGIN_SRC emacs-lisp
+(use-package dired
+  :config
+  (customize-set-variable 'dired-listing-switches
+                          "-avl"))
+#+END_SRC
+** Typescript
+
+#+BEGIN_SRC emacs-lisp
+(use-package typescript-mode
+  :ensure t)
+#+END_SRC
+** Settings
+
+#+BEGIN_SRC emacs-lisp
+(global-hl-line-mode 1)
+#+END_SRC
