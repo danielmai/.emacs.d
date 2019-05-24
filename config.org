@@ -484,6 +484,14 @@ speed keys in Org mode]].
 (setq org-use-speed-commands t)
 #+end_src
 
+Since v9.2 org mode changed the shortcut for template expansion to
+~C-c C-,~. I'm still used to the old way though, so we can activate
+the previous key bindings with ~org-tempo~.
+
+#+begin_src emacs-lisp
+(use-package org-tempo)
+#+end_src
+
 #+begin_src emacs-lisp
 (setq org-image-actual-width 550)
 #+end_src
@@ -795,6 +803,15 @@ tools I use).
   :ensure t)
 #+END_SRC
 
+** gist
+
+#+begin_src emacs-lisp
+(use-package gist
+  :ensure t)
+#+end_src
+
+#+RESULTS:
+
 ** Kubernetes
 
 #+BEGIN_SRC emacs-lisp
@@ -1030,7 +1047,10 @@ Install [[https://github.com/commonmark/cmark][cmark]] or your Markdown processo
   :mode (("\\.markdown\\'" . markdown-mode)
          ("\\.md\\'"       . markdown-mode))
   :config
-  (setq markdown-command "cmark"))
+  (setq markdown-command "cmark")
+  (setq markdown-css-paths (list
+                            (expand-file-name
+                             (concat user-emacs-directory "misc/" "preview.css")))))
 #+end_src
 
 ** Multiple cursors
@@ -1339,6 +1359,13 @@ Collection of Ridiculously Useful eXtensions
                               (setq tab-width 2))))
 #+END_SRC
 
+** terraform-mode
+
+#+begin_src emacs-lisp
+(use-package terraform-mode
+  :ensure t)
+#+end_src
+
 ** terminal-here
 
 #+begin_src emacs-lisp
@@ -1387,6 +1414,7 @@ This includes tools like, ~godef~, ~goimports~, and ~guru~ which are used in thi
   (bind-key "C-." #'godef-jump go-mode-map)
   (bind-key "C-x 4 C-." #'godef-jump-other-window go-mode-map)
   (bind-key "C-c C-r" #'go-remove-unused-imports)
+  (bind-key "C-c C-c" #'compile go-mode-map)
   (add-hook 'before-save-hook #'gofmt-before-save)
   (setq gofmt-command "goimports")
   (customize-set-variable 'go-mode-hook
@@ -1401,7 +1429,7 @@ Use ~go-eldoc~ to see things like function signatures in the modeline
 (use-package go-eldoc
   :ensure t
   :config
-  (go-eldoc-setup))
+  (add-hook 'go-mode-hook #'go-eldoc-setup))
 #+END_SRC
 
 ~go-guru~ is great for source code analysis. The most common thing I use it for is
@@ -1635,3 +1663,16 @@ Convenience bindings to use doc-view with the arrow keys.
 #+BEGIN_SRC emacs-lisp
 (global-hl-line-mode 1)
 #+END_SRC
+** Temp
+
+*** hl-todo
+#+begin_src emacs-lisp
+(use-package hl-todo
+  :ensure t)
+#+end_src
+*** magit-todo
+
+#+begin_src emacs-lisp
+(use-package magit-todos
+  :ensure t)
+#+end_src

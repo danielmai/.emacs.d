@@ -1,0 +1,11 @@
+/* Used for Markdown or Org Mode HTML previews. */
+body {
+  max-width: 38rem;
+  padding: 2rem;
+  margin: auto;
+  font-family: sans-serif;
+}
+
+img {
+    width: 100%;
+}
