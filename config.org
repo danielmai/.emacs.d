@@ -1344,6 +1344,7 @@ Collection of Ridiculously Useful eXtensions
 #+begin_src emacs-lisp
 (use-package terminal-here
   :ensure t
+  :if (string-equal system-type "gnu/linux")
   :bind (("C-c o t" . terminal-here-launch)
          ("C-c o p" . terminal-here-project-launch)))
 #+end_src
