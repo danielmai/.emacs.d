@@ -914,7 +914,8 @@ access magit.
          ("C-c m b" . magit-blame))
   :config
   (setq magit-display-buffer-function 'magit-display-buffer-same-window-except-diff-v1)
-  (setq magit-diff-refine-hunk t))
+  (setq magit-diff-refine-hunk t)
+  (remove-hook 'server-switch-hook 'magit-commit-diff))
 #+end_src
 
 *** Fullscreen magit
