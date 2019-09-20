@@ -1185,7 +1185,7 @@ Smex integrates ido with ~M-x~. I used to use this before moving on to
 This makes it so ~C-n~-ing and ~C-p~-ing won't make the buffer jump
 around so much.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package smooth-scrolling
   :ensure t
   :config
