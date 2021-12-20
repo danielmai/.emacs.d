@@ -12,12 +12,16 @@
         c-electric-paren
         c-electric-semi&comma
         c-electric-slash
+        counsel-M-x
         dabbrev-expand
         delete-horizontal-space
+        dired-next-line
+        dired-previous-line
         electric-newline-and-maybe-indent
         end-of-visual-line
         helm-confirm-and-exit-minibuffer
         indent-for-tab-command
+        jade-indent
         kill-visual-line
         mark-whole-buffer
         markdown-insert-bold
@@ -46,6 +50,9 @@
 
 (setq mc/cmds-to-run-once
       '(
+        counsel-projectile-switch-project
         dired-unmark-backward
+        end-of-buffer
         markdown-exdent-or-delete
+        org-cycle
         ))
