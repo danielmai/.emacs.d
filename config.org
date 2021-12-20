@@ -468,7 +468,7 @@ Learned about [[https://github.com/sachac/.emacs.d/blob/83d21e473368adb1f63e582a
 (setq org-agenda-files
       (delq nil
             (mapcar (lambda (x) (and (file-exists-p x) x))
-                    '("~/Dropbox/Agenda"))))
+                    '("~/Dropbox/Agenda" "~/org/org-roam" "~/org/org-roam/daily"))))
 #+end_src
 
 *** Org capture
@@ -647,6 +647,37 @@ Tagging TODOs for Eisenhower Matrix prioritization, following [[https://klez.me/
      ("4" "Q4" tags-todo "-important-urgent")))
 #+end_src
 
+* Org-roam
+
+#+begin_src emacs-lisp
+(use-package org-roam
+      :ensure t
+      :hook
+      (after-init . org-roam-setup)
+      :init
+      (setq org-roam-v2-ack t)
+      :custom
+      (org-roam-directory "~/org/org-roam")
+      (org-roam-dailies-directory "~/org/org-roam/daily")
+      (org-roam-dailies-capture-templates '(("d" "default" entry
+                                             "* %?\nEntered on %U"
+                                             :if-new (file+head "~/org/org-roam/daily/%<%Y-%m-%d>.org"
+                                                                "#+title: %<%Y-%m-%d>\n\n\n"))
+                                            ("c" "code" entryq
+                                             "* %?\n%a"
+                                             :if-new (file+head "~/org/org-roam/daily/%<%Y-%m-%d>.org"
+                                                                "#+title: %<%Y-%m-%d>\n\n"))))
+      :bind (("C-c n l" . org-roam-buffer-toggle)
+             ("C-c n f" . org-roam-node-find)
+             ("C-c n g" . org-roam-graph)
+             ("C-c d c" . org-roam-dailies-capture-today)
+             ("<f8>" . org-roam-dailies-capture-today)
+             ("C-c d t" . org-roam-dailies-find-today)
+             :map org-mode-map
+             (("C-c n i" . org-roam-node-insert))
+             (("C-c n I" . org-roam-insert-immediate))))
+(use-package org-roam-protocol)
+#+end_src
 * Tramp
 
 #+begin_src emacs-lisp :tangle no
@@ -1067,6 +1098,13 @@ npm install -g csslint
   :ensure t)
 #+END_SRC
 
+** git-timemachine
+
+#+begin_src emacs-lisp
+(use-package git-timemachine
+  :ensure t)
+#+end_src
+
 ** graphviz-dot-mode
 
 Create a ~.dot~ buffer in dot-mode and then quickly preview the rendered dot
@@ -1312,6 +1350,14 @@ Changing the =frame-zoom-font-difference= essentially enables a
   (setq frame-zoom-font-difference 10))
 #+end_src
 
+** display-time-mode
+
+#+begin_src emacs-lisp
+(use-package time
+  :config
+  (display-time-mode))
+#+end_src
+
 ** Scratch
 
 Convenient package to create =*scratch*= buffers that are based on the
@@ -1414,7 +1460,11 @@ Collection of Ridiculously Useful eXtensions
 
 #+begin_src emacs-lisp
 (use-package terraform-mode
-  :ensure t)
+  :ensure t
+  ;; :config
+  ;; (add-hook 'terraform-mode-hook (lambda ()
+  ;;                               (add-hook 'before-save-hook #'terraform-format-buffer nil 'make-it-local)))
+  )
 #+end_src
 
 ** terminal-here
