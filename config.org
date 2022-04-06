@@ -233,10 +233,13 @@ Sources for this section include [[https://github.com/magnars/.emacs.d/blob/mast
 (setq uniquify-buffer-name-style 'forward)
 
 ;; -i gets alias definitions from .bash_profile
-(setq shell-command-switch "-ic")
+;; (setq shell-command-switch "-ic")
 
 ;; Don't beep at me
 (setq visible-bell t)
+
+(add-hook 'after-save-hook
+          'executable-make-buffer-file-executable-if-script-p)
 #+end_src
 
 The following function for ~occur-dwim~ is taken from [[https://github.com/abo-abo][Oleh Krehel]] from
@@ -431,7 +434,11 @@ Although Org mode ships with Emacs, the latest version can be installed external
 
 #+BEGIN_SRC emacs-lisp
 (use-package org
-  :ensure org-plus-contrib)
+  :ensure t
+  :pin gnu)
+(use-package org-contrib
+  :ensure t
+  :pin nongnu)
 #+END_SRC
 
 On Org mode version 9 I wasn't able to execute source blocks out of the box. [[https://emacs.stackexchange.com/a/28604][Others have ran into the same issue too]]. The solution is to remove the .elc files from the package directory:
@@ -458,7 +465,7 @@ Learned about [[https://github.com/sachac/.emacs.d/blob/83d21e473368adb1f63e582a
 (setq org-agenda-files
       (delq nil
             (mapcar (lambda (x) (and (file-exists-p x) x))
-                    '("~/Dropbox/Agenda"))))
+                    '("~/Dropbox/Agenda" "~/org/org-roam" "~/org/org-roam/daily"))))
 #+end_src
 
 *** Org capture
@@ -498,6 +505,12 @@ the previous key bindings with ~org-tempo~.
       ;; '(latex script entities)
       nil)
 #+END_SRC
+
+#+begin_src emacs-lisp
+(use-package org
+  :custom
+  (org-adapt-indentation 'headline-data))
+#+end_src
 
 ** Org tags
 
@@ -596,6 +609,72 @@ I've had issues with getting BiBTeX to work correctly with the LaTeX exporter fo
 (setq org-latex-pdf-process (list "latexmk -pdf %f"))
 #+END_SRC
 
+** Org present
+
+#+begin_src emacs-lisp
+(use-package org-present
+  :ensure t
+  :config
+  (eval-after-load "org-present"
+    '(progn
+       (add-hook 'org-present-mode-hook
+                 (lambda ()
+                   (org-present-big)
+                   (org-display-inline-images)
+                   (org-present-hide-cursor)
+                   (org-present-read-only)))
+       (add-hook 'org-present-mode-quit-hook
+                 (lambda ()
+                   (org-present-small)
+                   (org-remove-inline-images)
+                   (org-present-show-cursor)
+                   (org-present-read-write))))))
+#+end_src
+** Org todos
+
+Tagging TODOs for Eisenhower Matrix prioritization, following [[https://klez.me/2019/10/22/using-the-eisenhower-matrix-in-emacs-org-mode/][Alessandro 'kLeZ' Accardo's setup]].
+
+#+begin_src emacs-lisp
+(setq org-tag-alist '(("important" . ?i)
+                      ("urgent"    . ?u)))
+(setq org-agenda-custom-commands
+   '(("1" "Q1" tags-todo "+important+urgent")
+     ("2" "Q2" tags-todo "+important-urgent")
+     ("3" "Q3" tags-todo "-important+urgent")
+     ("4" "Q4" tags-todo "-important-urgent")))
+#+end_src
+
+* Org-roam
+
+#+begin_src emacs-lisp
+(use-package org-roam
+      :ensure t
+      :hook
+      (after-init . org-roam-setup)
+      :init
+      (setq org-roam-v2-ack t)
+      :custom
+      (org-roam-directory "~/org/org-roam")
+      (org-roam-dailies-directory "~/org/org-roam/daily")
+      (org-roam-dailies-capture-templates '(("d" "default" entry
+                                             "* %?\nEntered on %U"
+                                             :if-new (file+head "~/org/org-roam/daily/%<%Y-%m-%d>.org"
+                                                                "#+title: %<%Y-%m-%d>\n\n\n"))
+                                            ("c" "code" entryq
+                                             "* %?\n%a"
+                                             :if-new (file+head "~/org/org-roam/daily/%<%Y-%m-%d>.org"
+                                                                "#+title: %<%Y-%m-%d>\n\n"))))
+      :bind (("C-c n l" . org-roam-buffer-toggle)
+             ("C-c n f" . org-roam-node-find)
+             ("C-c n g" . org-roam-graph)
+             ("C-c d c" . org-roam-dailies-capture-today)
+             ("<f8>" . org-roam-dailies-capture-today)
+             ("C-c d t" . org-roam-dailies-find-today)
+             :map org-mode-map
+             (("C-c n i" . org-roam-node-insert))
+             (("C-c n I" . org-roam-insert-immediate))))
+(use-package org-roam-protocol)
+#+end_src
 * Tramp
 
 #+begin_src emacs-lisp :tangle no
@@ -700,7 +779,17 @@ and allows you.
 
 #+BEGIN_SRC emacs-lisp
 (use-package hippie-exp
-  :bind (("C-c /" . hippie-expand)))
+  :bind (("C-c /" . hippie-expand))
+  :config (setq hippie-expand-try-functions-list '(try-expand-line
+                                                   try-complete-file-name-partially
+                                                   try-complete-file-name
+                                                   try-expand-all-abbrevs
+                                                   try-expand-list
+                                                   try-expand-dabbrev
+                                                   try-expand-dabbrev-all-buffers
+                                                   try-expand-dabbrev-from-kill
+                                                   try-complete-lisp-symbol-partially
+                                                   try-complete-lisp-symbol)))
 #+END_SRC
 
 * auth-sources
@@ -784,16 +873,6 @@ tools I use).
   :bind (("s-D"     . dash-at-point)
          ("C-c e"   . dash-at-point-with-docset)))
 #+end_src
-
-** Docker
-
-#+BEGIN_SRC emacs-lisp
-(use-package docker
-  :ensure t
-  :bind (("C-c d c" . docker-containers)
-         ("C-c d i" . docker-images)
-         ("C-c d v" . docker-volumes)))
-#+END_SRC
 
 ** Dockerfile
 
@@ -981,7 +1060,7 @@ used.
 #+begin_src emacs-lisp
 (use-package expand-region
   :ensure t
-  :bind ("C-@" . er/expand-region))
+  :bind ("C-c r" . er/expand-region))
 #+end_src
 
 ** Flycheck
@@ -1015,6 +1094,13 @@ npm install -g csslint
 (use-package git-link
   :ensure t)
 #+END_SRC
+
+** git-timemachine
+
+#+begin_src emacs-lisp
+(use-package git-timemachine
+  :ensure t)
+#+end_src
 
 ** graphviz-dot-mode
 
@@ -1215,7 +1301,7 @@ behavior when typing a templated snippet.
   :ensure t
   :diminish yas-minor-mode
   :config
-  (setq yas-snippet-dirs (concat user-emacs-directory "snippets"))
+  (setq yas-snippet-dirs (list (concat user-emacs-directory "snippets")))
   (setq yas-indent-line 'fixed)
   (yas-global-mode))
 #+end_src
@@ -1259,6 +1345,14 @@ Changing the =frame-zoom-font-difference= essentially enables a
          ("s-<f1>" . toggle-zoom-frame))
   :config
   (setq frame-zoom-font-difference 10))
+#+end_src
+
+** display-time-mode
+
+#+begin_src emacs-lisp
+(use-package time
+  :config
+  (display-time-mode))
 #+end_src
 
 ** Scratch
@@ -1363,7 +1457,11 @@ Collection of Ridiculously Useful eXtensions
 
 #+begin_src emacs-lisp
 (use-package terraform-mode
-  :ensure t)
+  :ensure t
+  ;; :config
+  ;; (add-hook 'terraform-mode-hook (lambda ()
+  ;;                               (add-hook 'before-save-hook #'terraform-format-buffer nil 'make-it-local)))
+  )
 #+end_src
 
 ** terminal-here
@@ -1390,7 +1488,7 @@ Auto completion.
   :ensure t
   :config
   (setq company-tooltip-limit 20)
-  (setq company-idle-delay .15)
+  (setq company-idle-delay 0.0)
   (setq company-echo-delay 0)
   (setq company-begin-commands '(self-insert-command))
   (define-key company-active-map (kbd "C-n") #'company-select-next)
@@ -1421,7 +1519,13 @@ This includes tools like, ~godef~, ~goimports~, and ~guru~ which are used in thi
   (customize-set-variable 'go-mode-hook
                           #'(lambda ()
                               (setq tab-width 4)
-                              (setq display-line-numbers 'relative))))
+                              (setq display-line-numbers t))))
+(defun dmai/swap-display-line-numbers ()
+  (interactive)
+  (if (string-equal display-line-numbers 'relative)
+      (setq display-line-numbers 'absolute)
+    (setq display-line-numbers 'relative)))
+(bind-key "<f9>" #'dmai/swap-display-line-numbers)
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
