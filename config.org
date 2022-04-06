@@ -18,13 +18,10 @@ make sense for any layout.
 
 On macOS, [[http://brew.sh/][homebrew]] is an easy way to install emacs.
 
-Here's what the parameters means.
-- ~--with-cocoa~ :: installs emacs with the macOS GUI version
-- ~--with-imagemagick~ :: installs emacs with imagemagick support for image processing
-- ~--with-gnutls~ :: installs emacs with GnuTLS for encrypted SSL and TLS connections
+To install the GUI version of Emacs:
 
 #+begin_src sh
-brew install emacs --with-cocoa --with-imagemagick --with-gnutls
+brew install homebrew/cask/emacs
 #+end_src
 
 * Personal Information
@@ -497,7 +494,9 @@ the previous key bindings with ~org-tempo~.
 #+end_src
 
 #+BEGIN_SRC emacs-lisp
-(setq org-highlight-latex-and-related '(latex script entities))
+(setq org-highlight-latex-and-related
+      ;; '(latex script entities)
+      nil)
 #+END_SRC
 
 ** Org tags
@@ -1098,7 +1097,7 @@ http://batsov.com/projectile/
   :diminish projectile-mode
   :commands (projectile-mode projectile-switch-project)
   :bind (("C-c p p" . projectile-switch-project)
-         ("C-c p s s" . projectile-ag)
+         ("C-c p s s" . projectile-ripgrep)
          ("C-c p s r" . projectile-ripgrep))
   :config
   (setq projectile-keymap-prefix (kbd "C-c p"))
@@ -1411,45 +1410,18 @@ This includes tools like, ~godef~, ~goimports~, and ~guru~ which are used in thi
 #+BEGIN_SRC emacs-lisp
 (use-package go-mode
   :ensure t
+  :hook (before-save . gofmt-before-save)
   :config
-  (bind-key "C-." #'godef-jump go-mode-map)
+  (bind-key "C-." #'lsp-find-definition go-mode-map)
   (bind-key "C-x 4 C-." #'godef-jump-other-window go-mode-map)
+  (bind-key "C-c C-o r" #'lsp-find-references go-mode-map)
   (bind-key "C-c C-r" #'go-remove-unused-imports)
   (bind-key "C-c C-c" #'compile go-mode-map)
-  (add-hook 'before-save-hook #'gofmt-before-save)
   (setq gofmt-command "goimports")
   (customize-set-variable 'go-mode-hook
                           #'(lambda ()
                               (setq tab-width 4)
                               (setq display-line-numbers 'relative))))
-#+END_SRC
-
-Use ~go-eldoc~ to see things like function signatures in the modeline
-.
-#+BEGIN_SRC emacs-lisp
-(use-package go-eldoc
-  :ensure t
-  :config
-  (add-hook 'go-mode-hook #'go-eldoc-setup))
-#+END_SRC
-
-~go-guru~ is great for source code analysis. The most common thing I use it for is
-~go-guru-referrers~, which finds all references to a particular thing across the workspace.
-
-#+BEGIN_SRC emacs-lisp
-(use-package go-guru
-  :ensure t
-  :config
-  ;; Search entire workspace
-  (customize-set-variable 'go-guru-scope "...")
-  (add-hook 'go-mode-hook #'go-guru-hl-identifier-mode))
-#+END_SRC
-
-
-To set up autocompletion with Go, first get ~gocode~: https://github.com/nsf/gocode.
-
-#+BEGIN_SRC sh
-go get -u github.com/nsf/gocode
 #+END_SRC
 
 #+BEGIN_SRC emacs-lisp
@@ -1472,6 +1444,31 @@ go get -u github.com/nsf/gocode
               ("C-c r" . go-run))
   :config
   (setq go-test-verbose t))
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package lsp-mode
+  :ensure t
+  :after go-mode
+  :hook (go-mode . lsp-deferred)
+  :commands (lsp lsp-deferred)
+  :config
+  (setq lsp-enable-snippet nil))
+
+;; optional - provides fancier overlays
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
+
+;; if you use company-mode for completion (otherwise, complete-at-point works out of the box):
+(use-package company-lsp
+  :ensure t
+  :commands company-lsp)
+#+end_src
+
+#+begin_src emacs-lisp
+(use-package go-tag
+  :ensure t)
 #+end_src
 
 ** jade-mode
@@ -1651,7 +1648,8 @@ Convenience bindings to use doc-view with the arrow keys.
 (use-package dired
   :config
   (customize-set-variable 'dired-listing-switches
-                          "-avl"))
+                          "-avl")
+  (customize-set-variable 'dired-dwim-target t))
 #+END_SRC
 ** Typescript
 
@@ -1664,16 +1662,4 @@ Convenience bindings to use doc-view with the arrow keys.
 #+BEGIN_SRC emacs-lisp
 (global-hl-line-mode 1)
 #+END_SRC
-** Temp
 
-*** hl-todo
-#+begin_src emacs-lisp
-(use-package hl-todo
-  :ensure t)
-#+end_src
-*** magit-todo
-
-#+begin_src emacs-lisp
-(use-package magit-todos
-  :ensure t)
-#+end_src
