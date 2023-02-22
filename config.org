@@ -466,6 +466,7 @@ Learned about [[https://github.com/sachac/.emacs.d/blob/83d21e473368adb1f63e582a
       (delq nil
             (mapcar (lambda (x) (and (file-exists-p x) x))
                     '("~/Dropbox/Agenda" "~/org/org-roam" "~/org/org-roam/daily"))))
+(setq org-agenda-file-regexp "\\`[^.].*\\.org\\(\\.gpg\\)?\\'")
 #+end_src
 
 *** Org capture
@@ -656,23 +657,34 @@ Tagging TODOs for Eisenhower Matrix prioritization, following [[https://klez.me/
       :custom
       (org-roam-directory "~/org/org-roam")
       (org-roam-dailies-directory "~/org/org-roam/daily")
+      ;; Use GPG
+      (org-roam-capture-templates '(("d" "default" plain "%?" :target
+                                     (file+head "%<%Y%m%d%H%M%S>-${slug}.org.gpg" "#+title: ${title}
+")
+;;                                      (file+head "%<%Y%m%d%H%M%S>.org.gpg" "#+title: ${title}
+;; ")
+                                     :unnarrowed t)))
       (org-roam-dailies-capture-templates '(("d" "default" entry
                                              "* %?\nEntered on %U"
-                                             :if-new (file+head "~/org/org-roam/daily/%<%Y-%m-%d>.org"
+                                             :if-new (file+head "~/org/org-roam/daily/%<%Y-%m-%d>.org.gpg"
                                                                 "#+title: %<%Y-%m-%d>\n\n\n"))
                                             ("c" "code" entryq
                                              "* %?\n%a"
-                                             :if-new (file+head "~/org/org-roam/daily/%<%Y-%m-%d>.org"
+                                             :if-new (file+head "~/org/org-roam/daily/%<%Y-%m-%d>.org.gpg"
                                                                 "#+title: %<%Y-%m-%d>\n\n"))))
       :bind (("C-c n l" . org-roam-buffer-toggle)
              ("C-c n f" . org-roam-node-find)
              ("C-c n g" . org-roam-graph)
              ("C-c d c" . org-roam-dailies-capture-today)
              ("<f8>" . org-roam-dailies-capture-today)
-             ("C-c d t" . org-roam-dailies-find-today)
+             ("C-c d t" . dmai/org-roam-dailies-find-today)
+             ("s-t" . dmai/org-roam-dailies-find-today)
              :map org-mode-map
              (("C-c n i" . org-roam-node-insert))
              (("C-c n I" . org-roam-insert-immediate))))
+(defun dmai/org-roam-dailies-find-today ()
+  (interactive)
+  (org-roam-dailies-find-today "d"))
 (use-package org-roam-protocol)
 #+end_src
 * Tramp
@@ -1632,11 +1644,16 @@ which returns the host name of the machine you are running on, as a string.
 ;; Settings for currently logged in user
 (setq mai/user-settings-dir
       (concat user-emacs-directory "users/" (system-name)))
+(setq mai/user-local-settings-dir
+      (concat user-emacs-directory "users" "/" "local"))
 (add-to-list 'load-path mai/user-settings-dir)
+(add-to-list 'load-path mai/user-local-settings-dir)
 
 ;; Load settings specific for the current user
 (when (file-exists-p mai/user-settings-dir)
   (mapc 'load (directory-files mai/user-settings-dir nil "^[^#].*el$")))
+(when (file-exists-p mai/user-local-settings-dir)
+  (mapc 'load (directory-files mai/user-local-settings-dir nil "^[^#].*el$")))
 #+end_src
 
 ** Finda
