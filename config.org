@@ -902,6 +902,14 @@ tools I use).
   :ensure t)
 #+END_SRC
 
+** EditorConfig
+
+#+begin_src emacs-lisp
+(use-package editorconfig
+  :ensure t
+  :pin nongnu)
+#+end_src
+
 ** gist
 
 #+begin_src emacs-lisp
