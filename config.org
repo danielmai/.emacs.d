@@ -244,7 +244,8 @@ Sources for this section include [[https://github.com/magnars/.emacs.d/blob/mast
 ;; (setq shell-command-switch "-ic")
 
 ;; Don't beep at me
-(setq visible-bell t)
+(setq visible-bell nil)
+(setq ring-bell-function (lambda () nil))
 
 (add-hook 'after-save-hook
           'executable-make-buffer-file-executable-if-script-p)
