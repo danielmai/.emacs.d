@@ -1479,10 +1479,9 @@ Collection of Ridiculously Useful eXtensions
 #+begin_src emacs-lisp
 (use-package terraform-mode
   :ensure t
-  ;; :config
-  ;; (add-hook 'terraform-mode-hook (lambda ()
-  ;;                               (add-hook 'before-save-hook #'terraform-format-buffer nil 'make-it-local)))
-  )
+  :config
+  (add-hook 'terraform-mode-hook (lambda ()
+                                (add-hook 'before-save-hook #'terraform-format-buffer nil 'make-it-local))))
 #+end_src
 
 ** terminal-here
