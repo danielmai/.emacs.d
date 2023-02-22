@@ -162,8 +162,16 @@ And here's how we tell Emacs to use the font we want to use.
 #+begin_src emacs-lisp
 (add-to-list 'default-frame-alist
              (cond
-              ((string-equal system-type "darwin")    '(font . "Fira Code-14"))
-              ((string-equal system-type "gnu/linux") '(font . "Fira Code-12"))))
+              ((string-equal system-type "darwin")
+               (cond
+                ((member "SF Mono" (font-family-list))
+                 '(font . "SF Mono-11"))
+                ((member "Fira Code" (font-family-list))
+                 '(font . "Fira Code-11"))))
+              ((string-equal system-type "gnu/linux")
+               (cond
+                ((member "Fira Code" (font-family-list))
+                 '(font . "Fira Code-12"))))))
 #+end_src
 
 Note: To view all fonts that are available to use, run the following:
