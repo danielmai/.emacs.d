@@ -901,7 +901,7 @@ tools I use).
 
 ** Helm
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package helm
   :disabled t
   :ensure t
@@ -920,14 +920,17 @@ tools I use).
         helm-M-x-fuzzy-match t)
   (helm-mode))
 (use-package helm-projectile
+  :disabled t
   :ensure t
   :after helm-mode
   :commands helm-projectile
   :bind ("C-c p h" . helm-projectile))
 (use-package helm-ag
+  :disabled t
   :ensure t
   :after helm-mode)
 (use-package helm-swoop
+  :disabled t
   :ensure t
   :after helm-mode
   :bind ("H-w" . helm-swoop))
@@ -935,7 +938,7 @@ tools I use).
 
 ** Ivy
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package ivy
   :ensure t
   :diminish (ivy-mode . "")
@@ -1511,7 +1514,7 @@ This includes tools like, ~godef~, ~goimports~, and ~guru~ which are used in thi
   :ensure t
   :hook (before-save . gofmt-before-save)
   :config
-  (bind-key "C-." #'lsp-find-definition go-mode-map)
+  ;; (bind-key "C-." #'lsp-find-definition go-mode-map)
   (bind-key "C-x 4 C-." #'godef-jump-other-window go-mode-map)
   (bind-key "C-c C-o r" #'lsp-find-references go-mode-map)
   (bind-key "C-c C-r" #'go-remove-unused-imports)
@@ -1562,11 +1565,13 @@ This includes tools like, ~godef~, ~goimports~, and ~guru~ which are used in thi
 
 ;; optional - provides fancier overlays
 (use-package lsp-ui
+  :disabled t
   :ensure t
   :commands lsp-ui-mode)
 
 ;; if you use company-mode for completion (otherwise, complete-at-point works out of the box):
 (use-package company-lsp
+  :disabled t
   :ensure t
   :commands company-lsp)
 #+end_src
@@ -1767,4 +1772,47 @@ Convenience bindings to use doc-view with the arrow keys.
 #+BEGIN_SRC emacs-lisp
 (global-hl-line-mode 1)
 #+END_SRC
+** vertico
+
+#+begin_src emacs-lisp
+(use-package vertico
+  :ensure t
+  :init
+  (vertico-mode 1))
+;; Configure directory extension.
+(use-package vertico-directory
+  :after vertico
+  :ensure nil
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+(use-package consult
+  :ensure t)
+(use-package savehist
+  :init
+  (savehist-mode))
+;; Optionally use the `orderless' completion style.
+(use-package orderless
+  :ensure t
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
+(use-package marginalia
+  :ensure t
+  :config
+  (marginalia-mode))
+(use-package embark
+  :ensure t
+  :bind
+  (("C-." . embark-act)
+   ("C-;" . embark-dwim)))
+#+end_src
 

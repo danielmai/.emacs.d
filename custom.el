@@ -5,12 +5,12 @@
  ;; If there is more than one, they won't work right.
  '(column-number-mode t)
  '(custom-safe-themes
-   (quote
-    ("f0a99f53cbf7b004ba0c1760aa14fd70f2eabafe4e62a2b3cf5cabae8203113b" default)))
+   '("f0a99f53cbf7b004ba0c1760aa14fd70f2eabafe4e62a2b3cf5cabae8203113b" default))
+ '(package-selected-packages
+   '(embark marginalia orderless consult vertico lsp-mode go-mode macrostep magit counsel ivy clojure-mode yaml-mode web-mode use-package undo-tree typescript-mode transpose-frame terraform-mode terminal-here smartscan slime shell-pop scratch scala-mode rust-mode racket-mode quickrun python-mode pos-tip pinentry page-break-lines ox-pandoc org-roam org-present org-contrib ob-restclient nginx-mode mustache-mode multiple-cursors monokai-theme lsp-ui kubernetes keychain-environment json-reformat json-mode jade-mode helm-swoop helm-projectile helm-ag grip-mode graphviz-dot-mode graphql-mode graphql gotest go-tag git-timemachine git-link gist geiser format-all forge flycheck expand-region exec-path-from-shell emmet-mode eglot edit-server edit-indirect doom-themes dockerfile-mode docker-tramp docker dired-narrow diminish demo-it deft dash-at-point csv-mode crux counsel-projectile company-lsp company-go cider c-eldoc ag ace-window a))
  '(vc-annotate-background "#2B2B2B")
  '(vc-annotate-color-map
-   (quote
-    ((20 . "#BC8383")
+   '((20 . "#BC8383")
      (40 . "#CC9393")
      (60 . "#DFAF8F")
      (80 . "#D0BF8F")
@@ -27,7 +27,7 @@
      (300 . "#7CB8BB")
      (320 . "#8CD0D3")
      (340 . "#94BFF3")
-     (360 . "#DC8CC3"))))
+     (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
