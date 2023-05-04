@@ -145,10 +145,9 @@ To install it on macOS, you can use Homebrew with [[http://caskroom.io/][Homebre
 #+begin_src sh :tangle no
 # You may need to run these two lines if you haven't set up Homebrew
 # Cask and its fonts formula.
-brew install caskroom/cask/brew-cask
-brew tap caskroom/fonts
+brew tap homebrew/cask-fonts
 
-brew cask install font-fira-code
+brew cask install homebrew/cask-fonts/font-fira-code
 #+end_src
 
 To install it on Ubuntu, install the package ~fonts-firacode~.
@@ -429,6 +428,13 @@ source: [[http://whattheemacsd.com/sane-defaults.el-01.html][Magnars Sveen]]
   (setq recentf-max-saved-items 500))
 #+end_src
 
+* Calc
+
+#+begin_src emacs-lisp
+(use-package calc
+   :custom
+   (calc-make-windows-dedicated t))
+#+end_src
 * Org mode
 
 Truly the way to [[http://orgmode.org/][live life in plain text]]. I mainly use it to take
@@ -444,7 +450,21 @@ Although Org mode ships with Emacs, the latest version can be installed external
 #+BEGIN_SRC emacs-lisp
 (use-package org
   :ensure t
-  :pin gnu)
+  :pin gnu
+  :bind
+  (:map org-mode-map
+   ("C-c i" . org-id-get-create))
+  :custom
+  (org-link-frame-setup
+   '((vm . vm-visit-folder-other-frame)
+     (vm-imap . vm-visit-imap-folder-other-frame)
+     (gnus . org-gnus-no-new-news)
+     (file . find-file) ;; Follow links in the same window
+     (wl . wl-other-frame)))
+  (org-return-follows-link t)
+  :config
+  (add-hook 'org-mode-hook #'bug-reference-mode))
+
 (use-package org-contrib
   :ensure t
   :pin nongnu)
@@ -464,6 +484,14 @@ Set up some global key bindings that integrate with Org Mode features.
 (bind-key "C-c l" 'org-store-link)
 (bind-key "C-c c" 'org-capture)
 (bind-key "C-c a" 'org-agenda)
+#+end_src
+
+Set up local key bindings:
+
+#+begin_src emacs-lisp
+(with-eval-after-load 'org
+  (define-key org-mode-map (kbd "M-n") #'org-next-link)
+  (define-key org-mode-map (kbd "M-p") #'org-previous-link))
 #+end_src
 
 *** Org agenda
@@ -605,7 +633,7 @@ Source block templates
 
 Pandoc converts between a huge number of different file formats.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package ox-pandoc
   :no-require t
   :defer 10
@@ -686,14 +714,14 @@ Tagging TODOs for Eisenhower Matrix prioritization, following [[https://klez.me/
              ("C-c n g" . org-roam-graph)
              ("C-c d c" . org-roam-dailies-capture-today)
              ("<f8>" . org-roam-dailies-capture-today)
-             ("C-c d t" . dmai/org-roam-dailies-find-today)
-             ("s-t" . dmai/org-roam-dailies-find-today)
+             ("C-c d t" . dmai/org-roam-dailies-goto-today)
+             ("s-t" . dmai/org-roam-dailies-goto-today)
              :map org-mode-map
              (("C-c n i" . org-roam-node-insert))
              (("C-c n I" . org-roam-insert-immediate))))
-(defun dmai/org-roam-dailies-find-today ()
+(defun dmai/org-roam-dailies-goto-today ()
   (interactive)
-  (org-roam-dailies-find-today "d"))
+  (org-roam-dailies-goto-today "d"))
 (use-package org-roam-protocol)
 #+end_src
 * Tramp
@@ -752,6 +780,7 @@ and allows you.
 
 #+begin_src emacs-lisp
 (use-package winner
+  :demand
   :config
   (winner-mode t)
   :bind (("C-c <left>" . winner-undo)
@@ -821,7 +850,6 @@ and allows you.
   (customize-set-variable 'auth-sources
                           '((:source "~/.authinfo.gpg"))))
 #+END_SRC
-
 
 * ELPA packages
 
@@ -963,7 +991,7 @@ tools I use).
 
 ** Ivy
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package ivy
   :ensure t
   :diminish (ivy-mode . "")
@@ -1215,10 +1243,12 @@ http://batsov.com/projectile/
          ("C-c p s s" . projectile-ripgrep)
          ("C-c p s r" . projectile-ripgrep))
   :config
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (setq projectile-keymap-prefix (kbd "C-c p"))
   (projectile-global-mode t)
   (setq projectile-enable-caching t)
   (setq projectile-switch-project-action 'projectile-dired))
+  
 #+end_src
 
 ** Python
@@ -1273,7 +1303,7 @@ Quickly jumps between other symbols found at point in Emacs.
 http://www.masteringemacs.org/article/smart-scan-jump-symbols-buffer
 
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package smartscan
   :ensure t
   :config (global-smartscan-mode 1)
@@ -1504,7 +1534,8 @@ Collection of Ridiculously Useful eXtensions
 
 #+BEGIN_SRC emacs-lisp
 (use-package yaml-mode
-  :ensure t)
+  :ensure t
+  :mode (("\\.y\\(a\\)?ml.tftpl\\'" . yaml-mode)))
 #+END_SRC
 
 ** company-mode
@@ -1513,6 +1544,7 @@ Auto completion.
 
 #+BEGIN_SRC emacs-lisp :tangle no
 (use-package company
+  :disabled t
   :ensure t
   :config
   (setq company-tooltip-limit 20)
@@ -1538,7 +1570,7 @@ This includes tools like, ~godef~, ~goimports~, and ~guru~ which are used in thi
   :ensure t
   :hook (before-save . gofmt-before-save)
   :config
-  (bind-key "C-." #'lsp-find-definition go-mode-map)
+  ;; (bind-key "C-." #'lsp-find-definition go-mode-map)
   (bind-key "C-x 4 C-." #'godef-jump-other-window go-mode-map)
   (bind-key "C-c C-o r" #'lsp-find-references go-mode-map)
   (bind-key "C-c C-r" #'go-remove-unused-imports)
@@ -1554,10 +1586,15 @@ This includes tools like, ~godef~, ~goimports~, and ~guru~ which are used in thi
       (setq display-line-numbers 'absolute)
     (setq display-line-numbers 'relative)))
 (bind-key "<f9>" #'dmai/swap-display-line-numbers)
+(defun dmai/gosimports ()
+  (interactive)
+  (let ((gofmt-command "gosimports"))
+    (gofmt)))
 #+END_SRC
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
 (use-package company-go
+  :disabled t
   :ensure t
   :config
   (add-hook 'go-mode-hook (lambda ()
@@ -1588,14 +1625,21 @@ This includes tools like, ~godef~, ~goimports~, and ~guru~ which are used in thi
   (setq lsp-enable-snippet nil))
 
 ;; optional - provides fancier overlays
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode)
+;; (use-package lsp-ui
+;;   :ensure t
+;;   :commands lsp-ui-mode)
 
 ;; if you use company-mode for completion (otherwise, complete-at-point works out of the box):
-(use-package company-lsp
+;; (use-package company-lsp
+;;   :ensure t
+;;   :commands company-lsp)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(use-package eglot
   :ensure t
-  :commands company-lsp)
+  :after go-mode
+  :hook (go-mode . eglot-ensure))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1799,4 +1843,186 @@ Convenience bindings to use doc-view with the arrow keys.
 #+BEGIN_SRC emacs-lisp
 (global-hl-line-mode 1)
 #+END_SRC
+** Bazel
 
+#+begin_src emacs-lisp
+(use-package bazel
+  :ensure t
+  :custom (bazel-buildifier-before-save t))
+#+end_src
+** wgrep
+
+#+begin_src emacs-lisp
+(use-package wgrep
+  :ensure t)
+#+end_src
+** tree-sitter
+#+begin_src emacs-lisp
+(use-package tree-sitter-langs
+  :ensure t)
+(use-package tree-sitter
+  :ensure t
+  :config
+  (global-tree-sitter-mode)
+  (defun meain/get-config-nesting-paths ()
+    "Get out all the nested paths in a config file."
+    (let* ((query (pcase major-mode
+                    ('json-mode "(object (pair (string (string_content) @key) (_)) @item)")
+                    ('yaml-mode "(block_mapping_pair (flow_node) @key (_)) @item")
+                    ('nix-mode "(bind (attrpath (attr_identifier) @key)) @item")))
+           (root-node (tsc-root-node tree-sitter-tree))
+           (query (tsc-make-query tree-sitter-language query))
+           (matches (tsc-query-matches query root-node #'tsc--buffer-substring-no-properties))
+           (prev-node-ends '(0)) ;; we can get away with just end as the list is sorted
+           (current-key-depth '())
+           (item-ranges (seq-map (lambda (x)
+                                   (let ((item (seq-elt (cdr x) 0))
+                                         (key (seq-elt (cdr x) 1)))
+                                     (list (tsc-node-text (cdr key))
+                                           (tsc-node-range (cdr key))
+                                           (tsc-node-range (cdr item)))))
+                                 matches)))
+      (mapcar (lambda (x)
+                (let* ((current-end (seq-elt (cadr (cdr x)) 1))
+                       (parent-end (car prev-node-ends))
+                       (current-key (car x)))
+                  (progn
+                    (if (> current-end parent-end)
+                        (mapcar (lambda (x)
+                                  (if (> current-end x)
+                                      (progn
+                                        (setq prev-node-ends (cdr prev-node-ends))
+                                        (setq current-key-depth (cdr current-key-depth)))))
+                                prev-node-ends))
+                    (setq current-key-depth (cons current-key current-key-depth))
+                    (setq prev-node-ends (cons current-end prev-node-ends))
+                    (list (reverse current-key-depth) (seq-elt (cadr x) 0)))))
+              item-ranges)))
+  (defun meain/goto-config-nesting-path ()
+    "Interactively go to a nested path in a config file."
+    (interactive)
+    (let* ((paths (mapcar (lambda (x)
+                            (cons (string-join (car x) ".") (cadr x)))
+                          (meain/get-config-nesting-paths))))
+      (goto-char (cdr (assoc
+                       (completing-read "Choose path: " paths)
+                       paths)))))
+  (defun meain/imenu-config-nesting-path ()
+    "Return config-nesting paths for use in imenu"
+    (mapcar (lambda (x)
+              (cons (string-join (car x) ".") (cadr x)))
+            (meain/get-config-nesting-paths)))
+  (add-hook 'yaml-mode-hook (lambda () (setq imenu-create-index-function #'meain/imenu-config-nesting-path))))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun meain/tree-sitter-config-nesting ()
+    (if (or (eq major-mode 'json-mode) (eq major-mode 'yaml-mode) (eq major-mode 'nix-mode))
+        (let* ((cur-point (point))
+               (query (pcase major-mode
+                        ('json-mode "(object (pair (string (string_content) @key) (_)) @item)")
+                        ('yaml-mode "(block_mapping_pair (flow_node) @key (_)) @item")
+                        ('nix-mode "(bind (attrpath (attr_identifier) @key)) @item")))
+               (root-node (tsc-root-node tree-sitter-tree))
+               (query (tsc-make-query tree-sitter-language query))
+               (matches (tsc-query-matches query root-node #'tsc--buffer-substring-no-properties)))
+          (string-join (remove-if (lambda (x) (eq x nil))
+                                  (seq-map (lambda (x)
+                                             (let (
+                                                   (item (seq-elt (cdr x) 0))
+                                                   (key (seq-elt (cdr x) 1)))
+                                               (if (and
+                                                    (> cur-point (byte-to-position (car (tsc-node-byte-range (cdr item)))))
+                                                    (< cur-point (byte-to-position (cdr (tsc-node-byte-range (cdr item))))))
+                                                   (format "%s" (tsc-node-text (cdr key)))
+                                                 nil)))
+                                           matches))
+                       "."))))
+#+end_src
+#+begin_src emacs-lisp
+(use-package mode-line-idle
+  :ensure t)
+(defvar my-date '(:eval (current-time-string)))
+(setq-default mode-line-format
+  '("%e" mode-line-front-space mode-line-mule-info mode-line-client mode-line-modified mode-line-remote mode-line-frame-identification mode-line-buffer-identification "   " mode-line-position
+ (vc-mode vc-mode)
+ "  " mode-line-modes mode-line-misc-info mode-line-end-spaces))
+#+end_src
+* vertico
+
+#+begin_src emacs-lisp
+(use-package vertico
+  :ensure t
+  :init
+  (vertico-mode))
+(use-package orderless
+  :ensure t
+  :custom
+  (completion-styles '(orderless basic))
+  (completion-category-overrides '((file (styles basic partial-completion)))))
+(use-package savehist
+  :init
+  (savehist-mode))
+(use-package consult
+  :ensure t
+  :bind
+  ;; M-s bindings (search-map)
+  (("M-s d" . consult-find)
+   ("C-x b" . consult-buffer)
+   ("M-s D" . consult-locate)
+   ("M-s g" . consult-grep)
+   ("M-s G" . consult-git-grep)
+   ("M-s r" . consult-ripgrep)
+   ("M-s l" . consult-line)
+   ("C-c s" . consult-line)
+   ("M-s L" . consult-line-multi)
+   ("M-s k" . consult-keep-lines)
+   ("M-s u" . consult-focus-lines)
+   ("C-x C-r" . consult-recent-file)
+   ("C-c h i" . consult-imenu)
+   :map projectile-mode-map
+   ("C-c p s s" . consult-ripgrep)
+   ("C-c p s r" . consult-ripgrep))
+
+  :config
+  (consult-customize
+   consult-line
+   :add-history (seq-some #'thing-at-point '(region symbol)))
+
+  (defalias 'consult-line-thing-at-point 'consult-line)
+
+  (consult-customize
+   consult-line-thing-at-point
+   :initial (thing-at-point 'symbol)))
+(use-package consult-projectile
+  :ensure t)
+(use-package marginalia
+  :ensure t
+  :config
+  (marginalia-mode))
+(use-package embark
+  :ensure t
+  :bind
+  (("C-." . embark-act)         ;; pick some comfortable binding
+   ("M-." . embark-dwim)))
+;; Consult users will also want the embark-consult package.
+(use-package embark-consult
+  :ensure t ; only need to install it, embark loads it after consult if found
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+(use-package corfu
+  :ensure t
+  :custom
+  (corfu-auto t)
+  :init
+  (global-corfu-mode))
+#+end_src
+** dap-mode
+
+#+begin_src emacs-lisp
+(use-package dap-mode
+  :ensure t)
+(use-package dap-go)
+(use-package dap-dlv-go)
+
+#+end_src
